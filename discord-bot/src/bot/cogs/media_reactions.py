@@ -16,12 +16,11 @@ from bot.config import Settings
 logger = logging.getLogger(__name__)
 
 FOFUXO_REACTIONS = (
-    "🇫",
-    "🇴",
-    "🇫",
-    "🇺",
-    "🇽",
-    "🇴",
+    "V",
+    "A",
+    "M",
+    "P",
+    "I",
 )
 MEDIA_CONTENT_TYPE_PREFIXES = ("image/", "video/")
 MEDIA_EXTENSIONS = {
