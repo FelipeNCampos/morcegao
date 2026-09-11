@@ -241,6 +241,7 @@ class Settings:
     discord_application_id: int | None
     discord_guild_id: int | None
     temporary_voice_creator_channel_id: int | None
+    media_reaction_channel_id: int | None
     sync_global_commands: bool
     log_level: str
     max_messages_to_delete: int
@@ -382,6 +383,10 @@ class Settings:
             temporary_voice_creator_channel_id=_numeric_id(
                 "DISCORD_TEMPORARY_VOICE_CREATOR_CHANNEL_ID",
                 source.get("DISCORD_TEMPORARY_VOICE_CREATOR_CHANNEL_ID"),
+            ),
+            media_reaction_channel_id=_numeric_id(
+                "DISCORD_MEDIA_REACTION_CHANNEL_ID",
+                source.get("DISCORD_MEDIA_REACTION_CHANNEL_ID"),
             ),
             sync_global_commands=_boolean(
                 "SYNC_GLOBAL_COMMANDS", source.get("SYNC_GLOBAL_COMMANDS")

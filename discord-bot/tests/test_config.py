@@ -44,6 +44,21 @@ def test_temporary_voice_creator_channel_id_is_optional_and_numeric(
         Settings.from_environment(values)
 
 
+def test_media_reaction_channel_id_is_optional_and_numeric(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O canal de reações pode ficar desativado ou receber um ID Discord válido."""
+    values = environment()
+    assert Settings.from_environment(values).media_reaction_channel_id is None
+
+    values["DISCORD_MEDIA_REACTION_CHANNEL_ID"] = "123456789012345679"
+    assert Settings.from_environment(values).media_reaction_channel_id == 123456789012345679
+
+    values["DISCORD_MEDIA_REACTION_CHANNEL_ID"] = "invalido"
+    with pytest.raises(ConfigurationError, match="DISCORD_MEDIA_REACTION_CHANNEL_ID"):
+        Settings.from_environment(values)
+
+
 @pytest.mark.parametrize(
     ("value", "expected"),
     [("true", True), ("false", False), ("1", True), ("0", False)],

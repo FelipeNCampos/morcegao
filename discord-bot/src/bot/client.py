@@ -43,6 +43,7 @@ class DiscordBot(commands.Bot):
         intents.members = False
         intents.presences = False
         intents.guilds = True
+        intents.guild_messages = True
         intents.voice_states = True
 
         super().__init__(
@@ -92,6 +93,7 @@ class DiscordBot(commands.Bot):
     async def setup_hook(self) -> None:
         """Carrega extensões e sincroniza comandos antes de conectar ao gateway."""
         await self.load_extension("bot.cogs.general")
+        await self.load_extension("bot.cogs.media_reactions")
         await self.load_extension("bot.cogs.temporary_voice")
 
         if self.settings.discord_guild_id is not None:

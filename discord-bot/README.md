@@ -98,6 +98,24 @@ Como `!limpar` é um comando prefixado, ative **Message Content Intent** na seç
 
 `DISCORD_GUILD_ID` registra os slash commands rapidamente no servidor de desenvolvimento. `SYNC_GLOBAL_COMMANDS=true` também sincroniza comandos globais, que podem demorar mais para aparecer.
 
+### Reações automáticas em mídias
+
+Defina o ID de um canal de texto para o Morcegão reagir automaticamente a imagens, GIFs e vídeos:
+
+```dotenv
+DISCORD_MEDIA_REACTION_CHANNEL_ID=123456789012345678
+```
+
+Com o **Developer Mode** ativo, clique com o botão direito no canal e escolha **Copiar ID do canal**.
+Deixe a variável vazia para desativar a funcionalidade. O bot precisa de **View Channel**, **Read
+Message History** e **Add Reactions** nesse canal; **Administrator** não é necessário. Ao detectar
+mídia enviada por uma pessoa, ele tenta adicionar a sequência Unicode `🇫 🇴 🇫 🇺 🇽 🇴` na ordem.
+
+O Discord agrupa reações iguais do mesmo usuário: portanto, as duas ocorrências de `🇫` e de `🇴`
+podem aparecer como uma única reação com contagem um, embora o bot tente toda a sequência. Esta
+primeira versão usa somente emojis Unicode; emojis personalizados distintos seriam necessários para
+exibir cada letra repetida separadamente.
+
 ### Canais de voz temporários
 
 Crie um canal de voz permanente, por exemplo **Criar sala**, de preferência dentro da categoria em
