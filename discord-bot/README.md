@@ -1,7 +1,7 @@
 # Discord Bot: Twitch e Instagram
 
-Bot em Python 3.12+ com `discord.py` 2.x e comandos slash, além do comando prefixado de
-moderação `!limpar`. Ele inclui `/ping`, `/comandos`, `/boasvindas` e `/reenviar_live`; notifica
+Bot em Python 3.12+ com `discord.py` 2.x e comandos slash. Ele inclui `/ping`, `/comandos`,
+`/boasvindas`, `/reenviar_live` e `/limpar`; notifica
 o Discord quando o perfil Twitch configurado entra ao vivo e consulta novas mídias de uma conta
 Instagram profissional autorizada usando somente a API oficial da Meta. Não usa scraping,
 Selenium, Playwright, navegador automatizado ou APIs não oficiais.
@@ -92,9 +92,9 @@ FastAPI no mesmo loop. Isso é necessário para que o webhook entregue eventos �
 
 No [Discord Developer Portal](https://discord.com/developers/applications), crie ou abra a aplicação e obtenha o token na seção **Bot** e o Application ID em **General Information**. Ative **Developer Mode** no Discord para copiar o ID do servidor e os IDs dos canais.
 
-Em **Installation** — ou **OAuth2 > URL Generator** — selecione os escopos `bot` e `applications.commands` para convidar o bot. Dê ao bot permissão para ver e enviar mensagens apenas nos canais necessários. Para usar `!limpar`, conceda também **Read Message History** e **Manage Messages** no canal de moderação.
+Em **Installation** — ou **OAuth2 > URL Generator** — selecione os escopos `bot` e `applications.commands` para convidar o bot. Dê ao bot permissão para ver e enviar mensagens apenas nos canais necessários. Para usar `/limpar`, conceda também **Read Message History** e **Manage Messages** no canal de moderação.
 
-Como `!limpar` é um comando prefixado, ative **Message Content Intent** na seção **Bot > Privileged Gateway Intents** do Discord Developer Portal. O cliente já o solicita por código; sem a ativação no portal, o Discord não entrega o conteúdo da mensagem ao bot.
+Ative **Message Content Intent** na seção **Bot > Privileged Gateway Intents** do Discord Developer Portal para que o listener de reações automáticas receba os anexos das mensagens. O cliente já o solicita por código; sem a ativação no portal, o Discord não entrega o conteúdo da mensagem ao bot.
 
 `DISCORD_GUILD_ID` registra os slash commands rapidamente no servidor de desenvolvimento. `SYNC_GLOBAL_COMMANDS=true` também sincroniza comandos globais, que podem demorar mais para aparecer.
 
@@ -278,9 +278,9 @@ fecha os clientes HTTP e encerra o servidor web de modo coordenado.
   **Gerenciar servidor** e responde somente ao administrador que executou o comando.
 - **Canais temporários de voz:** entre no canal criador configurado para receber uma sala exclusiva.
   Não há comando adicional; use as opções nativas de edição do Discord na sua própria sala.
-- `!limpar <quantidade>`: apaga até a quantidade informada de mensagens anteriores no mesmo canal
-  e também a própria mensagem de comando. Exige **Gerenciar mensagens** para o usuário e para o
-  bot. Exemplo: `!limpar 10`. O limite padrão é `100` e pode ser alterado com
+- `/limpar quantidade:<número>`: apaga até a quantidade informada de mensagens anteriores no mesmo
+  canal. Exige **Gerenciar mensagens** para o usuário e para o bot. Exemplo: `/limpar quantidade:10`.
+  O limite padrão é `100` e pode ser alterado com
   `MAX_MESSAGES_TO_DELETE` no `.env`.
 
 `/reenviar_live` usa o estado em memória criado depois que uma live é confirmada pela API Twitch.

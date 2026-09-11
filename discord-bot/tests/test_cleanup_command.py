@@ -1,24 +1,22 @@
-"""Testes do comando prefixado de limpeza, sem acesso ao Discord."""
+"""Testes do comando slash /limpar sem acesso ao Discord."""
 
 from __future__ import annotations
 
-import inspect
 from types import SimpleNamespace
 
 import discord
 import pytest
-from discord.ext import commands
 
 from bot.cogs.general import (
-    CLEANUP_DM_MESSAGE,
     CLEANUP_HTTP_ERROR_MESSAGE,
     CLEANUP_NOT_FOUND_MESSAGE,
     General,
 )
+from bot.errors import MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE
 
 
 def discord_error(error_type: type[discord.HTTPException], status: int) -> discord.HTTPException:
-    """Cria uma exceção Discord sem uma requisição real."""
+    """Cria uma falha Discord controlada sem uma requisição real."""
     response = SimpleNamespace(status=status, reason="Erro de teste", headers={})
     return error_type(response, "Erro de teste")
 
@@ -43,17 +41,40 @@ class FakeChannel:
         return self._messages
 
 
-class FakeContext:
-    """Contexto mínimo para executar o comando prefixado diretamente."""
+class FakeResponse:
+    """Resposta de interação que registra defer e mensagens efêmeras."""
 
-    def __init__(self, channel: FakeChannel, *, guild: object | None = object()) -> None:
+    def __init__(self) -> None:
+        self.deferred: list[bool] = []
+        self.messages: list[tuple[str, bool]] = []
+
+    async def defer(self, *, ephemeral: bool) -> None:
+        self.deferred.append(ephemeral)
+
+    async def send_message(self, content: str, *, ephemeral: bool) -> None:
+        self.messages.append((content, ephemeral))
+
+
+class FakeFollowup:
+    """Follow-up efêmero usado após a limpeza potencialmente demorada."""
+
+    def __init__(self) -> None:
+        self.messages: list[tuple[str, bool]] = []
+
+    async def send(self, content: str, *, ephemeral: bool) -> None:
+        self.messages.append((content, ephemeral))
+
+
+class FakeInteraction:
+    """Interação de servidor com permissões e canal controláveis."""
+
+    def __init__(self, channel: FakeChannel, *, manage_messages: bool = True) -> None:
         self.channel = channel
-        self.guild = guild
-        self.author = SimpleNamespace(id=4321)
-        self.messages: list[tuple[str, int | None]] = []
-
-    async def send(self, content: str, *, delete_after: int | None = None) -> None:
-        self.messages.append((content, delete_after))
+        self.channel_id = channel.id
+        self.permissions = SimpleNamespace(manage_messages=manage_messages)
+        self.user = SimpleNamespace(id=4321)
+        self.response = FakeResponse()
+        self.followup = FakeFollowup()
 
 
 class FakeNotificationSender:
@@ -66,26 +87,19 @@ def cleanup_cog(*, maximum: int = 100) -> General:
 
 
 @pytest.mark.asyncio
-async def test_cleanup_purges_requested_messages_and_the_command_message() -> None:
-    """A limpeza pede quantidade + 1 e confirma somente mensagens anteriores."""
-    channel = FakeChannel(messages=[object() for _ in range(11)])
-    ctx = FakeContext(channel)
+async def test_cleanup_is_registered_as_a_slash_command_and_purges_requested_messages() -> None:
+    """O /limpar apaga exatamente a quantidade solicitada e responde de modo efêmero."""
+    channel = FakeChannel(messages=[object() for _ in range(10)])
+    interaction = FakeInteraction(channel)
+    cog = cleanup_cog()
 
-    await General.limpar.callback(cleanup_cog(), ctx, 10)  # type: ignore[arg-type]
+    await General.limpar.callback(cog, interaction, 10)  # type: ignore[arg-type]
 
-    assert channel.purge_limits == [11]
-    assert ctx.messages == [("🧹 10 mensagens foram apagadas.", 5)]
-
-
-@pytest.mark.asyncio
-async def test_cleanup_confirmation_never_reports_a_negative_count() -> None:
-    """Uma limitação do Discord que omita o comando ainda produz uma contagem segura."""
-    channel = FakeChannel(messages=[])
-    ctx = FakeContext(channel)
-
-    await General.limpar.callback(cleanup_cog(), ctx, 1)  # type: ignore[arg-type]
-
-    assert ctx.messages == [("🧹 0 mensagens foram apagadas.", 5)]
+    assert "limpar" in [command.name for command in cog.get_app_commands()]
+    assert "limpar" not in [command.name for command in cog.get_commands()]
+    assert channel.purge_limits == [10]
+    assert interaction.response.deferred == [True]
+    assert interaction.followup.messages == [("🧹 10 mensagens foram apagadas.", True)]
 
 
 @pytest.mark.asyncio
@@ -93,91 +107,61 @@ async def test_cleanup_confirmation_never_reports_a_negative_count() -> None:
 async def test_cleanup_rejects_non_positive_quantities(quantity: int) -> None:
     """Zero e valores negativos não chamam a API de exclusão."""
     channel = FakeChannel()
-    ctx = FakeContext(channel)
+    interaction = FakeInteraction(channel)
 
-    await General.limpar.callback(cleanup_cog(), ctx, quantity)  # type: ignore[arg-type]
+    await General.limpar.callback(cleanup_cog(), interaction, quantity)  # type: ignore[arg-type]
 
     assert channel.purge_limits == []
-    assert ctx.messages == [("Informe uma quantidade maior que zero.", 5)]
+    assert interaction.response.messages == [("Informe uma quantidade maior que zero.", True)]
 
 
 @pytest.mark.asyncio
-async def test_cleanup_rejects_a_quantity_above_the_configured_limit() -> None:
-    """O limite configurado bloqueia a limpeza antes de qualquer exclusão."""
+async def test_cleanup_rejects_quantity_above_configured_limit() -> None:
+    """O limite configurado bloqueia a operação antes de qualquer exclusão."""
     channel = FakeChannel()
-    ctx = FakeContext(channel)
+    interaction = FakeInteraction(channel)
 
-    await General.limpar.callback(cleanup_cog(maximum=3), ctx, 4)  # type: ignore[arg-type]
+    await General.limpar.callback(cleanup_cog(maximum=3), interaction, 4)  # type: ignore[arg-type]
 
     assert channel.purge_limits == []
-    assert ctx.messages == [("Você pode apagar no máximo 3 mensagens por vez.", 5)]
+    assert interaction.response.messages == [
+        ("Você pode apagar no máximo 3 mensagens por vez.", True)
+    ]
 
 
 @pytest.mark.asyncio
-async def test_cleanup_handles_not_found_and_http_errors() -> None:
-    """Falhas Discord são convertidas em respostas temporárias e sem detalhes internos."""
-    missing_ctx = FakeContext(FakeChannel(purge_error=discord_error(discord.NotFound, 404)))
-    http_ctx = FakeContext(FakeChannel(purge_error=discord_error(discord.HTTPException, 500)))
+async def test_cleanup_requires_manage_messages_permission() -> None:
+    """A validação manual também informa a permissão correta antes do purge."""
+    channel = FakeChannel()
+    interaction = FakeInteraction(channel, manage_messages=False)
 
-    await General.limpar.callback(cleanup_cog(), missing_ctx, 1)  # type: ignore[arg-type]
-    await General.limpar.callback(cleanup_cog(), http_ctx, 1)  # type: ignore[arg-type]
+    await General.limpar.callback(cleanup_cog(), interaction, 1)  # type: ignore[arg-type]
 
-    assert missing_ctx.messages == [(CLEANUP_NOT_FOUND_MESSAGE, 5)]
-    assert http_ctx.messages == [(CLEANUP_HTTP_ERROR_MESSAGE, 5)]
+    assert channel.purge_limits == []
+    assert interaction.response.messages == [(MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE, True)]
 
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(
-    ("error", "message"),
+    ("error_type", "status", "expected_message"),
     [
+        (discord.NotFound, 404, CLEANUP_NOT_FOUND_MESSAGE),
         (
-            commands.MissingPermissions(["manage_messages"]),
-            "Você precisa da permissão “Gerenciar mensagens” para usar este comando.",
-        ),
-        (
-            commands.BotMissingPermissions(["manage_messages"]),
+            discord.Forbidden,
+            403,
             "Eu preciso da permissão “Gerenciar mensagens” para executar este comando.",
         ),
-        (
-            commands.BadArgument(),
-            "Uso correto: `/limpar <quantidade>`\nExemplo: `/limpar 10`",
-        ),
-        (
-            commands.NoPrivateMessage(),
-            CLEANUP_DM_MESSAGE,
-        ),
+        (discord.HTTPException, 500, CLEANUP_HTTP_ERROR_MESSAGE),
     ],
 )
-async def test_cleanup_error_handler_handles_permissions_bad_argument_and_dm(
-    error: commands.CommandError,
-    message: str,
+async def test_cleanup_handles_discord_failures(
+    error_type: type[discord.HTTPException], status: int, expected_message: str
 ) -> None:
-    """Os erros previsíveis não chegam ao canal como traceback."""
-    ctx = FakeContext(FakeChannel(), guild=None)
+    """Falhas Discord retornam respostas seguras em vez de traceback para o usuário."""
+    channel = FakeChannel(purge_error=discord_error(error_type, status))
+    interaction = FakeInteraction(channel)
 
-    await General.limpar_error(cleanup_cog(), ctx, error)  # type: ignore[arg-type]
+    await General.limpar.callback(cleanup_cog(), interaction, 1)  # type: ignore[arg-type]
 
-    assert ctx.messages == [(message, 5)]
-
-
-@pytest.mark.asyncio
-async def test_cleanup_error_handler_handles_missing_quantity() -> None:
-    """A ausência de argumento recebe instrução de uso específica."""
-    parameter = commands.Parameter(
-        "quantidade",
-        inspect.Parameter.POSITIONAL_OR_KEYWORD,
-        inspect.Parameter.empty,
-        int,
-        "",
-        "",
-        "quantidade",
-    )
-    ctx = FakeContext(FakeChannel())
-
-    await General.limpar_error(
-        cleanup_cog(),
-        ctx,  # type: ignore[arg-type]
-        commands.MissingRequiredArgument(parameter),
-    )
-
-    assert ctx.messages == [("Informe a quantidade de mensagens.\nUso: `/limpar <quantidade>`", 5)]
+    assert interaction.response.deferred == [True]
+    assert interaction.followup.messages == [(expected_message, True)]

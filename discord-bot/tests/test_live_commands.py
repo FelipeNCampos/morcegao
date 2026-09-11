@@ -261,4 +261,4 @@ def test_general_cog_does_not_register_duplicate_slash_commands() -> None:
     command_names = [command.name for command in cog.get_app_commands()]
 
     assert len(command_names) == len(set(command_names))
-    assert set(command_names) == {"ping", "boasvindas", "reenviar_live", "comandos"}
+    assert set(command_names) == {"ping", "boasvindas", "reenviar_live", "comandos", "limpar"}

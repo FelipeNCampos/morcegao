@@ -12,7 +12,10 @@ from discord.ext import commands
 from bot.client import DiscordBot
 from bot.config import DEFAULT_MAX_MESSAGES_TO_DELETE
 from bot.current_twitch_live import CurrentTwitchLive, CurrentTwitchLiveStore
-from bot.errors import MISSING_MANAGE_GUILD_PERMISSION_MESSAGE
+from bot.errors import (
+    MISSING_MANAGE_GUILD_PERMISSION_MESSAGE,
+    MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE,
+)
 from bot.integrations.discord_sender import DiscordNotificationError, DiscordNotificationSender
 from bot.integrations.twitch import TwitchClient
 from bot.integrations.twitch_auth import TwitchError
@@ -46,11 +49,8 @@ COMMAND_HELP: dict[str, tuple[str, str, str]] = {
         "/comandos",
         "todos os membros.",
     ),
-}
-
-PREFIX_COMMAND_HELP: dict[str, tuple[str, str, str]] = {
     "limpar": (
-        "Apaga a quantidade informada de mensagens anteriores e também a mensagem do comando.",
+        "Apaga a quantidade informada de mensagens anteriores no mesmo canal.",
         "/limpar <quantidade>",
         "Gerenciar mensagens.",
     ),
@@ -168,23 +168,8 @@ class General(commands.Cog):
                 command.name,
                 (command.description, f"/{command.qualified_name}", "consulte um administrador."),
             )
-            embed.add_field(
-                name=f"/{command.qualified_name}",
-                value=(f"{description}\nUso: `{usage}`\nPermissão: {permission}"),
-                inline=False,
-            )
-
-        for command in self.get_commands():
-            description, usage, permission = PREFIX_COMMAND_HELP.get(
-                command.name,
-                (
-                    command.help or command.brief or "Comando prefixado.",
-                    f"/{command.qualified_name}",
-                    "",
-                ),
-            )
             limit_hint = (
-                "\nExemplo: `/limpar 10`\nLimite: "
+                "\nExemplo: `/limpar quantidade:10`\nLimite: "
                 f"{self._max_messages_to_delete} mensagens por vez."
                 if command.name == "limpar"
                 else ""
@@ -209,91 +194,68 @@ class General(commands.Cog):
 
         await interaction.response.send_message(embed=embed)
 
-    @commands.command(name="limpar")
-    @commands.guild_only()
-    @commands.has_guild_permissions(manage_messages=True)
-    @commands.bot_has_guild_permissions(manage_messages=True)
-    async def limpar(self, ctx: commands.Context, quantidade: int) -> None:
-        """Apaga mensagens do próprio canal, incluindo a mensagem de comando."""
+    @app_commands.command(name="limpar", description="Apaga mensagens anteriores deste canal.")
+    @app_commands.guild_only()
+    @app_commands.default_permissions(manage_messages=True)
+    @app_commands.checks.has_permissions(manage_messages=True)
+    async def limpar(self, interaction: discord.Interaction, quantidade: int) -> None:
+        """Apaga até a quantidade solicitada de mensagens anteriores no próprio canal."""
+        if not interaction.permissions.manage_messages:
+            await interaction.response.send_message(
+                MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE,
+                ephemeral=True,
+            )
+            return
         if quantidade <= 0:
-            await ctx.send("Informe uma quantidade maior que zero.", delete_after=5)
+            await interaction.response.send_message(
+                "Informe uma quantidade maior que zero.", ephemeral=True
+            )
             return
         if quantidade > self._max_messages_to_delete:
-            await ctx.send(
+            await interaction.response.send_message(
                 f"Você pode apagar no máximo {self._max_messages_to_delete} mensagens por vez.",
-                delete_after=5,
+                ephemeral=True,
             )
             return
 
+        await interaction.response.defer(ephemeral=True)
         try:
-            deleted_messages = await ctx.channel.purge(limit=quantidade + 1)
+            if interaction.channel is None or not hasattr(interaction.channel, "purge"):
+                await interaction.followup.send(CLEANUP_DM_MESSAGE, ephemeral=True)
+                return
+            deleted_messages = await interaction.channel.purge(limit=quantidade)
         except discord.NotFound:
             logger.warning(
-                "Mensagens não encontradas durante uma limpeza no canal %s.", ctx.channel.id
+                "Mensagens não encontradas durante uma limpeza no canal %s.", interaction.channel_id
             )
-            await ctx.send(CLEANUP_NOT_FOUND_MESSAGE, delete_after=5)
+            await interaction.followup.send(CLEANUP_NOT_FOUND_MESSAGE, ephemeral=True)
             return
         except discord.Forbidden:
-            logger.warning("Bot sem permissão para limpar mensagens no canal %s.", ctx.channel.id)
-            await ctx.send(
+            logger.warning(
+                "Bot sem permissão para limpar mensagens no canal %s.", interaction.channel_id
+            )
+            await interaction.followup.send(
                 "Eu preciso da permissão “Gerenciar mensagens” para executar este comando.",
-                delete_after=5,
+                ephemeral=True,
             )
             return
         except discord.HTTPException:
-            logger.exception("Falha HTTP ao limpar mensagens no canal %s.", ctx.channel.id)
-            await ctx.send(CLEANUP_HTTP_ERROR_MESSAGE, delete_after=5)
+            logger.exception("Falha HTTP ao limpar mensagens no canal %s.", interaction.channel_id)
+            await interaction.followup.send(CLEANUP_HTTP_ERROR_MESSAGE, ephemeral=True)
             return
 
-        deleted_count = max(len(deleted_messages) - 1, 0)
+        deleted_count = len(deleted_messages)
         logger.info(
             "Limpeza executada pelo usuário %s no canal %s: solicitadas=%d, apagadas=%d.",
-            ctx.author.id,
-            ctx.channel.id,
+            interaction.user.id,
+            interaction.channel_id,
             quantidade,
             deleted_count,
         )
-        await ctx.send(
+        await interaction.followup.send(
             f"🧹 {deleted_count} mensagens foram apagadas.",
-            delete_after=5,
+            ephemeral=True,
         )
-
-    @limpar.error
-    async def limpar_error(self, ctx: commands.Context, error: commands.CommandError) -> None:
-        """Converte falhas de uso e permissões em respostas temporárias e seguras."""
-        if isinstance(error, commands.MissingPermissions):
-            await ctx.send(
-                "Você precisa da permissão “Gerenciar mensagens” para usar este comando.",
-                delete_after=5,
-            )
-            return
-        if isinstance(error, commands.BotMissingPermissions):
-            await ctx.send(
-                "Eu preciso da permissão “Gerenciar mensagens” para executar este comando.",
-                delete_after=5,
-            )
-            return
-        if isinstance(error, commands.BadArgument):
-            await ctx.send(
-                "Uso correto: `/limpar <quantidade>`\nExemplo: `/limpar 10`",
-                delete_after=5,
-            )
-            return
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send(
-                "Informe a quantidade de mensagens.\nUso: `/limpar <quantidade>`",
-                delete_after=5,
-            )
-            return
-        if isinstance(error, commands.NoPrivateMessage):
-            await ctx.send(CLEANUP_DM_MESSAGE, delete_after=5)
-            return
-
-        logger.error(
-            "Erro não tratado no comando prefixado /limpar.",
-            exc_info=(type(error), error, error.__traceback__),
-        )
-        await ctx.send(CLEANUP_HTTP_ERROR_MESSAGE, delete_after=5)
 
     async def _get_current_open_twitch_live(self) -> CurrentTwitchLive | None:
         """Obtém a live atual e confirma que ela ainda está online antes do reenvio."""

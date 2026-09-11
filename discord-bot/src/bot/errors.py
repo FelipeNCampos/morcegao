@@ -13,6 +13,9 @@ USER_ERROR_MESSAGE = "Ocorreu um erro ao executar este comando. Tente novamente 
 MISSING_MANAGE_GUILD_PERMISSION_MESSAGE = (
     "Você precisa da permissão “Gerenciar servidor” para usar este comando."
 )
+MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE = (
+    "Você precisa da permissão “Gerenciar mensagens” para usar este comando."
+)
 
 
 async def handle_app_command_error(
@@ -26,7 +29,11 @@ async def handle_app_command_error(
         )
         await _send_error_message(
             interaction,
-            MISSING_MANAGE_GUILD_PERMISSION_MESSAGE,
+            (
+                MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE
+                if "manage_messages" in error.missing_permissions
+                else MISSING_MANAGE_GUILD_PERMISSION_MESSAGE
+            ),
         )
         return
 
