@@ -109,12 +109,8 @@ DISCORD_MEDIA_REACTION_CHANNEL_ID=123456789012345678
 Com o **Developer Mode** ativo, clique com o botão direito no canal e escolha **Copiar ID do canal**.
 Deixe a variável vazia para desativar a funcionalidade. O bot precisa de **View Channel**, **Read
 Message History** e **Add Reactions** nesse canal; **Administrator** não é necessário. Ao detectar
-mídia enviada por uma pessoa, ele tenta adicionar a sequência Unicode `🇫 🇴 🇫 🇺 🇽 🇴` na ordem.
-
-O Discord agrupa reações iguais do mesmo usuário: portanto, as duas ocorrências de `🇫` e de `🇴`
-podem aparecer como uma única reação com contagem um, embora o bot tente toda a sequência. Esta
-primeira versão usa somente emojis Unicode; emojis personalizados distintos seriam necessários para
-exibir cada letra repetida separadamente.
+mídia enviada por uma pessoa, ele adiciona a sequência Unicode `🇻 🇦 🇲 🇵 🇮` na ordem. Esta primeira
+versão usa somente emojis Unicode.
 
 ### Canais de voz temporários
 

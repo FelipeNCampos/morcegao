@@ -15,12 +15,12 @@ from bot.config import Settings
 
 logger = logging.getLogger(__name__)
 
-FOFUXO_REACTIONS = (
-    "V",
-    "A",
-    "M",
-    "P",
-    "I",
+VAMPI_REACTIONS = (
+    "🇻",
+    "🇦",
+    "🇲",
+    "🇵",
+    "🇮",
 )
 MEDIA_CONTENT_TYPE_PREFIXES = ("image/", "video/")
 MEDIA_EXTENSIONS = {
@@ -54,7 +54,7 @@ def _message_contains_media(message: discord.Message) -> bool:
 
 
 class MediaReactions(commands.Cog):
-    """Adiciona a sequência FOFUXO a mídias do canal explicitamente configurado."""
+    """Adiciona a sequência VAMPI a mídias do canal explicitamente configurado."""
 
     def __init__(self, bot: discord.Client, settings: Settings) -> None:
         self._bot = bot
@@ -93,11 +93,11 @@ class MediaReactions(commands.Cog):
             attachment.filename,
             attachment.content_type,
         )
-        await self._add_fofuxo_reactions(message)
+        await self._add_vampi_reactions(message)
 
-    async def _add_fofuxo_reactions(self, message: discord.Message) -> None:
+    async def _add_vampi_reactions(self, message: discord.Message) -> None:
         """Adiciona as reações em ordem e encerra com segurança após uma falha."""
-        for emoji in FOFUXO_REACTIONS:
+        for emoji in VAMPI_REACTIONS:
             try:
                 await message.add_reaction(emoji)
             except discord.Forbidden:
@@ -116,7 +116,7 @@ class MediaReactions(commands.Cog):
                 return
 
         logger.info(
-            "Reações FOFUXO adicionadas à mensagem %s do canal %s.",
+            "Reações VAMPI adicionadas à mensagem %s do canal %s.",
             message.id,
             message.channel.id,
         )

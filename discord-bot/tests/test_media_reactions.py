@@ -1,4 +1,4 @@
-"""Testes isolados para o listener de reações FOFUXO em mídias."""
+"""Testes isolados para o listener de reações VAMPI em mídias."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ from discord.ext import commands
 
 from bot.client import DiscordBot
 from bot.cogs.media_reactions import (
-    FOFUXO_REACTIONS,
     PROCESSED_MESSAGE_CACHE_LIMIT,
+    VAMPI_REACTIONS,
     MediaReactions,
     _message_contains_media,
 )
@@ -80,16 +80,16 @@ def media_cog(environment: Callable[[], dict[str, str]]) -> MediaReactions:
         ("live.mp4", "video/mp4"),
     ],
 )
-async def test_supported_media_receives_fofuxo_reactions(
+async def test_supported_media_receives_vampi_reactions(
     environment: Callable[[], dict[str, str]], filename: str, content_type: str
 ) -> None:
-    """PNG, JPG, GIF e vídeo recebem todas as reações na ordem definida."""
+    """PNG, JPG, GIF e vídeo recebem VAMPI na ordem definida."""
     cog = media_cog(environment)
     message = FakeMessage(1, 10, [FakeAttachment(filename, content_type)])
 
     await cog.on_message(message)  # type: ignore[arg-type]
 
-    assert message.reactions == list(FOFUXO_REACTIONS)
+    assert message.reactions == list(VAMPI_REACTIONS)
 
 
 @pytest.mark.asyncio
@@ -103,7 +103,7 @@ async def test_extension_is_used_when_content_type_is_missing(
     await cog.on_message(message)  # type: ignore[arg-type]
 
     assert _message_contains_media(message) is True  # type: ignore[arg-type]
-    assert message.reactions == list(FOFUXO_REACTIONS)
+    assert message.reactions == list(VAMPI_REACTIONS)
 
 
 @pytest.mark.asyncio
@@ -169,7 +169,7 @@ async def test_discord_reaction_errors_are_handled_without_retrying(
 
     await cog.on_message(message)  # type: ignore[arg-type]
 
-    assert message.reactions == [FOFUXO_REACTIONS[0]]
+    assert message.reactions == [VAMPI_REACTIONS[0]]
 
 
 @pytest.mark.asyncio
@@ -182,7 +182,7 @@ async def test_message_is_processed_only_once_and_cache_is_bounded(
 
     await cog.on_message(message)  # type: ignore[arg-type]
     await cog.on_message(message)  # type: ignore[arg-type]
-    assert message.reactions == list(FOFUXO_REACTIONS)
+    assert message.reactions == list(VAMPI_REACTIONS)
 
     for message_id in range(2, PROCESSED_MESSAGE_CACHE_LIMIT + 3):
         assert cog._remember_processed_message(message_id) is True
