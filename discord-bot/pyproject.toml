@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "discord-bot"
+version = "0.1.0"
+description = "Bot Discord com comandos slash e notificações Twitch e Instagram."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "discord.py>=2.4,<3.0",
+    "fastapi>=0.115,<1.0",
+    "httpx>=0.27,<1.0",
+    "python-dotenv>=1.0,<2.0",
+    "uvicorn>=0.30,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9.0",
+    "pytest-asyncio>=0.24,<1.0",
+    "ruff>=0.6,<1.0",
+]
+aws = [
+    "boto3>=1.34,<2.0",
+]
+
+[project.scripts]
+discord-bot = "bot.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --basetemp=.pytest-tmp"
+asyncio_mode = "auto"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
