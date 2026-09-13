@@ -48,28 +48,49 @@ class InstagramPoller:
         self._task = None
 
     async def poll_once(self) -> None:
-        """Executa uma consulta e envia somente uma mídia ainda desconhecida."""
-        media = await self._instagram_client.get_latest_media()
-        if media is None:
+        """Consulta mídias recentes e envia cada publicação nova ainda pendente."""
+        media_items = await self._instagram_client.list_recent_media()
+        if not media_items:
             self._initial_sync_completed = True
             return
 
-        already_processed = await self._store.has_processed_instagram_media(media.media_id)
         if not self._initial_sync_completed:
             self._initial_sync_completed = True
+            latest_media = max(media_items, key=lambda media: media.timestamp)
+
+            # A primeira sincronização só pode anunciar a mídia mais recente quando
+            # explicitamente solicitada. As demais existentes são conhecidas para não
+            # virarem notificações atrasadas no próximo ciclo.
+            for media in media_items:
+                if media.media_id == latest_media.media_id:
+                    continue
+                if not await self._store.has_processed_instagram_media(media.media_id):
+                    await self._store.mark_instagram_media_processed(media, status="known")
+
+            already_processed = await self._store.has_processed_instagram_media(
+                latest_media.media_id
+            )
             if already_processed:
                 return
             if not self._settings.notify_existing_latest:
-                await self._store.mark_instagram_media_processed(media, status="known")
+                await self._store.mark_instagram_media_processed(latest_media, status="known")
                 logger.info("A mídia mais recente do Instagram foi marcada como conhecida.")
                 return
 
-        if already_processed:
+            await self._sender.send_instagram_notification(latest_media)
+            await self._store.mark_instagram_media_processed(latest_media, status="notified")
+            logger.info("Notificação de nova mídia do Instagram enviada.")
             return
 
-        await self._sender.send_instagram_notification(media)
-        await self._store.mark_instagram_media_processed(media, status="notified")
-        logger.info("Notificação de nova mídia do Instagram enviada.")
+        # Após a sincronização inicial, processar todas as mídias desconhecidas em
+        # ordem cronológica impede que um post e um Reel publicados no mesmo intervalo
+        # de polling façam uma notificação encobrir a outra.
+        for media in sorted(media_items, key=lambda item: item.timestamp):
+            if await self._store.has_processed_instagram_media(media.media_id):
+                continue
+            await self._sender.send_instagram_notification(media)
+            await self._store.mark_instagram_media_processed(media, status="notified")
+            logger.info("Notificação de nova mídia do Instagram enviada.")
 
     async def _run(self) -> None:
         """Mantém o polling ativo sem derrubar o bot após uma falha recuperável."""

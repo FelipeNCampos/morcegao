@@ -392,11 +392,11 @@ async def test_aws_token_store_serializes_token_without_aws_connection() -> None
 class FakeInstagramClient:
     """Retorna mídias controladas sem chamar a API real."""
 
-    def __init__(self, media_items: list[InstagramMedia]) -> None:
-        self._media_items = media_items
+    def __init__(self, responses: list[list[InstagramMedia]]) -> None:
+        self._responses = responses
 
-    async def get_latest_media(self) -> InstagramMedia | None:
-        return self._media_items.pop(0) if self._media_items else None
+    async def list_recent_media(self) -> list[InstagramMedia]:
+        return self._responses.pop(0) if self._responses else []
 
 
 class FakeSender:
@@ -441,7 +441,10 @@ async def test_first_poll_marks_latest_as_known_then_notifies_new_media(
     await store.initialize()
     sender = FakeSender()
     poller = InstagramPoller(
-        settings, FakeInstagramClient([old_media, new_media, new_media]), store, sender
+        settings,
+        FakeInstagramClient([[old_media], [old_media, new_media], [old_media, new_media]]),
+        store,
+        sender,
     )  # type: ignore[arg-type]
 
     await poller.poll_once()
@@ -450,6 +453,60 @@ async def test_first_poll_marks_latest_as_known_then_notifies_new_media(
 
     assert await store.has_processed_instagram_media("old-media")
     assert sender.sent_media == [new_media]
+
+
+@pytest.mark.asyncio
+async def test_poller_notifies_post_and_reel_published_in_same_interval(
+    environment: Callable[[], dict[str, str]], tmp_path: Path
+) -> None:
+    """Post e Reel novos não devem se encobrir quando surgem entre duas consultas."""
+    settings = Settings.from_environment(instagram_environment(environment)).instagram
+    existing_media = InstagramMedia(
+        media_id="existing-media",
+        username="perfil_autorizado",
+        caption=None,
+        media_type="IMAGE",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/p/existing/",
+        timestamp=datetime(2026, 9, 11, 10, tzinfo=UTC),
+    )
+    post = InstagramMedia(
+        media_id="post-media",
+        username="perfil_autorizado",
+        caption="Novo post",
+        media_type="IMAGE",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/p/post/",
+        timestamp=datetime(2026, 9, 11, 11, tzinfo=UTC),
+    )
+    reel = InstagramMedia(
+        media_id="reel-media",
+        username="perfil_autorizado",
+        caption="Novo Reel",
+        media_type="REELS",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/reel/reel/",
+        timestamp=datetime(2026, 9, 11, 12, tzinfo=UTC),
+    )
+    store = NotificationStore(
+        tmp_path / "notifications.sqlite3", instagram_user_id=settings.user_id
+    )
+    await store.initialize()
+    sender = FakeSender()
+    poller = InstagramPoller(
+        settings,
+        FakeInstagramClient([[existing_media], [existing_media, post, reel]]),
+        store,
+        sender,
+    )  # type: ignore[arg-type]
+
+    await poller.poll_once()
+    await poller.poll_once()
+
+    assert sender.sent_media == [post, reel]
 
 
 class FailingSender:
@@ -483,7 +540,7 @@ async def test_poller_does_not_persist_media_when_discord_send_fails(
     await store.initialize()
     poller = InstagramPoller(
         settings,
-        FakeInstagramClient([media]),
+        FakeInstagramClient([[media]]),
         store,
         FailingSender(),  # type: ignore[arg-type]
     )
@@ -497,7 +554,7 @@ async def test_poller_does_not_persist_media_when_discord_send_fails(
 class FailingInstagramClient:
     """Simula uma falha segura da API sem carregar detalhes de requisição."""
 
-    async def get_latest_media(self) -> InstagramMedia | None:
+    async def list_recent_media(self) -> list[InstagramMedia]:
         raise InstagramAuthenticationError("Token do Instagram expirado.")
 
 
