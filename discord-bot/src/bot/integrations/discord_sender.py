@@ -168,9 +168,10 @@ class DiscordNotificationSender:
                 "O canal de notificações do Instagram não foi configurado."
             )
 
-        username = media.username or self._settings.instagram.username or "perfil autorizado"
+        #username = media.username or self._settings.instagram.username or "perfil autorizado"
 
-        media_type = media.media_type or "Publicação"
+        #media_type = media.media_type or "Publicação"
+
         caption = self._truncate_caption(media.caption)
 
         publication_link = media.permalink or "Link da publicação indisponível."
@@ -181,8 +182,7 @@ class DiscordNotificationSender:
         )
 
         embed = discord.Embed(
-            title="Nova publicação no Instagram",
-            description=caption,
+            title=caption or "Nova publicação",
             colour=0xE4405F,
             url=media.permalink or None,
         )
