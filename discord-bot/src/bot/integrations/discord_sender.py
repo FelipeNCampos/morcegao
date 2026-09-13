@@ -22,7 +22,7 @@ BASE_ASSETS_DIR = Path(__file__).resolve().parents[1] / "assets"
 
 TWITCH_IMAGE_DIR = BASE_ASSETS_DIR / "twitch-banner-live"
 WELCOME_IMAGE_DIR = BASE_ASSETS_DIR / "welcome-img"
-REELS_FALLBACK_IMAGE_PATH = BASE_ASSETS_DIR / "reels-png" / "gato.png"
+REELS_FALLBACK_IMAGE_PATH = BASE_ASSETS_DIR / "reels-png" / "usar.png"
 
 SUPPORTED_IMAGE_EXTENSIONS = {
     ".png",
@@ -199,16 +199,20 @@ class DiscordNotificationSender:
             url=media.permalink or None,
         )
 
-        if media.media_url:
+        file: discord.File | None = None
+        if media_label == "reels":
+            # media_url de Reel costuma apontar para vídeo e não pode ser renderizada
+            # como imagem pelo embed. Preferir a miniatura; sem ela, anexar o fallback.
+            if media.thumbnail_url:
+                embed.set_image(url=media.thumbnail_url)
+            else:
+                file = self._reels_fallback_file()
+                if file is not None:
+                    embed.set_image(url=f"attachment://{REELS_FALLBACK_IMAGE_PATH.name}")
+        elif media.media_url:
             embed.set_image(url=media.media_url)
         elif media.thumbnail_url:
             embed.set_thumbnail(url=media.thumbnail_url)
-
-        file: discord.File | None = None
-        if media_label == "reels" and not media.media_url and not media.thumbnail_url:
-            file = self._reels_fallback_file()
-            if file is not None:
-                embed.set_image(url=f"attachment://{REELS_FALLBACK_IMAGE_PATH.name}")
 
         view = InstagramNotificationView(media.permalink) if media.permalink else None
         await self._send_to_channel(channel_id, content, embed, file=file, view=view)

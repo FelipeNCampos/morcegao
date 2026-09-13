@@ -99,7 +99,7 @@ async def test_sends_instagram_reel_title_and_link_button(
         username="perfil_autorizado",
         caption=None,
         media_type="VIDEO",
-        media_url=None,
+        media_url="https://cdn.example.test/reel.mp4",
         thumbnail_url=None,
         permalink="https://www.instagram.com/reel/example/",
         timestamp=datetime(2026, 9, 11, 12, tzinfo=UTC),
