@@ -22,6 +22,7 @@ BASE_ASSETS_DIR = Path(__file__).resolve().parents[1] / "assets"
 
 TWITCH_IMAGE_DIR = BASE_ASSETS_DIR / "twitch-banner-live"
 WELCOME_IMAGE_DIR = BASE_ASSETS_DIR / "welcome-img"
+REELS_FALLBACK_IMAGE_PATH = BASE_ASSETS_DIR / "reels-png" / "gato.png"
 
 SUPPORTED_IMAGE_EXTENSIONS = {
     ".png",
@@ -203,14 +204,28 @@ class DiscordNotificationSender:
         elif media.thumbnail_url:
             embed.set_thumbnail(url=media.thumbnail_url)
 
+        file: discord.File | None = None
+        if media_label == "reels" and not media.media_url and not media.thumbnail_url:
+            file = self._reels_fallback_file()
+            if file is not None:
+                embed.set_image(url=f"attachment://{REELS_FALLBACK_IMAGE_PATH.name}")
+
         view = InstagramNotificationView(media.permalink) if media.permalink else None
-        await self._send_to_channel(channel_id, content, embed, view=view)
+        await self._send_to_channel(channel_id, content, embed, file=file, view=view)
 
     @staticmethod
     def _instagram_media_label(media: InstagramMedia) -> str:
         """Converte o tipo de produto Instagram em rótulo legível da notificação."""
         product_type = (media.media_product_type or media.media_type or "").upper()
         return "reels" if product_type == "REELS" else "post"
+
+    @staticmethod
+    def _reels_fallback_file() -> discord.File | None:
+        """Fornece a imagem local do gato quando o Reel não trouxer mídia da API."""
+        if not REELS_FALLBACK_IMAGE_PATH.is_file():
+            logger.warning("Imagem fallback de Reel não encontrada: %s", REELS_FALLBACK_IMAGE_PATH)
+            return None
+        return discord.File(REELS_FALLBACK_IMAGE_PATH, filename=REELS_FALLBACK_IMAGE_PATH.name)
 
     async def send_welcome_message(
         self,

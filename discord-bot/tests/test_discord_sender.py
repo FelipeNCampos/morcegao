@@ -110,6 +110,9 @@ async def test_sends_instagram_reel_title_and_link_button(
 
     assert channel.messages[0]["embed"].title == "O Vampirão adicionou novo reels"  # type: ignore[union-attr]
     assert isinstance(channel.messages[0]["view"], InstagramNotificationView)
+    fallback_file = channel.messages[0]["file"]
+    assert fallback_file.filename == "gato.png"  # type: ignore[union-attr]
+    assert channel.messages[0]["embed"].image.url == "attachment://gato.png"  # type: ignore[union-attr]
 
 
 @pytest.mark.asyncio
