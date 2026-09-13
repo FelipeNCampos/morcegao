@@ -193,7 +193,6 @@ class DiscordNotificationSender:
         content = f"📸 **{title}**"
 
         embed = discord.Embed(
-            title=title,
             description=caption or None,
             colour=0xE4405F,
             url=media.permalink or None,
