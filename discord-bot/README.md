@@ -224,12 +224,14 @@ Instale as dependências do projeto após atualizar o código:
 python -m pip install -e ".[dev]"
 ```
 
-O host também precisa do FFmpeg no `PATH`. Na EC2 Amazon Linux 2023, instale o pacote disponível na
-sua imagem via DNF; se o repositório padrão não o disponibilizar, use uma imagem ou repositório
-aprovado pela sua organização, sem substituir bibliotecas do sistema. Depois valide:
+O host também precisa do FFmpeg no `PATH`. Na EC2 Amazon Linux 2023, o pacote está no repositório
+oficial Supplementary Packages for Amazon Linux (SPAL). Instale o repositório e o pacote
+`ffmpeg-free`, depois valide:
 
 ```bash
-sudo dnf install -y ffmpeg
+sudo dnf upgrade -y
+sudo dnf install -y spal-release
+sudo dnf install -y ffmpeg-free
 ffmpeg -version
 ```
 
