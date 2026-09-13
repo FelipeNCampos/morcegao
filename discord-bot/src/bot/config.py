@@ -373,8 +373,8 @@ def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
             options=(
                 ("DISCORD_ROLE_GENDER_FEMININE_ID", "DISCORD_ROLE_GENDER_FEMININE_EMOJI", "♀️"),
                 ("DISCORD_ROLE_GENDER_MASCULINE_ID", "DISCORD_ROLE_GENDER_MASCULINE_EMOJI", "♂️"),
-                ("DISCORD_ROLE_GENDER_NON_BINARY_ID", "DISCORD_ROLE_GENDER_NON_BINARY_EMOJI", "⚧️"),
-                ("DISCORD_ROLE_GENDER_OTHER_ID", "DISCORD_ROLE_GENDER_OTHER_EMOJI", "✨"),
+                ("DISCORD_ROLE_GENDER_NON_BINARY_ID", "DISCORD_ROLE_GENDER_NON_BINARY_EMOJI", "⭐"),
+                ("DISCORD_ROLE_GENDER_OTHER_ID", "DISCORD_ROLE_GENDER_OTHER_EMOJI", "🌈"),
             ),
         ),
         _role_category(
@@ -386,7 +386,6 @@ def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
             options=(
                 ("DISCORD_ROLE_PRONOUN_SHE_HER_ID", "DISCORD_ROLE_PRONOUN_SHE_HER_EMOJI", "🌙"),
                 ("DISCORD_ROLE_PRONOUN_HE_HIM_ID", "DISCORD_ROLE_PRONOUN_HE_HIM_EMOJI", "☀️"),
-                ("DISCORD_ROLE_PRONOUN_THEY_THEM_ID", "DISCORD_ROLE_PRONOUN_THEY_THEM_EMOJI", "⭐"),
             ),
         ),
     )

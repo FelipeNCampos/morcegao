@@ -140,11 +140,11 @@ DISCORD_ROLE_GENDER_NON_BINARY_ID=
 DISCORD_ROLE_GENDER_OTHER_ID=
 DISCORD_ROLE_PRONOUN_SHE_HER_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_HE_HIM_ID=123456789012345678
-DISCORD_ROLE_PRONOUN_THEY_THEM_ID=123456789012345678
 ```
 
-Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `♀️`, `♂️`, `⚧️` e `✨` para
-gênero; `🌙`, `☀️` e `⭐` para pronomes. Você pode alterar qualquer um por
+Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `♀️`, `♂️`, `⭐` e `🌈` para
+gênero; `🌙` e `☀️` para pronomes. Todos são emojis Unicode disponíveis no Discord padrão. Você
+pode alterar qualquer um por
 `DISCORD_ROLE_*_EMOJI`. Para emoji personalizado, informe a string completa, por exemplo
 `<:meuemoji:123456789012345678>`; o bot compara tanto a string quanto o ID do emoji.
 

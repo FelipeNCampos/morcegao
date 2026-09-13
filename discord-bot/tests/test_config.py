@@ -85,6 +85,26 @@ def test_role_menu_ids_emojis_and_exclusivity_are_read(
     assert role_menu.categories[1].exclusive is True
 
 
+def test_legacy_they_them_variables_do_not_create_a_pronoun_option(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """They/them foi removido do menu e variáveis antigas não voltam a ativá-lo."""
+    values = environment()
+    values.update(
+        {
+            "DISCORD_ROLE_MENU_CHANNEL_ID": "222",
+            "DISCORD_PRONOUN_ROLE_MESSAGE_ID": "333",
+            "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "444",
+            "DISCORD_ROLE_PRONOUN_THEY_THEM_ID": "555",
+            "DISCORD_ROLE_PRONOUN_THEY_THEM_EMOJI": "⭐",
+        }
+    )
+
+    pronouns = Settings.from_environment(values).role_menu.categories[2]
+
+    assert [option.role_id for option in pronouns.options] == [444]
+
+
 @pytest.mark.parametrize(
     ("value", "expected"),
     [("true", True), ("false", False), ("1", True), ("0", False)],
