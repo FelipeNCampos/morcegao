@@ -214,9 +214,20 @@ de dados para esse recurso.
 
 O Morcegão pode reproduzir o áudio de um único vídeo público por vez em cada servidor. Use apenas
 conteúdo que você tenha permissão para reproduzir. O recurso não usa self-bot, conta de usuário,
-cookies, download permanente, playlists, DRM ou tentativas de contornar autenticação, bloqueios
-geográficos e restrições do YouTube. A disponibilidade da extração pode mudar conforme o YouTube e
-o `yt-dlp` evoluem.
+download permanente, DRM ou tentativas de contornar bloqueios geográficos e restrições do YouTube.
+A disponibilidade da extração pode mudar conforme o YouTube e o `yt-dlp` evoluem.
+
+Quando o YouTube exigir uma sessão autenticada para liberar um vídeo, é possível configurar
+opcionalmente um arquivo de cookies no formato Netscape, associado a uma conta que você controla:
+
+```dotenv
+YOUTUBE_COOKIES_FILE=/etc/morcegao/youtube-cookies.txt
+```
+
+O arquivo é usado somente pelo `yt-dlp` no host e não é enviado ao Discord, não aparece nos logs e
+não deve ser incluído no Git. Guarde-o fora do repositório, com proprietário `morcegao` e permissão
+`600`. Consulte as instruções do [yt-dlp para cookies](https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp)
+para exportá-lo localmente; nunca cole seu conteúdo no chat.
 
 Instale as dependências do projeto após atualizar o código:
 
@@ -243,7 +254,7 @@ Administrator. Em uma sala temporária, os overwrites do canal continuam valendo
 Comandos disponíveis:
 
 - `/tocar_youtube url:<link>`: entra no seu canal e substitui a música atual pelo áudio do vídeo.
-  Aceita apenas URLs `youtube.com`, `music.youtube.com` ou `youtu.be`, sem playlists.
+  Aceita URLs `youtube.com`, `music.youtube.com` ou `youtu.be` e sempre reproduz apenas um vídeo.
 - `/parar_musica`: interrompe a reprodução; o bot sai depois do timeout de inatividade.
 - `/sair_call`: interrompe e desconecta imediatamente. Ambos exigem que você esteja no mesmo canal
   de voz que o Morcegão.

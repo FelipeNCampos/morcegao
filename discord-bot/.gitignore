@@ -21,6 +21,7 @@ ENV/
 .env.*
 !.env.example
 *.token
+youtube-cookies*.txt
 instagram-token*
 data/instagram*
 *.log

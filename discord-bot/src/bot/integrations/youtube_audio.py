@@ -22,6 +22,9 @@ YTDL_OPTIONS: dict[str, object] = {
     "no_warnings": True,
     "skip_download": True,
     "socket_timeout": 15,
+    # O YouTube exige JavaScript para alguns desafios de reprodução. O Node.js
+    # é instalado no host; caso esteja ausente, o yt-dlp mantém seu erro seguro.
+    "js_runtimes": {"node": {}},
 }
 
 
@@ -75,8 +78,14 @@ def normalize_youtube_video_url(value: str) -> str:
 class YouTubeAudioService:
     """Obtém stream temporário em uma thread, preservando o event loop do bot."""
 
-    def __init__(self, extractor_factory: Callable[[dict[str, object]], Any] | None = None) -> None:
+    def __init__(
+        self,
+        extractor_factory: Callable[[dict[str, object]], Any] | None = None,
+        *,
+        cookies_file: str | None = None,
+    ) -> None:
         self._extractor_factory = extractor_factory
+        self._cookies_file = cookies_file
 
     async def get_audio_source(self, url: str) -> YouTubeAudio:
         """Extrai metadados e uma URL de áudio sem gravar arquivos em disco."""
@@ -95,9 +104,12 @@ class YouTubeAudioService:
     def _extract(self, url: str) -> YouTubeAudio:
         """Executa a parte bloqueante do yt-dlp fora do loop assíncrono."""
         video_url = normalize_youtube_video_url(url)
+        options = YTDL_OPTIONS.copy()
+        if self._cookies_file is not None:
+            options["cookiefile"] = self._cookies_file
         try:
             factory = self._extractor_factory or self._default_extractor_factory()
-            with factory(YTDL_OPTIONS) as extractor:
+            with factory(options) as extractor:
                 payload = extractor.extract_info(video_url, download=False)
         except Exception as error:
             logger.warning(

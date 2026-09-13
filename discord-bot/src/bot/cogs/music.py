@@ -39,7 +39,9 @@ class Music(commands.Cog):
     ) -> None:
         self._bot = bot
         self._settings = settings
-        self._audio_service = audio_service or YouTubeAudioService()
+        self._audio_service = audio_service or YouTubeAudioService(
+            cookies_file=settings.youtube_cookies_file
+        )
         self._voice_locks: dict[int, asyncio.Lock] = {}
         self._idle_tasks: dict[int, asyncio.Task[None]] = {}
 

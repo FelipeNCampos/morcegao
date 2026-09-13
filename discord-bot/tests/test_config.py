@@ -161,6 +161,20 @@ def test_max_messages_to_delete_is_configurable_and_positive(
         Settings.from_environment(values)
 
 
+def test_youtube_cookies_file_is_optional_and_not_exposed(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O caminho de cookies é opcional e permanece uma configuração local do host."""
+    values = environment()
+    assert Settings.from_environment(values).youtube_cookies_file is None
+
+    values["YOUTUBE_COOKIES_FILE"] = "/etc/morcegao/youtube-cookies.txt"
+    assert (
+        Settings.from_environment(values).youtube_cookies_file
+        == "/etc/morcegao/youtube-cookies.txt"
+    )
+
+
 def test_web_host_and_port_are_configured_and_validated(
     environment: Callable[[], dict[str, str]],
 ) -> None:

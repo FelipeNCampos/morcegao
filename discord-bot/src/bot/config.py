@@ -421,6 +421,7 @@ class Settings:
     twitch: TwitchSettings
     instagram: InstagramSettings
     web: WebSettings
+    youtube_cookies_file: str | None = None
 
     @classmethod
     def from_environment(cls, environment: Mapping[str, str] | None = None) -> Settings:
@@ -581,4 +582,5 @@ class Settings:
                 host=_web_host(source.get("WEB_HOST")),
                 port=_web_port(source.get("WEB_PORT")),
             ),
+            youtube_cookies_file=_optional_value(source.get("YOUTUBE_COOKIES_FILE")),
         )

@@ -7,6 +7,7 @@ import threading
 import pytest
 
 from bot.integrations.youtube_audio import (
+    YTDL_OPTIONS,
     YouTubeAudioError,
     YouTubeAudioService,
     is_valid_youtube_url,
@@ -20,6 +21,7 @@ class FakeExtractor:
     def __init__(self, payload: dict[str, object] | Exception) -> None:
         self.payload = payload
         self.thread_id: int | None = None
+        self.options: dict[str, object] | None = None
 
     def __enter__(self) -> FakeExtractor:
         return self
@@ -66,6 +68,36 @@ def test_normalize_youtube_url_discards_radio_and_playlist_parameters() -> None:
     )
 
     assert normalize_youtube_video_url(url) == "https://www.youtube.com/watch?v=7eLC4LnddHk"
+
+
+def test_ytdlp_uses_node_for_youtube_javascript_challenges() -> None:
+    """O runtime Node instalado no host é habilitado explicitamente no yt-dlp."""
+    assert YTDL_OPTIONS["js_runtimes"] == {"node": {}}
+
+
+@pytest.mark.asyncio
+async def test_audio_extraction_uses_configured_cookies_file() -> None:
+    """O arquivo local é passado ao yt-dlp, sem ser incluído no resultado público."""
+    extractor = FakeExtractor(
+        {
+            "url": "https://temporary-stream.example.test/signed",
+            "title": "Vídeo de teste",
+        }
+    )
+
+    def extractor_factory(options: dict[str, object]) -> FakeExtractor:
+        extractor.options = options
+        return extractor
+
+    service = YouTubeAudioService(
+        extractor_factory,
+        cookies_file="/etc/morcegao/youtube-cookies.txt",
+    )
+
+    await service.get_audio_source("https://www.youtube.com/watch?v=abc")
+
+    assert extractor.options is not None
+    assert extractor.options["cookiefile"] == "/etc/morcegao/youtube-cookies.txt"
 
 
 @pytest.mark.asyncio
