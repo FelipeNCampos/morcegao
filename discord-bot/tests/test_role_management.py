@@ -206,7 +206,7 @@ async def test_ready_adds_configured_emojis_to_existing_messages(
     await cog.on_ready()
     await cog.on_ready()
 
-    assert channel.message.added == ["🔞", "🔓", "♀️", "♂️", "🌙", "☀️"]
+    assert channel.message.added == ["🔞", "🔓", "♀️", "♂️", "🌙", "🌞"]
 
 
 @pytest.mark.asyncio

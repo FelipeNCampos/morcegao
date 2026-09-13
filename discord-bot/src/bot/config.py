@@ -385,7 +385,7 @@ def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
             default_exclusive=False,
             options=(
                 ("DISCORD_ROLE_PRONOUN_SHE_HER_ID", "DISCORD_ROLE_PRONOUN_SHE_HER_EMOJI", "🌙"),
-                ("DISCORD_ROLE_PRONOUN_HE_HIM_ID", "DISCORD_ROLE_PRONOUN_HE_HIM_EMOJI", "☀️"),
+                ("DISCORD_ROLE_PRONOUN_HE_HIM_ID", "DISCORD_ROLE_PRONOUN_HE_HIM_EMOJI", "🌞"),
             ),
         ),
     )
