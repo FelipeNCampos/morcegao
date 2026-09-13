@@ -10,6 +10,7 @@ from bot.integrations.youtube_audio import (
     YouTubeAudioError,
     YouTubeAudioService,
     is_valid_youtube_url,
+    normalize_youtube_video_url,
 )
 
 
@@ -55,6 +56,16 @@ class FakeExtractor:
 def test_youtube_url_validation(url: str, expected: bool) -> None:
     """Somente links públicos que apontem para um vídeo YouTube são aceitos."""
     assert is_valid_youtube_url(url) is expected
+
+
+def test_normalize_youtube_url_discards_radio_and_playlist_parameters() -> None:
+    """A URL enviada ao yt-dlp referencia somente o vídeo selecionado."""
+    url = (
+        "https://www.youtube.com/watch?v=7eLC4LnddHk&list=RD7eLC4LnddHk"
+        "&start_radio=1&rv=lbFl6ESBUGA"
+    )
+
+    assert normalize_youtube_video_url(url) == "https://www.youtube.com/watch?v=7eLC4LnddHk"
 
 
 @pytest.mark.asyncio

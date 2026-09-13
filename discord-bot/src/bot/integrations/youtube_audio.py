@@ -56,6 +56,22 @@ def is_valid_youtube_url(value: str) -> bool:
     return bool(query.get("v") or parsed.path.startswith("/shorts/"))
 
 
+def normalize_youtube_video_url(value: str) -> str:
+    """Retorna a URL canônica de um vídeo e descarta parâmetros de playlist/rádio."""
+    parsed = urlparse(value.strip())
+    hostname = (parsed.hostname or "").lower().rstrip(".")
+    query = parse_qs(parsed.query)
+
+    if hostname in {"youtu.be", "www.youtu.be"}:
+        video_id = parsed.path.strip("/").split("/", maxsplit=1)[0]
+    elif parsed.path.startswith("/shorts/"):
+        video_id = parsed.path.removeprefix("/shorts/").split("/", maxsplit=1)[0]
+    else:
+        video_id = query.get("v", [""])[0]
+
+    return f"https://www.youtube.com/watch?v={video_id}"
+
+
 class YouTubeAudioService:
     """Obtém stream temporário em uma thread, preservando o event loop do bot."""
 
@@ -78,10 +94,11 @@ class YouTubeAudioService:
 
     def _extract(self, url: str) -> YouTubeAudio:
         """Executa a parte bloqueante do yt-dlp fora do loop assíncrono."""
+        video_url = normalize_youtube_video_url(url)
         try:
             factory = self._extractor_factory or self._default_extractor_factory()
             with factory(YTDL_OPTIONS) as extractor:
-                payload = extractor.extract_info(url, download=False)
+                payload = extractor.extract_info(video_url, download=False)
         except Exception as error:
             logger.warning(
                 "yt-dlp recusou um vídeo do host %s: %s.", self._host(url), type(error).__name__
