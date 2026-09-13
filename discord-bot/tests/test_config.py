@@ -268,16 +268,19 @@ def test_twitch_and_instagram_can_be_enabled_independently(
     assert instagram_only.instagram.enabled is True
 
 
-def test_instagram_enabled_requires_all_values(environment: Callable[[], dict[str, str]]) -> None:
-    """Ativar Instagram exige perfil, ID, token e canal."""
+def test_instagram_enabled_allows_oauth_before_token_is_available(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """OAuth pode ser iniciado antes de haver token, ID ou canal para o polling."""
     values = environment()
     values["INSTAGRAM_ENABLED"] = "true"
-    values["INSTAGRAM_USERNAME"] = "perfil_autorizado"
-    values["INSTAGRAM_USER_ID"] = "17800000000000000"
-    values["INSTAGRAM_ACCESS_TOKEN"] = "test-instagram-token"
 
-    with pytest.raises(ConfigurationError, match="DISCORD_INSTAGRAM_CHANNEL_ID"):
-        Settings.from_environment(values)
+    instagram = Settings.from_environment(values).instagram
+
+    assert instagram.enabled is True
+    assert instagram.access_token is None
+    assert instagram.user_id is None
+    assert instagram.notification_channel_id is None
 
 
 def test_instagram_login_is_normalized_and_url_is_rejected(

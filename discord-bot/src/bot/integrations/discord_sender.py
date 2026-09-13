@@ -173,12 +173,13 @@ class DiscordNotificationSender:
         media_type = media.media_type or "Publicação"
         caption = self._truncate_caption(media.caption)
 
+        publication_link = media.permalink or "Link da publicação indisponível."
         content = (
             "📸 **Nova publicação no Instagram!**\n\n"
             f"Perfil: @{username}\n"
             f"Tipo: {media_type}\n"
             f"{caption}\n\n"
-            f"Veja a publicação:\n{media.permalink}"
+            f"Veja a publicação:\n{publication_link}"
         )
 
         embed = discord.Embed(
@@ -238,7 +239,7 @@ class DiscordNotificationSender:
             "Fique à vontade pra interagir com a comunidade e se divertir."
         )
 
-        final_message = "PS: O tipo sanguíneo do O vampirão é O+"
+        final_message = "PS: O tipo sanguíneo do O vampirão é A+"
         image_path = self._choose_welcome_image()
 
         try:

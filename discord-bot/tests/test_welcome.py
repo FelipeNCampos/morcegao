@@ -136,7 +136,7 @@ async def test_welcome_message_uses_display_name_and_current_channel_names(
         "vou te avisar das lives pelo canal lives-do-vampirao e de posts novos pelo canal "
         "posts-do-vampirao, ambos no Discord O vampirão.\n"
         "Fique à vontade pra interagir com a comunidade e se divertir.",
-        "PS: O tipo sanguíneo do O vampirão é O+",
+        "PS: O tipo sanguíneo do O vampirão é A+",
     ]
 
 

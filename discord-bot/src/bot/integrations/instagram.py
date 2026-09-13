@@ -14,7 +14,12 @@ from bot.integrations.instagram_token_store import (
     InMemoryInstagramTokenStore,
     InstagramTokenStore,
 )
-from bot.models import InstagramMedia, InstagramProfile, InstagramTokenRefreshResult
+from bot.models import (
+    InstagramMedia,
+    InstagramProfile,
+    InstagramTokenData,
+    InstagramTokenRefreshResult,
+)
 
 INSTAGRAM_API_BASE_URL = "https://graph.instagram.com"
 INSTAGRAM_TOKEN_REFRESH_URL = f"{INSTAGRAM_API_BASE_URL}/refresh_access_token"
@@ -45,6 +50,10 @@ class InstagramTokenRefreshError(InstagramAPIError):
 
 class InstagramPermissionError(InstagramAPIError):
     """Indica que o token não tem permissões para a conta configurada."""
+
+
+class InstagramProfileNotFoundError(InstagramAPIError):
+    """Indica que a conta profissional autorizada não foi encontrada."""
 
 
 class InstagramRateLimitError(InstagramAPIError):
@@ -139,10 +148,8 @@ class InstagramClient:
         max_transient_retries: int = MAX_TRANSIENT_RETRIES,
         retry_delay_seconds: float = 1.0,
     ) -> None:
-        if not settings.enabled or settings.user_id is None or settings.access_token is None:
-            raise ValueError(
-                "A integração Instagram precisa estar configurada para criar o cliente."
-            )
+        if not settings.enabled:
+            raise ValueError("INSTAGRAM_ENABLED deve estar ativo para criar o cliente Instagram.")
 
         self._settings = settings
         self._token_store = token_store or InMemoryInstagramTokenStore(settings)
@@ -165,17 +172,26 @@ class InstagramClient:
             retry_delay_seconds=self._retry_delay_seconds,
         )
 
-    def build_profile_url(self) -> str:
+    def build_profile_url(self, user_id: str | None = None) -> str:
         """Monta a URL oficial para consultar o perfil autorizado."""
-        return f"{INSTAGRAM_API_BASE_URL}/{self._settings.api_version}/{self._settings.user_id}"
+        identifier = user_id or (
+            str(self._settings.user_id) if self._settings.user_id is not None else "me"
+        )
+        return f"{INSTAGRAM_API_BASE_URL}/{self._settings.api_version}/{identifier}"
 
-    def build_media_url(self) -> str:
+    def build_media_url(self, user_id: str | None = None) -> str:
         """Monta a URL oficial para consultar mídias do perfil autorizado."""
-        return f"{self.build_profile_url()}/media"
+        return f"{self.build_profile_url(user_id)}/media"
 
     async def get_profile(self) -> InstagramProfile:
         """Obtém os dados básicos do perfil profissional autorizado."""
-        payload = await self._request(self.build_profile_url(), fields="id,username")
+        token = await self._get_token()
+        user_id = (
+            str(self._settings.user_id) if self._settings.user_id is not None else token.user_id
+        )
+        payload = await self._request(
+            self.build_profile_url(user_id), fields="id,username", token=token
+        )
         user_id = payload.get("id")
         username = payload.get("username")
         if not isinstance(user_id, str) or not isinstance(username, str):
@@ -183,31 +199,70 @@ class InstagramClient:
         return InstagramProfile(user_id=user_id, username=username)
 
     async def list_recent_media(self) -> list[InstagramMedia]:
-        """Obtém e converte as mídias recentes retornadas pela API oficial."""
-        payload = await self._request(self.build_media_url(), fields=MEDIA_FIELDS)
-        raw_media = payload.get("data")
-        if not isinstance(raw_media, list):
-            raise InstagramAPIError("A API do Instagram retornou uma lista de mídias inválida.")
-        return [self._parse_media(item) for item in raw_media if isinstance(item, Mapping)]
+        """Obtém até cinco páginas de mídias e converte campos opcionais com segurança."""
+        token = await self._get_token()
+        user_id = (
+            str(self._settings.user_id) if self._settings.user_id is not None else token.user_id
+        )
+        if user_id is None:
+            profile = await self.get_profile()
+            user_id = profile.user_id
+
+        media_items: list[InstagramMedia] = []
+        after: str | None = None
+        for _ in range(5):
+            payload = await self._request(
+                self.build_media_url(user_id),
+                fields=MEDIA_FIELDS,
+                token=token,
+                after=after,
+            )
+            raw_media = payload.get("data")
+            if not isinstance(raw_media, list):
+                raise InstagramAPIError("A API do Instagram retornou uma lista de mídias inválida.")
+            media_items.extend(
+                self._parse_media(item) for item in raw_media if isinstance(item, Mapping)
+            )
+            paging = payload.get("paging")
+            cursors = paging.get("cursors") if isinstance(paging, Mapping) else None
+            next_after = cursors.get("after") if isinstance(cursors, Mapping) else None
+            if not isinstance(next_after, str) or not next_after:
+                break
+            after = next_after
+        return media_items
 
     async def get_latest_media(self) -> InstagramMedia | None:
         """Retorna a mídia mais recente, se a conta tiver conteúdo disponível."""
         media_items = await self.list_recent_media()
         return max(media_items, key=lambda media: media.timestamp, default=None)
 
-    async def _request(self, url: str, *, fields: str) -> Mapping[str, Any]:
-        """Executa consulta autenticada com repetição limitada para falhas transitórias."""
+    async def _get_token(self) -> InstagramTokenData:
+        """Obtém o token atual sem propagar seu valor para logs ou erros."""
         token = await self._token_store.get_token()
         if token is None:
             raise InstagramAuthenticationError(
-                "Não há token Instagram disponível na configuração segura."
+                "Instagram habilitado, mas INSTAGRAM_ACCESS_TOKEN não foi configurado."
             )
+        return token
+
+    async def _request(
+        self,
+        url: str,
+        *,
+        fields: str,
+        token: InstagramTokenData,
+        after: str | None = None,
+    ) -> Mapping[str, Any]:
+        """Executa consulta autenticada com repetição limitada para falhas transitórias."""
+        params = {"fields": fields, "access_token": token.access_token}
+        if after is not None:
+            params["after"] = after
 
         for attempt in range(self._max_transient_retries + 1):
             try:
                 response = await self._http_client.get(
                     url,
-                    params={"fields": fields, "access_token": token.access_token},
+                    params=params,
                 )
             except httpx.RequestError:
                 if attempt < self._max_transient_retries:
@@ -223,6 +278,10 @@ class InstagramClient:
                 )
             if response.status_code == 429:
                 raise InstagramRateLimitError("A API do Instagram aplicou limite de requisições.")
+            if response.status_code == 404:
+                raise InstagramProfileNotFoundError(
+                    "A conta profissional autorizada não foi encontrada."
+                )
             if response.status_code >= 500:
                 if attempt < self._max_transient_retries:
                     await asyncio.sleep(self._retry_delay_seconds * (attempt + 1))
@@ -248,15 +307,9 @@ class InstagramClient:
             media_type=InstagramClient._optional_string(payload.get("media_type")),
             media_url=InstagramClient._optional_string(payload.get("media_url")),
             thumbnail_url=InstagramClient._optional_string(payload.get("thumbnail_url")),
-            permalink=InstagramClient._required_permalink(payload.get("permalink")),
+            permalink=InstagramClient._optional_string(payload.get("permalink")),
             timestamp=InstagramClient._parse_timestamp(payload.get("timestamp")),
         )
-
-    @staticmethod
-    def _required_permalink(value: object) -> str:
-        if isinstance(value, str) and value:
-            return value
-        raise InstagramAPIError("A API do Instagram retornou uma mídia sem permalink.")
 
     @staticmethod
     def _parse_timestamp(value: object) -> datetime:

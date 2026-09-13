@@ -186,30 +186,93 @@ Após iniciar o bot, verifique as inscrições no painel ou na referência de AP
 
 ### Instagram oficial da Meta
 
-A integração Instagram é desativada por padrão e é independente da Twitch. Ela usa o endpoint oficial Graph configurado por `INSTAGRAM_API_VERSION`, acessando exclusivamente o `INSTAGRAM_USER_ID` profissional autorizado. A conta, o aplicativo Meta, as permissões e o token precisam ser compatíveis com a API Instagram Graph usada pela sua aplicação.
+A integração Instagram é independente da Twitch, desativada por padrão e usa o fluxo **Instagram Login**
+oficial da Meta. O cliente consulta `graph.instagram.com`; portanto, não misture suas credenciais com o
+fluxo Business Login/Facebook Login que usa endpoints e permissões diferentes. A conta monitorada deve
+ser profissional (Business ou Creator). Para este projeto, o perfil esperado é `nosferarityy`.
 
-No painel de desenvolvedores da Meta, crie o aplicativo adequado, associe a conta profissional autorizada e gere um Access Token com as permissões exigidas pelo produto escolhido. Configure:
+1. Crie ou selecione o app em [Meta for Developers](https://developers.facebook.com/apps/) e adicione
+   o produto Instagram API com Instagram Login.
+2. Cadastre a URI pública HTTPS de callback na configuração OAuth da Meta. Em produção, por exemplo,
+   use `https://morcegao-bot.duckdns.org/instagram/oauth/callback`.
+3. Solicite apenas `instagram_business_basic`, que é suficiente para identificar a conta e consultar
+   suas mídias. Em modo de desenvolvimento, a conta precisa estar entre as funções/testadores do app;
+   em modo Live, ela deve concluir o consentimento OAuth e as permissões exigidas pela Meta devem estar
+   aprovadas.
+4. Configure o ambiente sem inserir token manualmente. `INSTAGRAM_USER_ID` e
+   `INSTAGRAM_ACCESS_TOKEN` podem ficar inicialmente vazios: serão preenchidos no armazenamento seguro
+   pelo callback OAuth.
 
 ```dotenv
 INSTAGRAM_ENABLED=true
-INSTAGRAM_USERNAME=perfil_autorizado
-INSTAGRAM_USER_ID=17800000000000000
+INSTAGRAM_USERNAME=nosferarityy
+INSTAGRAM_USER_ID=
 INSTAGRAM_ACCESS_TOKEN=
-INSTAGRAM_TOKEN_EXPIRES_AT=2026-11-10T03:30:00+00:00
+INSTAGRAM_TOKEN_EXPIRES_AT=
+INSTAGRAM_APP_ID=
+INSTAGRAM_APP_SECRET=
+INSTAGRAM_REDIRECT_URI=https://example.com/instagram/oauth/callback
 INSTAGRAM_AUTO_REFRESH_TOKEN=false
 INSTAGRAM_TOKEN_REFRESH_DAYS_BEFORE_EXPIRY=10
 INSTAGRAM_TOKEN_REFRESH_CHECK_INTERVAL_HOURS=24
 INSTAGRAM_API_VERSION=v22.0
 INSTAGRAM_POLL_INTERVAL_SECONDS=300
 INSTAGRAM_NOTIFY_EXISTING_LATEST=false
-DISCORD_INSTAGRAM_CHANNEL_ID=123456789012345678
+DISCORD_INSTAGRAM_CHANNEL_ID=
 ```
 
-O exemplo não contém token. `INSTAGRAM_USERNAME` aceita apenas o nome de usuário, sem `@` e sem URL; o bot remove um `@` inicial. Para trocar o perfil, atualize essas variáveis e reinicie o processo, sem mudar código.
+Nunca versione o `.env`, o `INSTAGRAM_APP_SECRET` ou um token. O bot também nunca escreve esses
+valores em logs, respostas HTTP ou mensagens Discord.
 
-O intervalo mínimo de polling é 60 segundos; o padrão de 300 segundos reduz consumo e risco de rate limit. Na primeira execução, `INSTAGRAM_NOTIFY_EXISTING_LATEST=false` registra a publicação mais recente como conhecida sem notificá-la. Defina como `true` para notificar essa publicação inicial.
+#### Autorizar a conta
 
-#### Renovação automática do token Instagram
+Com o bot e o FastAPI em execução, abra no navegador:
+
+```text
+https://seu-dominio/instagram/oauth/start
+```
+
+O endpoint gera um `state` aleatório, de uso único e válido por dez minutos, e redireciona à Meta. A
+conta `nosferarityy` deve entrar no Instagram e aceitar o consentimento. O callback rejeita `state`
+ausente, inválido ou repetido, troca o código no servidor, confere o username autorizado e mostra uma
+página genérica de sucesso. Não compartilhe a URL de callback nem o código de autorização.
+
+O resultado é gravado de forma atômica em `data/instagram-token.json`, com permissões `0600` no Linux.
+O arquivo contém token, ID, username e datas de expiração/atualização e está ignorado pelo Git. Reinicie
+o serviço após uma autorização bem-sucedida para criar o cliente e iniciar o polling:
+
+```bash
+sudo systemctl restart morcegao
+sudo journalctl -u morcegao -n 100 --no-pager
+```
+
+Na EC2, mantenha o FastAPI em `127.0.0.1:8000` e faça o Nginx encaminhar o caminho OAuth público; não
+abra a porta 8000 no Security Group. Se sua configuração Nginx ainda só encaminha o webhook Twitch,
+inclua uma localização equivalente a:
+
+```nginx
+location /instagram/oauth/ {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+Depois valide e recarregue o Nginx com `sudo nginx -t` e `sudo systemctl reload nginx`.
+
+O bot precisa de **Ver canal**, **Enviar mensagens** e **Incorporar links** no canal cujo ID está em
+`DISCORD_INSTAGRAM_CHANNEL_ID`.
+
+#### Polling e renovação
+
+O polling começa somente quando `INSTAGRAM_ENABLED=true`, há token disponível e o canal Discord foi
+configurado. Ele consulta a mídia mais recente a cada `INSTAGRAM_POLL_INTERVAL_SECONDS`, percorre até
+cinco páginas da API e persiste o ID da mídia somente depois que a mensagem Discord é enviada. Assim,
+reinicializações e falhas de envio não causam duplicidade ou perda de post.
+
+Na primeira execução, `INSTAGRAM_NOTIFY_EXISTING_LATEST=false` marca a publicação atual como conhecida
+sem enviá-la. Publique uma mídia nova e aguarde o intervalo configurado para testar. Defina a variável
+como `true` somente se quiser anunciar a publicação mais recente na primeira sincronização.
 
 A renovação só funciona enquanto o token ainda está válido. Para ativá-la, informe a expiração com
 fuso horário ISO 8601 e defina `INSTAGRAM_AUTO_REFRESH_TOKEN=true`. O bot verifica no intervalo de
@@ -218,8 +281,8 @@ Token expirado, revogado ou recusado exige nova autorização no painel Meta; o 
 uma mensagem segura e continua executando.
 
 No backend padrão `TOKEN_STORAGE_BACKEND=env`, o token renovado e sua expiração são atualizados no
-`.env` local, que já é ignorado pelo Git. Em Linux, o arquivo recebe permissão `0600`; em Windows,
-restrinja o acesso ao arquivo pela conta que executa o serviço. Nunca faça commit do `.env`.
+arquivo JSON local protegido. Em Linux, mantenha o diretório `data/` acessível apenas à conta do
+serviço. Em Windows, restrinja o acesso ao arquivo pela conta que executa o processo.
 
 Para EC2, prefira AWS Secrets Manager com IAM Role — não coloque chaves AWS no `.env`:
 
@@ -235,11 +298,16 @@ Instale o extra AWS no ambiente de produção:
 python -m pip install -e ".[aws]"
 ```
 
-O segredo deve ser um JSON com `access_token`, `token_type`, `expires_at` e `updated_at`. A IAM Role
+O segredo deve ser um JSON com `access_token`, `token_type`, `user_id`, `username`, `expires_at` e
+`updated_at`. A IAM Role
 da instância precisa somente de `secretsmanager:GetSecretValue` e `secretsmanager:PutSecretValue`
 para esse segredo. Após uma reautorização manual, atualize o backend seguro e reinicie o serviço.
 
-Para testar a API manualmente, use a ferramenta oficial Graph API Explorer ou a documentação do produto Meta habilitado na sua aplicação. Não tente acessar o perfil com scraping. Caso o token expire, gere ou renove um token autorizado, atualize apenas o `.env` e reinicie. Revogue a autorização no painel Meta se o token for comprometido ou se quiser remover o acesso.
+Para desenvolvimento local, use `python -m bot` a partir da raiz do projeto e abra `/instagram/oauth/start`
+no domínio configurado. Na EC2, use a URL HTTPS do Nginx e reinicie a unidade `morcegao` após o callback.
+Erros `401`/`400` indicam token inválido ou expirado; `403` indica permissão insuficiente ou fluxo Meta
+incorreto; `429` indica rate limit. Não tente acessar o perfil por scraping. Caso o token seja revogado,
+execute novamente o OAuth e reinicie o serviço.
 
 Esta versão prepara a separação para futuros callbacks `/webhooks/instagram`, mas não afirma existir um webhook geral de nova publicação. A notificação atual é feita por polling, pois eventos Meta devem ser implementados apenas quando oficialmente suportados pela configuração da conta e do aplicativo.
 

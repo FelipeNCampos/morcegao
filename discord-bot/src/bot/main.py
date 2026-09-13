@@ -45,7 +45,7 @@ async def _prepare_twitch_client(settings: Settings) -> TwitchClient | None:
     return twitch_client
 
 
-def _prepare_instagram_client(
+async def _prepare_instagram_client(
     settings: Settings,
 ) -> tuple[InstagramClient | None, InstagramTokenStore | None]:
     """Cria Instagram e seu armazenamento sem derrubar os serviços Discord se falhar."""
@@ -54,12 +54,38 @@ def _prepare_instagram_client(
         return None, None
     try:
         token_store = create_instagram_token_store(settings.instagram)
-        return InstagramClient(settings.instagram, token_store=token_store), token_store
+        token = await token_store.get_token()
     except (InstagramTokenStoreError, ValueError):
         logger.exception(
             "A integração Instagram não pôde ser preparada; o Discord continuará ativo."
         )
         return None, None
+
+    if token is None:
+        if settings.instagram.oauth_is_configured:
+            logger.error(
+                "Instagram habilitado, mas INSTAGRAM_ACCESS_TOKEN não foi configurado; "
+                "o Discord continuará ativo e o OAuth poderá ser usado."
+            )
+        else:
+            logger.error(
+                "Instagram habilitado, mas INSTAGRAM_ACCESS_TOKEN não foi configurado; "
+                "configure OAuth para autorizar a conta sem interromper o Discord."
+            )
+        return None, token_store
+    if settings.instagram.notification_channel_id is None:
+        logger.error(
+            "Instagram habilitado, mas DISCORD_INSTAGRAM_CHANNEL_ID não foi configurado; "
+            "o polling não será iniciado."
+        )
+        return None, token_store
+
+    logger.info(
+        "Integração Instagram preparada para @%s e canal Discord %d.",
+        token.username or settings.instagram.username or "conta autorizada",
+        settings.instagram.notification_channel_id,
+    )
+    return InstagramClient(settings.instagram, token_store=token_store), token_store
 
 
 async def _wait_for_server_start(server: uvicorn.Server, task: asyncio.Task[None]) -> None:
@@ -79,7 +105,7 @@ async def run_services(settings: Settings) -> None:
     )
 
     twitch_client = await _prepare_twitch_client(settings)
-    instagram_client, instagram_token_store = _prepare_instagram_client(settings)
+    instagram_client, instagram_token_store = await _prepare_instagram_client(settings)
     bot = DiscordBot(
         settings,
         store=store,
@@ -87,7 +113,12 @@ async def run_services(settings: Settings) -> None:
         instagram_client=instagram_client,
         instagram_token_store=instagram_token_store,
     )
-    app = create_web_app(settings, store, bot)
+    app = create_web_app(
+        settings,
+        store,
+        bot,
+        instagram_token_store=instagram_token_store,
+    )
     server: uvicorn.Server | None = uvicorn.Server(
         uvicorn.Config(
             app,

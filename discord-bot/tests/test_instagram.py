@@ -20,7 +20,7 @@ from bot.integrations.instagram import (
 )
 from bot.integrations.instagram_token_store import (
     AwsSecretsManagerInstagramTokenStore,
-    DotenvInstagramTokenStore,
+    JsonFileInstagramTokenStore,
 )
 from bot.models import InstagramMedia, InstagramTokenData, InstagramTokenRefreshResult
 from bot.storage import NotificationStore
@@ -341,20 +341,26 @@ async def test_token_refresh_task_stops_cleanly(
 
 
 @pytest.mark.asyncio
-async def test_dotenv_token_store_persists_refreshed_token_locally(
+async def test_json_token_store_persists_refreshed_token_locally(
     environment: Callable[[], dict[str, str]], tmp_path: Path
 ) -> None:
-    """O backend de desenvolvimento grava token e expiração no `.env` ignorado pelo Git."""
+    """O backend local grava token e expiração em JSON fora do repositório."""
     settings = Settings.from_environment(instagram_refresh_environment(environment)).instagram
-    token_store = DotenvInstagramTokenStore(settings, dotenv_path=tmp_path / ".env")
+    token_store = JsonFileInstagramTokenStore(
+        settings, token_path=tmp_path / "instagram-token.json"
+    )
     expected = token_data(datetime(2026, 11, 10, 3, 30, tzinfo=UTC))
 
     await token_store.save_token(expected)
-    loaded = await token_store.get_token()
+    reloaded_store = JsonFileInstagramTokenStore(
+        settings, token_path=tmp_path / "instagram-token.json"
+    )
+    loaded = await reloaded_store.get_token()
 
     assert loaded is not None
     assert loaded.access_token == expected.access_token
     assert loaded.expires_at == expected.expires_at
+    assert loaded.user_id == "17800000000000000"
 
 
 class FakeSecretStore:
@@ -444,6 +450,48 @@ async def test_first_poll_marks_latest_as_known_then_notifies_new_media(
 
     assert await store.has_processed_instagram_media("old-media")
     assert sender.sent_media == [new_media]
+
+
+class FailingSender:
+    """Simula uma falha Discord para verificar que a mídia continua pendente."""
+
+    async def send_instagram_notification(self, _: InstagramMedia) -> None:
+        raise RuntimeError("Falha de envio simulada.")
+
+
+@pytest.mark.asyncio
+async def test_poller_does_not_persist_media_when_discord_send_fails(
+    environment: Callable[[], dict[str, str]], tmp_path: Path
+) -> None:
+    """Uma mídia só é marcada após a confirmação de envio ao Discord."""
+    values = instagram_environment(environment)
+    values["INSTAGRAM_NOTIFY_EXISTING_LATEST"] = "true"
+    settings = Settings.from_environment(values).instagram
+    media = InstagramMedia(
+        media_id="unsent-media",
+        username="perfil_autorizado",
+        caption="Teste",
+        media_type="IMAGE",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/p/unsent/",
+        timestamp=datetime(2026, 9, 11, 12, tzinfo=UTC),
+    )
+    store = NotificationStore(
+        tmp_path / "notifications.sqlite3", instagram_user_id=settings.user_id
+    )
+    await store.initialize()
+    poller = InstagramPoller(
+        settings,
+        FakeInstagramClient([media]),
+        store,
+        FailingSender(),  # type: ignore[arg-type]
+    )
+
+    with pytest.raises(RuntimeError, match="Falha de envio"):
+        await poller.poll_once()
+
+    assert not await store.has_processed_instagram_media(media.media_id)
 
 
 class FailingInstagramClient:

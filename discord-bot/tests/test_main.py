@@ -74,9 +74,13 @@ async def test_run_services_composes_single_bot_and_cleans_up_tasks(
     monkeypatch.setattr(main_module, "NotificationStore", FakeStore)
     monkeypatch.setattr(main_module, "DiscordBot", FakeBot)
     monkeypatch.setattr(main_module.uvicorn, "Server", FakeServer)
-    monkeypatch.setattr(main_module, "create_web_app", lambda *_: object())
+    monkeypatch.setattr(main_module, "create_web_app", lambda *_, **__: object())
     monkeypatch.setattr(main_module, "_prepare_twitch_client", no_twitch)
-    monkeypatch.setattr(main_module, "_prepare_instagram_client", lambda _: (None, None))
+
+    async def no_instagram(_: Settings) -> tuple[None, None]:
+        return None, None
+
+    monkeypatch.setattr(main_module, "_prepare_instagram_client", no_instagram)
 
     await main_module.run_services(Settings.from_environment(environment()))
 

@@ -1,19 +1,20 @@
-"""Armazenamento seguro e intercambiável para tokens renováveis do Instagram."""
+"""Armazenamento seguro e intercambiável para tokens autorizados do Instagram."""
 
 from __future__ import annotations
 
 import asyncio
 import json
 import os
+import secrets
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Protocol
 
-from dotenv import dotenv_values, set_key
-
 from bot.config import InstagramSettings
 from bot.models import InstagramTokenData
+
+DEFAULT_TOKEN_PATH = Path("data") / "instagram-token.json"
 
 
 class InstagramTokenStoreError(RuntimeError):
@@ -27,7 +28,7 @@ class InstagramTokenStore(Protocol):
         """Retorna o token atual e seus metadados, quando estiver configurado."""
 
     async def save_token(self, token: InstagramTokenData) -> None:
-        """Persiste um token recém-renovado sem registrá-lo em logs."""
+        """Persiste um token recém-autorizado sem registrá-lo em logs."""
 
 
 class SecretStore(Protocol):
@@ -40,18 +41,51 @@ class SecretStore(Protocol):
         """Atualiza o valor de um segredo pelo identificador configurado."""
 
 
+def _fallback_token(settings: InstagramSettings) -> InstagramTokenData | None:
+    """Cria um valor inicial a partir do ambiente, sem gravá-lo em disco."""
+    if settings.access_token is None:
+        return None
+    return InstagramTokenData(
+        access_token=settings.access_token,
+        token_type=None,
+        expires_at=settings.token_expires_at or datetime.max.replace(tzinfo=UTC),
+        updated_at=datetime.now(UTC),
+        user_id=str(settings.user_id) if settings.user_id is not None else None,
+        username=settings.username,
+    )
+
+
+def _validated_token(
+    token: InstagramTokenData,
+    *,
+    previous: InstagramTokenData | None = None,
+) -> InstagramTokenData:
+    """Valida uma resposta e preserva metadados ausentes de um token válido anterior."""
+    if not token.access_token.strip():
+        raise InstagramTokenStoreError("O token Instagram recebido é inválido.")
+    if token.expires_at.tzinfo is None or token.updated_at.tzinfo is None:
+        raise InstagramTokenStoreError("Os dados do token Instagram precisam incluir fuso horário.")
+    if token.token_type is not None and not token.token_type.strip():
+        raise InstagramTokenStoreError("O tipo do token Instagram é inválido.")
+    if token.user_id is not None and not token.user_id.strip():
+        raise InstagramTokenStoreError("O ID da conta Instagram é inválido.")
+    if token.username is not None and not token.username.strip():
+        raise InstagramTokenStoreError("O nome da conta Instagram é inválido.")
+    return InstagramTokenData(
+        access_token=token.access_token,
+        token_type=token.token_type,
+        expires_at=token.expires_at.astimezone(UTC),
+        updated_at=token.updated_at.astimezone(UTC),
+        user_id=token.user_id or (previous.user_id if previous is not None else None),
+        username=token.username or (previous.username if previous is not None else None),
+    )
+
+
 class InMemoryInstagramTokenStore:
-    """Armazenamento efêmero usado somente quando o cliente é criado isoladamente em testes."""
+    """Armazenamento efêmero usado somente em testes isolados."""
 
     def __init__(self, settings: InstagramSettings) -> None:
-        if settings.access_token is None:
-            raise ValueError("INSTAGRAM_ACCESS_TOKEN é obrigatório para criar o armazenamento.")
-        self._token = InstagramTokenData(
-            access_token=settings.access_token,
-            token_type=None,
-            expires_at=settings.token_expires_at or datetime.max.replace(tzinfo=UTC),
-            updated_at=datetime.now(UTC),
-        )
+        self._token = _fallback_token(settings)
         self._lock = asyncio.Lock()
 
     async def get_token(self) -> InstagramTokenData | None:
@@ -60,107 +94,106 @@ class InMemoryInstagramTokenStore:
             return self._token
 
     async def save_token(self, token: InstagramTokenData) -> None:
-        """Substitui o token em memória para refletir a renovação nos testes."""
+        """Substitui o token em memória depois de validá-lo."""
         async with self._lock:
-            self._token = token
+            self._token = _validated_token(token, previous=self._token)
 
 
-class DotenvInstagramTokenStore:
-    """Backend local de desenvolvimento que atualiza o arquivo `.env` ignorado pelo Git."""
+class JsonFileInstagramTokenStore:
+    """Persiste token em JSON atômico, fora do Git e com modo 0600 em sistemas POSIX."""
 
-    def __init__(self, settings: InstagramSettings, *, dotenv_path: Path | None = None) -> None:
-        if settings.access_token is None:
-            raise ValueError("INSTAGRAM_ACCESS_TOKEN é obrigatório para o armazenamento local.")
-        self._fallback_token = settings.access_token
-        self._fallback_expires_at = settings.token_expires_at
-        self._dotenv_path = dotenv_path or Path(".env")
+    def __init__(self, settings: InstagramSettings, *, token_path: Path | None = None) -> None:
+        self._token_path = token_path or DEFAULT_TOKEN_PATH
+        self._fallback = _fallback_token(settings)
         self._lock = asyncio.Lock()
 
     async def get_token(self) -> InstagramTokenData | None:
-        """Recarrega o token persistido para que polling e renovação usem o valor atual."""
-        values = await asyncio.to_thread(self._read_values)
-        access_token = self._value_or_fallback(
-            values, "INSTAGRAM_ACCESS_TOKEN", self._fallback_token
-        )
-        expires_at = self._parse_expires_at(
-            self._value_or_fallback(
-                values,
-                "INSTAGRAM_TOKEN_EXPIRES_AT",
-                self._fallback_expires_at.isoformat() if self._fallback_expires_at else None,
-            )
-        )
-        if access_token is None:
-            return None
-        return InstagramTokenData(
-            access_token=access_token,
-            token_type=self._optional_value(values.get("INSTAGRAM_TOKEN_TYPE")),
-            expires_at=expires_at,
-            updated_at=datetime.now(UTC),
-        )
+        """Lê o JSON persistido; usa o ambiente apenas quando ainda não há arquivo."""
+        async with self._lock:
+            token = await asyncio.to_thread(self._read_token)
+            return token or self._fallback
 
     async def save_token(self, token: InstagramTokenData) -> None:
-        """Atualiza o `.env` local de modo serializado, mantendo o token fora do repositório."""
+        """Grava uma resposta completa de modo atômico e atualiza o fallback em memória."""
         async with self._lock:
-            await asyncio.to_thread(self._write_values, token)
-            self._fallback_token = token.access_token
-            self._fallback_expires_at = token.expires_at
+            previous = await asyncio.to_thread(self._read_token)
+            normalized = _validated_token(token, previous=previous or self._fallback)
+            await asyncio.to_thread(self._write_token, normalized)
+            self._fallback = normalized
 
-    def _read_values(self) -> Mapping[str, str | None]:
-        if not self._dotenv_path.exists():
-            return {}
-        return dotenv_values(self._dotenv_path)
-
-    def _write_values(self, token: InstagramTokenData) -> None:
-        self._dotenv_path.parent.mkdir(parents=True, exist_ok=True)
-        set_key(
-            str(self._dotenv_path),
-            "INSTAGRAM_ACCESS_TOKEN",
-            token.access_token,
-            quote_mode="always",
-        )
-        set_key(
-            str(self._dotenv_path),
-            "INSTAGRAM_TOKEN_EXPIRES_AT",
-            token.expires_at.isoformat(),
-            quote_mode="always",
-        )
-        if token.token_type is not None:
-            set_key(
-                str(self._dotenv_path),
-                "INSTAGRAM_TOKEN_TYPE",
-                token.token_type,
-                quote_mode="always",
-            )
-        if os.name != "nt":
-            self._dotenv_path.chmod(0o600)
-
-    @staticmethod
-    def _value_or_fallback(
-        values: Mapping[str, str | None], key: str, fallback: str | None
-    ) -> str | None:
-        value = DotenvInstagramTokenStore._optional_value(values.get(key))
-        return value if value is not None else fallback
-
-    @staticmethod
-    def _optional_value(value: str | None) -> str | None:
-        normalized_value = (value or "").strip()
-        return normalized_value or None
-
-    @staticmethod
-    def _parse_expires_at(value: str | None) -> datetime:
-        if value is None:
-            return datetime.max.replace(tzinfo=UTC)
+    def _read_token(self) -> InstagramTokenData | None:
+        if not self._token_path.exists():
+            return None
         try:
-            parsed_value = datetime.fromisoformat(value.replace("Z", "+00:00"))
-        except ValueError:
+            payload = json.loads(self._token_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
             raise InstagramTokenStoreError(
-                "A data de expiração armazenada do Instagram é inválida."
+                "Não foi possível ler o armazenamento seguro do token Instagram."
             ) from None
-        if parsed_value.tzinfo is None:
+        if not isinstance(payload, Mapping):
             raise InstagramTokenStoreError(
-                "A data de expiração armazenada do Instagram precisa incluir fuso horário."
+                "O armazenamento do token Instagram possui formato inválido."
             )
-        return parsed_value.astimezone(UTC)
+        return self._deserialize_token(payload)
+
+    def _write_token(self, token: InstagramTokenData) -> None:
+        self._token_path.parent.mkdir(parents=True, exist_ok=True)
+        temporary_path = self._token_path.with_name(
+            f".{self._token_path.name}.{secrets.token_hex(8)}.tmp"
+        )
+        try:
+            with temporary_path.open("x", encoding="utf-8") as file:
+                json.dump(self._serialize_token(token), file, separators=(",", ":"))
+                file.flush()
+                os.fsync(file.fileno())
+            if os.name != "nt":
+                temporary_path.chmod(0o600)
+            os.replace(temporary_path, self._token_path)
+            if os.name != "nt":
+                self._token_path.chmod(0o600)
+        finally:
+            if temporary_path.exists():
+                temporary_path.unlink(missing_ok=True)
+
+    @staticmethod
+    def _serialize_token(token: InstagramTokenData) -> dict[str, str | None]:
+        return {
+            "access_token": token.access_token,
+            "token_type": token.token_type,
+            "expires_at": token.expires_at.isoformat(),
+            "updated_at": token.updated_at.isoformat(),
+            "user_id": token.user_id,
+            "username": token.username,
+        }
+
+    @staticmethod
+    def _deserialize_token(payload: Mapping[str, object]) -> InstagramTokenData:
+        access_token = payload.get("access_token")
+        expires_at = payload.get("expires_at")
+        updated_at = payload.get("updated_at")
+        token_type = payload.get("token_type")
+        user_id = payload.get("user_id")
+        username = payload.get("username")
+        if not isinstance(access_token, str) or not access_token:
+            raise InstagramTokenStoreError("O armazenamento não possui um token Instagram válido.")
+        if not isinstance(expires_at, str) or not isinstance(updated_at, str):
+            raise InstagramTokenStoreError("O armazenamento não possui datas de token válidas.")
+        if token_type is not None and not isinstance(token_type, str):
+            raise InstagramTokenStoreError("O armazenamento possui tipo de token inválido.")
+        if user_id is not None and not isinstance(user_id, str):
+            raise InstagramTokenStoreError("O armazenamento possui ID Instagram inválido.")
+        if username is not None and not isinstance(username, str):
+            raise InstagramTokenStoreError("O armazenamento possui usuário Instagram inválido.")
+        return _validated_token(
+            InstagramTokenData(
+                access_token=access_token,
+                token_type=token_type,
+                expires_at=_parse_expires_at(expires_at),
+                updated_at=_parse_expires_at(updated_at),
+                user_id=user_id,
+                username=username,
+            )
+        )
 
 
 class AwsSecretsManagerSecretStore:
@@ -204,6 +237,7 @@ class AwsSecretsManagerInstagramTokenStore:
     def __init__(self, secret_name: str, secret_store: SecretStore) -> None:
         self._secret_name = secret_name
         self._secret_store = secret_store
+        self._lock = asyncio.Lock()
 
     async def get_token(self) -> InstagramTokenData | None:
         """Converte o segredo JSON em dados de token sem expor seu valor."""
@@ -218,50 +252,39 @@ class AwsSecretsManagerInstagramTokenStore:
             ) from None
         if not isinstance(payload, Mapping):
             raise InstagramTokenStoreError("O segredo Instagram da AWS possui formato inválido.")
-        return self._deserialize_token(payload)
+        return JsonFileInstagramTokenStore._deserialize_token(payload)
 
     async def save_token(self, token: InstagramTokenData) -> None:
-        """Grava dados tipados em JSON, sem logs ou arquivos públicos."""
-        payload = {
-            "access_token": token.access_token,
-            "token_type": token.token_type,
-            "expires_at": token.expires_at.isoformat(),
-            "updated_at": token.updated_at.isoformat(),
-        }
-        await self._secret_store.write(
-            self._secret_name, json.dumps(payload, separators=(",", ":"))
-        )
+        """Grava dados validados em JSON, sem logs ou arquivos públicos."""
+        async with self._lock:
+            previous = await self.get_token()
+            normalized = _validated_token(token, previous=previous)
+            payload = JsonFileInstagramTokenStore._serialize_token(normalized)
+            await self._secret_store.write(
+                self._secret_name, json.dumps(payload, separators=(",", ":"))
+            )
 
-    @staticmethod
-    def _deserialize_token(payload: Mapping[str, object]) -> InstagramTokenData:
-        access_token = payload.get("access_token")
-        expires_at = payload.get("expires_at")
-        updated_at = payload.get("updated_at")
-        token_type = payload.get("token_type")
-        if not isinstance(access_token, str) or not access_token:
-            raise InstagramTokenStoreError("O segredo Instagram da AWS não possui token válido.")
-        if token_type is not None and not isinstance(token_type, str):
-            raise InstagramTokenStoreError(
-                "O segredo Instagram da AWS possui tipo de token inválido."
-            )
-        if not isinstance(expires_at, str) or not isinstance(updated_at, str):
-            raise InstagramTokenStoreError(
-                "O segredo Instagram da AWS não possui datas de token válidas."
-            )
-        return InstagramTokenData(
-            access_token=access_token,
-            token_type=token_type,
-            expires_at=DotenvInstagramTokenStore._parse_expires_at(expires_at),
-            updated_at=DotenvInstagramTokenStore._parse_expires_at(updated_at),
+
+def _parse_expires_at(value: str) -> datetime:
+    try:
+        parsed_value = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        raise InstagramTokenStoreError(
+            "A data de expiração armazenada do Instagram é inválida."
+        ) from None
+    if parsed_value.tzinfo is None:
+        raise InstagramTokenStoreError(
+            "A data de expiração armazenada do Instagram precisa incluir fuso horário."
         )
+    return parsed_value.astimezone(UTC)
 
 
 def create_instagram_token_store(
-    settings: InstagramSettings, *, dotenv_path: Path | None = None
+    settings: InstagramSettings, *, token_path: Path | None = None
 ) -> InstagramTokenStore:
-    """Seleciona o armazenamento local ou AWS conforme a configuração validada."""
+    """Seleciona o armazenamento JSON local ou AWS conforme a configuração validada."""
     if settings.token_storage_backend == "env":
-        return DotenvInstagramTokenStore(settings, dotenv_path=dotenv_path)
+        return JsonFileInstagramTokenStore(settings, token_path=token_path)
     if settings.aws_secret_name is None or settings.aws_region is None:
         raise InstagramTokenStoreError("O backend AWS não possui nome de segredo ou região.")
     secret_store = AwsSecretsManagerSecretStore(region_name=settings.aws_region)

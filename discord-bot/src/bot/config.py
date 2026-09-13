@@ -212,6 +212,9 @@ class InstagramSettings:
     username: str | None
     user_id: int | None
     access_token: str | None
+    app_id: str | None
+    app_secret: str | None
+    redirect_uri: str | None
     api_version: str
     poll_interval_seconds: int
     notify_existing_latest: bool
@@ -223,6 +226,16 @@ class InstagramSettings:
     token_storage_backend: str
     aws_secret_name: str | None
     aws_region: str | None
+
+    @property
+    def oauth_is_configured(self) -> bool:
+        """Indica se as três credenciais necessárias para OAuth foram informadas."""
+        return all((self.app_id, self.app_secret, self.redirect_uri))
+
+    @property
+    def polling_is_configured(self) -> bool:
+        """Indica se há dados mínimos no ambiente para iniciar polling imediatamente."""
+        return self.access_token is not None and self.notification_channel_id is not None
 
 
 @dataclass(frozen=True, slots=True)
@@ -333,18 +346,18 @@ class Settings:
             )
         instagram = InstagramSettings(
             enabled=instagram_enabled,
-            username=_optional_profile_login("INSTAGRAM_USERNAME", source.get("INSTAGRAM_USERNAME"))
-            if not instagram_enabled
-            else _profile_login("INSTAGRAM_USERNAME", source.get("INSTAGRAM_USERNAME")),
+            username=_optional_profile_login(
+                "INSTAGRAM_USERNAME", source.get("INSTAGRAM_USERNAME")
+            ),
             user_id=_numeric_id(
                 "INSTAGRAM_USER_ID",
                 source.get("INSTAGRAM_USER_ID"),
-                required=instagram_enabled,
             ),
-            access_token=(
-                _required_value("INSTAGRAM_ACCESS_TOKEN", source.get("INSTAGRAM_ACCESS_TOKEN"))
-                if instagram_enabled
-                else _optional_value(source.get("INSTAGRAM_ACCESS_TOKEN"))
+            access_token=_optional_value(source.get("INSTAGRAM_ACCESS_TOKEN")),
+            app_id=_optional_value(source.get("INSTAGRAM_APP_ID")),
+            app_secret=_optional_value(source.get("INSTAGRAM_APP_SECRET")),
+            redirect_uri=_optional_https_url(
+                "INSTAGRAM_REDIRECT_URI", source.get("INSTAGRAM_REDIRECT_URI")
             ),
             api_version=_instagram_api_version(source.get("INSTAGRAM_API_VERSION")),
             poll_interval_seconds=_poll_interval(source.get("INSTAGRAM_POLL_INTERVAL_SECONDS")),
@@ -355,7 +368,6 @@ class Settings:
             notification_channel_id=_numeric_id(
                 "DISCORD_INSTAGRAM_CHANNEL_ID",
                 source.get("DISCORD_INSTAGRAM_CHANNEL_ID"),
-                required=instagram_enabled,
             ),
             auto_refresh_token=instagram_auto_refresh_token,
             token_refresh_days_before_expiry=_positive_integer(

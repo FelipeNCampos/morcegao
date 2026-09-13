@@ -59,6 +59,8 @@ class InstagramTokenData:
     token_type: str | None
     expires_at: datetime
     updated_at: datetime
+    user_id: str | None = None
+    username: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,5 +83,5 @@ class InstagramMedia:
     media_type: str | None
     media_url: str | None
     thumbnail_url: str | None
-    permalink: str
+    permalink: str | None
     timestamp: datetime
