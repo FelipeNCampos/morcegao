@@ -96,6 +96,10 @@ Em **Installation** — ou **OAuth2 > URL Generator** — selecione os escopos `
 
 Ative **Message Content Intent** na seção **Bot > Privileged Gateway Intents** do Discord Developer Portal para que o listener de reações automáticas receba os anexos das mensagens. O cliente já o solicita por código; sem a ativação no portal, o Discord não entrega o conteúdo da mensagem ao bot.
 
+Ative também **Server Members Intent** nessa mesma seção. Ele é necessário para que o Morcegão receba
+entradas de membros e atribua o cargo automático. O código já solicita esse intent; o portal precisa
+autorizá-lo também.
+
 `DISCORD_GUILD_ID` registra os slash commands rapidamente no servidor de desenvolvimento. `SYNC_GLOBAL_COMMANDS=true` também sincroniza comandos globais, que podem demorar mais para aparecer.
 
 ### Reações automáticas em mídias
@@ -111,6 +115,72 @@ Deixe a variável vazia para desativar a funcionalidade. O bot precisa de **View
 Message History** e **Add Reactions** nesse canal; **Administrator** não é necessário. Ao detectar
 mídia enviada por uma pessoa, ele adiciona a sequência Unicode `🇻 🇦 🇲 🇵 🇮` na ordem. Esta primeira
 versão usa somente emojis Unicode.
+
+### Cargos automáticos e por reação
+
+O sistema usa exclusivamente IDs. Assim, renomear um cargo no Discord não quebra a configuração.
+Primeiro crie os cargos que deseja oferecer e posicione o cargo do **Morcegão acima de todos os
+cargos que ele pode atribuir**. Não coloque o bot acima de cargos administrativos que ele não deve
+gerenciar. No canal dos menus, conceda ao bot **View Channel**, **Read Message History**, **Add
+Reactions** e **Manage Roles**.
+
+Com o Developer Mode ativo, clique com o botão direito em um cargo, canal ou mensagem e escolha
+**Copiar ID**. Preencha inicialmente o canal e os cargos no `.env`; os IDs das mensagens podem ficar
+vazios até elas serem publicadas:
+
+```dotenv
+DISCORD_AUTO_ROLE_ID=123456789012345678
+DISCORD_ROLE_MENU_CHANNEL_ID=123456789012345678
+
+DISCORD_ROLE_AGE_PLUS_18_ID=123456789012345678
+DISCORD_ROLE_AGE_MINUS_18_ID=123456789012345678
+DISCORD_ROLE_GENDER_FEMININE_ID=123456789012345678
+DISCORD_ROLE_GENDER_MASCULINE_ID=123456789012345678
+DISCORD_ROLE_GENDER_NON_BINARY_ID=
+DISCORD_ROLE_GENDER_OTHER_ID=
+DISCORD_ROLE_PRONOUN_SHE_HER_ID=123456789012345678
+DISCORD_ROLE_PRONOUN_HE_HIM_ID=123456789012345678
+DISCORD_ROLE_PRONOUN_THEY_THEM_ID=123456789012345678
+```
+
+Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `♀️`, `♂️`, `⚧️` e `✨` para
+gênero; `🌙`, `☀️` e `⭐` para pronomes. Você pode alterar qualquer um por
+`DISCORD_ROLE_*_EMOJI`. Para emoji personalizado, informe a string completa, por exemplo
+`<:meuemoji:123456789012345678>`; o bot compara tanto a string quanto o ID do emoji.
+
+Depois de reiniciar, um administrador pode executar `/configurar-cargos`. O comando publica as
+mensagens configuradas apenas quando você o chama, adiciona as reações e responde de forma efêmera
+com os IDs criados. Copie-os para as variáveis abaixo, reinicie o bot e não execute o comando de
+novo, pois isso criaria outras mensagens:
+
+```dotenv
+DISCORD_AGE_ROLE_MESSAGE_ID=123456789012345678
+DISCORD_GENDER_ROLE_MESSAGE_ID=123456789012345678
+DISCORD_PRONOUN_ROLE_MESSAGE_ID=123456789012345678
+```
+
+Se preferir criar as mensagens manualmente, escreva uma mensagem por categoria, adicione as reações
+configuradas e copie os IDs das mensagens para essas variáveis. Caso uma mensagem seja apagada e
+recriada, atualize somente seu ID no `.env` e reinicie. Não há persistência de configurações além do
+ambiente, por escolha: nenhum dado pessoal é armazenado.
+
+O comportamento é um toggle:
+
+1. Reaja com `🔞` para receber o cargo +18.
+2. Reaja com `🔓` para receber o cargo -18.
+3. Se já tiver o cargo escolhido e reagir novamente, o cargo será removido.
+4. Ao escolher a outra opção de idade, o cargo anterior será substituído.
+5. A reação do usuário é removida automaticamente após o processamento.
+
+Idade é exclusiva por padrão (`DISCORD_ROLE_AGE_EXCLUSIVE=true`). Gênero e pronomes permitem
+múltiplas opções por padrão; defina `DISCORD_ROLE_GENDER_EXCLUSIVE=true` ou
+`DISCORD_ROLE_PRONOUN_EXCLUSIVE=true` se quiser limitar cada categoria a uma opção. Reações em outro
+canal, outra mensagem ou com emoji não configurado são ignoradas. O processamento usa
+`on_raw_reaction_add`, portanto continua funcionando mesmo que a mensagem não esteja no cache.
+
+Se aparecer nos logs que um cargo não é gerenciável, confira se o cargo existe, se não é integrado e
+se está abaixo do cargo do bot. Se o bot não remover reações, confira também **Read Message History**
+e as permissões do canal. O bot não envia erros públicos para cada reação para não poluir o canal.
 
 ### Canais de voz temporários
 
@@ -344,6 +414,8 @@ fecha os clientes HTTP e encerra o servidor web de modo coordenado.
   **Gerenciar servidor**.
 - `/reenviar_live`: reenvia a notificação da última live Twitch ainda aberta. Exige a permissão
   **Gerenciar servidor** e responde somente ao administrador que executou o comando.
+- `/configurar-cargos`: publica mensagens de idade, gênero e pronomes no canal de cargos e mostra os
+  IDs criados. Exige **Gerenciar servidor**. Execute apenas durante a configuração inicial.
 - **Canais temporários de voz:** entre no canal criador configurado para receber uma sala exclusiva.
   Não há comando adicional; use as opções nativas de edição do Discord na sua própria sala.
 - `/limpar quantidade:<número>`: apaga até a quantidade informada de mensagens anteriores no mesmo

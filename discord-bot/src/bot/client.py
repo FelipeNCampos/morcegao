@@ -40,7 +40,8 @@ class DiscordBot(commands.Bot):
     ) -> None:
         intents = discord.Intents.default()
         intents.message_content = True
-        intents.members = False
+        # Necessário para receber on_member_join e resolver membros em reações antigas.
+        intents.members = True
         intents.presences = False
         intents.guilds = True
         intents.guild_messages = True
@@ -99,6 +100,7 @@ class DiscordBot(commands.Bot):
         """Carrega extensões e sincroniza comandos antes de conectar ao gateway."""
         await self.load_extension("bot.cogs.general")
         await self.load_extension("bot.cogs.media_reactions")
+        await self.load_extension("bot.cogs.role_management")
         await self.load_extension("bot.cogs.temporary_voice")
 
         if self.settings.discord_guild_id is not None:

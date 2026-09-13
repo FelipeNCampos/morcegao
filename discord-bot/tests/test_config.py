@@ -59,6 +59,32 @@ def test_media_reaction_channel_id_is_optional_and_numeric(
         Settings.from_environment(values)
 
 
+def test_role_menu_ids_emojis_and_exclusivity_are_read(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """Menus de cargos usam IDs e permitem regras de exclusividade por categoria."""
+    values = environment()
+    values.update(
+        {
+            "DISCORD_AUTO_ROLE_ID": "111",
+            "DISCORD_ROLE_MENU_CHANNEL_ID": "222",
+            "DISCORD_AGE_ROLE_MESSAGE_ID": "333",
+            "DISCORD_ROLE_AGE_PLUS_18_ID": "444",
+            "DISCORD_ROLE_AGE_PLUS_18_EMOJI": "<:adult:555>",
+            "DISCORD_ROLE_GENDER_EXCLUSIVE": "true",
+        }
+    )
+
+    role_menu = Settings.from_environment(values).role_menu
+
+    assert role_menu.auto_role_id == 111
+    assert role_menu.channel_id == 222
+    assert role_menu.categories[0].message_id == 333
+    assert role_menu.categories[0].role_id_for_emoji("adult", 555) == 444
+    assert role_menu.categories[0].exclusive is True
+    assert role_menu.categories[1].exclusive is True
+
+
 @pytest.mark.parametrize(
     ("value", "expected"),
     [("true", True), ("false", False), ("1", True), ("0", False)],

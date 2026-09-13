@@ -247,6 +247,164 @@ class WebSettings:
 
 
 @dataclass(frozen=True, slots=True)
+class RoleReactionOption:
+    """Vínculo seguro entre um emoji configurado e um cargo do Discord."""
+
+    emoji: str
+    role_id: int
+
+    @property
+    def emoji_keys(self) -> frozenset[str]:
+        """Retorna chaves compatíveis com emojis Unicode e personalizados."""
+        keys = {self.emoji}
+        custom_emoji = re.fullmatch(r"<a?:[^:]+:(\d+)>", self.emoji)
+        if custom_emoji is not None:
+            keys.add(custom_emoji.group(1))
+        return frozenset(keys)
+
+
+@dataclass(frozen=True, slots=True)
+class RoleCategorySettings:
+    """Configuração de uma mensagem de cargos por reação."""
+
+    name: str
+    message_id: int | None
+    options: tuple[RoleReactionOption, ...]
+    exclusive: bool
+
+    def role_id_for_emoji(self, emoji: str, emoji_id: int | None) -> int | None:
+        """Localiza somente um cargo explicitamente autorizado para o emoji."""
+        candidate_keys = {emoji}
+        if emoji_id is not None:
+            candidate_keys.add(str(emoji_id))
+        for option in self.options:
+            if option.emoji_keys.intersection(candidate_keys):
+                return option.role_id
+        return None
+
+
+@dataclass(frozen=True, slots=True)
+class RoleMenuSettings:
+    """Configuração opcional dos cargos automáticos e menus por reação."""
+
+    auto_role_id: int | None
+    channel_id: int | None
+    categories: tuple[RoleCategorySettings, ...]
+
+    @property
+    def has_reaction_menu(self) -> bool:
+        """Indica se há ao menos uma mensagem de reação configurada."""
+        return self.channel_id is not None and any(
+            category.message_id is not None and category.options for category in self.categories
+        )
+
+
+def _role_option(
+    source: Mapping[str, str], *, role_variable: str, emoji_variable: str, default_emoji: str
+) -> RoleReactionOption | None:
+    """Lê uma opção de cargo sem aceitar configurações incompletas."""
+    role_id = _numeric_id(role_variable, source.get(role_variable))
+    emoji = _optional_value(source.get(emoji_variable))
+    if role_id is None:
+        if emoji is not None:
+            raise ConfigurationError(
+                f"{role_variable} é obrigatório quando {emoji_variable} for definido."
+            )
+        return None
+    return RoleReactionOption(emoji=emoji or default_emoji, role_id=role_id)
+
+
+def _role_category(
+    source: Mapping[str, str],
+    *,
+    name: str,
+    message_variable: str,
+    exclusive_variable: str,
+    default_exclusive: bool,
+    options: tuple[tuple[str, str, str], ...],
+) -> RoleCategorySettings:
+    """Monta uma categoria centralizada de cargos por reação."""
+    message_id = _numeric_id(message_variable, source.get(message_variable))
+    configured_options = tuple(
+        option
+        for role_variable, emoji_variable, default_emoji in options
+        if (
+            option := _role_option(
+                source,
+                role_variable=role_variable,
+                emoji_variable=emoji_variable,
+                default_emoji=default_emoji,
+            )
+        )
+        is not None
+    )
+    if message_id is not None and not configured_options:
+        raise ConfigurationError(f"Configure ao menos um cargo para a mensagem {message_variable}.")
+    return RoleCategorySettings(
+        name=name,
+        message_id=message_id,
+        options=configured_options,
+        exclusive=_boolean(
+            exclusive_variable, source.get(exclusive_variable), default=default_exclusive
+        ),
+    )
+
+
+def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
+    """Lê os IDs dos cargos sem depender de nomes mutáveis no Discord."""
+    categories = (
+        _role_category(
+            source,
+            name="age",
+            message_variable="DISCORD_AGE_ROLE_MESSAGE_ID",
+            exclusive_variable="DISCORD_ROLE_AGE_EXCLUSIVE",
+            default_exclusive=True,
+            options=(
+                ("DISCORD_ROLE_AGE_PLUS_18_ID", "DISCORD_ROLE_AGE_PLUS_18_EMOJI", "🔞"),
+                ("DISCORD_ROLE_AGE_MINUS_18_ID", "DISCORD_ROLE_AGE_MINUS_18_EMOJI", "🔓"),
+            ),
+        ),
+        _role_category(
+            source,
+            name="gender",
+            message_variable="DISCORD_GENDER_ROLE_MESSAGE_ID",
+            exclusive_variable="DISCORD_ROLE_GENDER_EXCLUSIVE",
+            default_exclusive=False,
+            options=(
+                ("DISCORD_ROLE_GENDER_FEMININE_ID", "DISCORD_ROLE_GENDER_FEMININE_EMOJI", "♀️"),
+                ("DISCORD_ROLE_GENDER_MASCULINE_ID", "DISCORD_ROLE_GENDER_MASCULINE_EMOJI", "♂️"),
+                ("DISCORD_ROLE_GENDER_NON_BINARY_ID", "DISCORD_ROLE_GENDER_NON_BINARY_EMOJI", "⚧️"),
+                ("DISCORD_ROLE_GENDER_OTHER_ID", "DISCORD_ROLE_GENDER_OTHER_EMOJI", "✨"),
+            ),
+        ),
+        _role_category(
+            source,
+            name="pronouns",
+            message_variable="DISCORD_PRONOUN_ROLE_MESSAGE_ID",
+            exclusive_variable="DISCORD_ROLE_PRONOUN_EXCLUSIVE",
+            default_exclusive=False,
+            options=(
+                ("DISCORD_ROLE_PRONOUN_SHE_HER_ID", "DISCORD_ROLE_PRONOUN_SHE_HER_EMOJI", "🌙"),
+                ("DISCORD_ROLE_PRONOUN_HE_HIM_ID", "DISCORD_ROLE_PRONOUN_HE_HIM_EMOJI", "☀️"),
+                ("DISCORD_ROLE_PRONOUN_THEY_THEM_ID", "DISCORD_ROLE_PRONOUN_THEY_THEM_EMOJI", "⭐"),
+            ),
+        ),
+    )
+    channel_id = _numeric_id(
+        "DISCORD_ROLE_MENU_CHANNEL_ID", source.get("DISCORD_ROLE_MENU_CHANNEL_ID")
+    )
+    if channel_id is None and any(category.message_id is not None for category in categories):
+        raise ConfigurationError(
+            "DISCORD_ROLE_MENU_CHANNEL_ID é obrigatório quando mensagens de cargos forem definidas."
+        )
+    return RoleMenuSettings(
+        auto_role_id=_numeric_id("DISCORD_AUTO_ROLE_ID", source.get("DISCORD_AUTO_ROLE_ID")),
+        channel_id=channel_id,
+        categories=categories,
+    )
+
+
+@dataclass(frozen=True, slots=True)
 class Settings:
     """Configuração tipada e segura para inicializar o bot."""
 
@@ -255,6 +413,7 @@ class Settings:
     discord_guild_id: int | None
     temporary_voice_creator_channel_id: int | None
     media_reaction_channel_id: int | None
+    role_menu: RoleMenuSettings
     sync_global_commands: bool
     log_level: str
     max_messages_to_delete: int
@@ -400,6 +559,7 @@ class Settings:
                 "DISCORD_MEDIA_REACTION_CHANNEL_ID",
                 source.get("DISCORD_MEDIA_REACTION_CHANNEL_ID"),
             ),
+            role_menu=_role_menu_settings(source),
             sync_global_commands=_boolean(
                 "SYNC_GLOBAL_COMMANDS", source.get("SYNC_GLOBAL_COMMANDS")
             ),

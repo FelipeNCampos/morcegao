@@ -189,7 +189,7 @@ class DiscordNotificationSender:
 
         caption = self._truncate_caption(media.caption)
         media_label = self._instagram_media_label(media)
-        title = f"O Vampirão adicionou novo {media_label}"
+        title = f"O Vampirão adicionou novo {media_label} no Instagram"
         content = f"📸 **{title}**"
 
         embed = discord.Embed(
