@@ -102,6 +102,7 @@ class DiscordBot(commands.Bot):
         await self.load_extension("bot.cogs.media_reactions")
         await self.load_extension("bot.cogs.role_management")
         await self.load_extension("bot.cogs.temporary_voice")
+        await self.load_extension("bot.cogs.music")
 
         if self.settings.discord_guild_id is not None:
             guild = discord.Object(id=self.settings.discord_guild_id)

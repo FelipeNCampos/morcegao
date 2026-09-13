@@ -72,6 +72,25 @@ COMMAND_HELP: dict[str, tuple[str, str, str]] = {
     ),
 }
 
+MUSIC_COMMAND_HELP: tuple[tuple[str, str, str], ...] = (
+    (
+        "/tocar_youtube",
+        "Entra no seu canal de voz e toca o áudio de um vídeo do YouTube.\n"
+        "Uso: `/tocar_youtube url:https://www.youtube.com/watch?v=VIDEO_ID`\n"
+        "Permissão: você precisa estar em um canal de voz.",
+    ),
+    (
+        "/parar_musica",
+        "Interrompe a reprodução atual.\nUso: `/parar_musica`\n"
+        "Permissão: estar no mesmo canal de voz que o Morcegão.",
+    ),
+    (
+        "/sair_call",
+        "Para a música e desconecta do canal de voz.\nUso: `/sair_call`\n"
+        "Permissão: estar no mesmo canal de voz que o Morcegão.",
+    ),
+)
+
 
 class General(commands.Cog):
     """Agrupa comandos slash de uso geral."""
@@ -281,6 +300,9 @@ class General(commands.Cog):
                 value=(f"{description}\nUso: `{usage}`{limit_hint}\nPermissão: {permission}"),
                 inline=False,
             )
+
+        for name, value in MUSIC_COMMAND_HELP:
+            embed.add_field(name=name, value=value, inline=False)
 
         if self._temporary_voice_creator_channel_id is not None:
             embed.add_field(

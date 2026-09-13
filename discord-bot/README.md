@@ -210,6 +210,46 @@ estejam na categoria do canal criador, usem o prefixo `🔊 Sala de` e tenham um
 de `Manage Channels` para um único dono. Salas sem essas três marcas são preservadas. Não há banco
 de dados para esse recurso.
 
+### Música do YouTube em canais de voz
+
+O Morcegão pode reproduzir o áudio de um único vídeo público por vez em cada servidor. Use apenas
+conteúdo que você tenha permissão para reproduzir. O recurso não usa self-bot, conta de usuário,
+cookies, download permanente, playlists, DRM ou tentativas de contornar autenticação, bloqueios
+geográficos e restrições do YouTube. A disponibilidade da extração pode mudar conforme o YouTube e
+o `yt-dlp` evoluem.
+
+Instale as dependências do projeto após atualizar o código:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+O host também precisa do FFmpeg no `PATH`. Na EC2 Amazon Linux 2023, instale o pacote disponível na
+sua imagem via DNF; se o repositório padrão não o disponibilizar, use uma imagem ou repositório
+aprovado pela sua organização, sem substituir bibliotecas do sistema. Depois valide:
+
+```bash
+sudo dnf install -y ffmpeg
+ffmpeg -version
+```
+
+O bot precisa de **View Channel**, **Connect** e **Speak** no canal de voz, e de **View Channel**,
+**Send Messages** e **Use Application Commands** no canal de texto. Não é necessário conceder
+Administrator. Em uma sala temporária, os overwrites do canal continuam valendo.
+
+Comandos disponíveis:
+
+- `/tocar_youtube url:<link>`: entra no seu canal e substitui a música atual pelo áudio do vídeo.
+  Aceita apenas URLs `youtube.com`, `music.youtube.com` ou `youtu.be`, sem playlists.
+- `/parar_musica`: interrompe a reprodução; o bot sai depois do timeout de inatividade.
+- `/sair_call`: interrompe e desconecta imediatamente. Ambos exigem que você esteja no mesmo canal
+  de voz que o Morcegão.
+
+Depois que o áudio termina ou é interrompido, o bot aguarda
+`DISCORD_MUSIC_IDLE_DISCONNECT_SECONDS` (padrão: `120`) antes de sair. Uma nova reprodução cancela
+esse timeout. Se todos os humanos saírem de uma sala, o bot para e sai imediatamente para não impedir
+a limpeza automática de canais temporários.
+
 ### Twitch EventSub
 
 Defina `TWITCH_ENABLED=true` para ativar esta integração. Com `TWITCH_ENABLED=false`, o bot não

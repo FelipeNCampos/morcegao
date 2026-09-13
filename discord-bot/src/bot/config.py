@@ -17,6 +17,7 @@ DEFAULT_WEB_PORT = 8000
 DEFAULT_INSTAGRAM_TOKEN_REFRESH_DAYS_BEFORE_EXPIRY = 10
 DEFAULT_INSTAGRAM_TOKEN_REFRESH_CHECK_INTERVAL_HOURS = 24
 DEFAULT_MAX_MESSAGES_TO_DELETE = 100
+DEFAULT_MUSIC_IDLE_DISCONNECT_SECONDS = 120
 
 
 class ConfigurationError(ValueError):
@@ -416,6 +417,7 @@ class Settings:
     sync_global_commands: bool
     log_level: str
     max_messages_to_delete: int
+    music_idle_disconnect_seconds: int
     twitch: TwitchSettings
     instagram: InstagramSettings
     web: WebSettings
@@ -567,6 +569,11 @@ class Settings:
                 "MAX_MESSAGES_TO_DELETE",
                 source.get("MAX_MESSAGES_TO_DELETE"),
                 default=DEFAULT_MAX_MESSAGES_TO_DELETE,
+            ),
+            music_idle_disconnect_seconds=_positive_integer(
+                "DISCORD_MUSIC_IDLE_DISCONNECT_SECONDS",
+                source.get("DISCORD_MUSIC_IDLE_DISCONNECT_SECONDS"),
+                default=DEFAULT_MUSIC_IDLE_DISCONNECT_SECONDS,
             ),
             twitch=twitch,
             instagram=instagram,

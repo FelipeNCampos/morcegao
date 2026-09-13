@@ -51,7 +51,11 @@ class TemporaryVoice(commands.Cog):
         after: discord.VoiceState,
     ) -> None:
         """Cria uma sala ao entrar no criador e remove salas que ficarem vazias."""
-        if member.bot or before.channel == after.channel:
+        if member.bot:
+            if before.channel is not None:
+                await self._delete_if_empty(before.channel)
+            return
+        if before.channel == after.channel:
             return
 
         if before.channel is not None:

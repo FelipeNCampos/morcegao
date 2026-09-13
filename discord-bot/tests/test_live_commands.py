@@ -365,6 +365,9 @@ async def test_commands_list_contains_all_and_only_registered_commands() -> None
         "/boasvindas",
         "/ping",
         "/limpar",
+        "/tocar_youtube",
+        "/parar_musica",
+        "/sair_call",
     } == field_names
     assert "/inexistente" not in {field.name for field in embed.fields}
     assert "!inexistente" not in field_names
