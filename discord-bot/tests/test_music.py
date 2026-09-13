@@ -85,6 +85,13 @@ class FakeVoiceChannel:
         return self.connected_client
 
 
+class MissingPyNaClChannel(FakeVoiceChannel):
+    """Canal que simula a ausência da dependência de voz no host."""
+
+    async def connect(self, *, self_deaf: bool) -> FakeVoiceClient:
+        raise RuntimeError("PyNaCl library needed in order to use voice")
+
+
 class FakeMember:
     """Membro compatível com a checagem de estado de voz do cog."""
 
@@ -170,6 +177,23 @@ async def test_play_connects_and_replaces_current_audio(monkeypatch: pytest.Monk
     assert len(current_client.played) == 1
     assert "Faixa" in interaction.followup.messages[0][0]
     assert "temporary.example" not in interaction.followup.messages[0][0]
+
+
+@pytest.mark.asyncio
+async def test_play_reports_missing_pynacl_without_propagating_traceback(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Ausência de PyNaCl gera uma resposta segura e não derruba o comando."""
+    monkeypatch.setattr(music_module.discord, "Member", FakeMember)
+    channel = MissingPyNaClChannel(35)
+    guild = FakeGuild()
+    interaction = FakeInteraction(guild, FakeMember(channel))
+
+    await Music.play_youtube.callback(music_cog(guild), interaction, "https://youtu.be/abc")  # type: ignore[arg-type]
+
+    assert interaction.followup.messages == [
+        ("O servidor do bot não possui o PyNaCl configurado para reprodução de áudio.", True)
+    ]
 
 
 @pytest.mark.asyncio
