@@ -54,6 +54,24 @@ class TwitchNotificationView(discord.ui.View):
         )
 
 
+class InstagramNotificationView(discord.ui.View):
+    """View com botão para abrir a publicação original no Instagram."""
+
+    def __init__(self, permalink: str) -> None:
+        super().__init__(timeout=None)
+
+        if not permalink:
+            raise ValueError("O link da publicação Instagram não pode estar vazio.")
+
+        self.add_item(
+            discord.ui.Button(
+                label="Ver no Instagram",
+                style=discord.ButtonStyle.link,
+                url=permalink,
+            )
+        )
+
+
 class DiscordNotificationSender:
     """Envia notificações usando o cliente Discord já conectado."""
 
@@ -168,21 +186,14 @@ class DiscordNotificationSender:
                 "O canal de notificações do Instagram não foi configurado."
             )
 
-        #username = media.username or self._settings.instagram.username or "perfil autorizado"
-
-        #media_type = media.media_type or "Publicação"
-
         caption = self._truncate_caption(media.caption)
-
-        publication_link = media.permalink or "Link da publicação indisponível."
-        content = (
-            "📸 **Nova publicação no Instagram!**\n\n"
-            f"{caption}\n\n"
-            f"Veja a publicação:\n{publication_link}"
-        )
+        media_label = self._instagram_media_label(media)
+        title = f"O Vampirão adicionou novo {media_label}"
+        content = f"📸 **{title}**"
 
         embed = discord.Embed(
-            title=caption or "Nova publicação",
+            title=title,
+            description=caption or None,
             colour=0xE4405F,
             url=media.permalink or None,
         )
@@ -192,11 +203,14 @@ class DiscordNotificationSender:
         elif media.thumbnail_url:
             embed.set_thumbnail(url=media.thumbnail_url)
 
-        await self._send_to_channel(
-            channel_id,
-            content,
-            embed,
-        )
+        view = InstagramNotificationView(media.permalink) if media.permalink else None
+        await self._send_to_channel(channel_id, content, embed, view=view)
+
+    @staticmethod
+    def _instagram_media_label(media: InstagramMedia) -> str:
+        """Converte o tipo de produto Instagram em rótulo legível da notificação."""
+        product_type = (media.media_product_type or media.media_type or "").upper()
+        return "reels" if product_type == "REELS" else "post"
 
     async def send_welcome_message(
         self,

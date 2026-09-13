@@ -8,7 +8,11 @@ from datetime import UTC, datetime
 import pytest
 
 from bot.config import Settings
-from bot.integrations.discord_sender import DiscordNotificationError, DiscordNotificationSender
+from bot.integrations.discord_sender import (
+    DiscordNotificationError,
+    DiscordNotificationSender,
+    InstagramNotificationView,
+)
 from bot.models import InstagramMedia
 
 
@@ -51,8 +55,10 @@ def instagram_environment(environment: Callable[[], dict[str, str]]) -> dict[str
 
 
 @pytest.mark.asyncio
-async def test_sends_instagram_embed(environment: Callable[[], dict[str, str]]) -> None:
-    """Uma publicação cria conteúdo e embed com perfil e permalink."""
+async def test_sends_instagram_embed_with_post_title_and_link_button(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """Um post cria embed com título solicitado e botão para seu permalink."""
     channel = FakeChannel()
     sender = DiscordNotificationSender(  # type: ignore[arg-type]
         FakeDiscordClient(channel), Settings.from_environment(instagram_environment(environment))
@@ -71,8 +77,39 @@ async def test_sends_instagram_embed(environment: Callable[[], dict[str, str]]) 
     await sender.send_instagram_notification(media)
 
     assert len(channel.messages) == 1
-    assert "@perfil_autorizado" in str(channel.messages[0]["content"])
+    assert "O Vampirão adicionou novo post" in str(channel.messages[0]["content"])
+    assert channel.messages[0]["embed"].title == "O Vampirão adicionou novo post"  # type: ignore[union-attr]
     assert channel.messages[0]["embed"].url == media.permalink  # type: ignore[union-attr]
+    view = channel.messages[0]["view"]
+    assert isinstance(view, InstagramNotificationView)
+    assert view.children[0].url == media.permalink
+
+
+@pytest.mark.asyncio
+async def test_sends_instagram_reel_title_and_link_button(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """Um Reel recebe título próprio, sem ser classificado como post."""
+    channel = FakeChannel()
+    sender = DiscordNotificationSender(  # type: ignore[arg-type]
+        FakeDiscordClient(channel), Settings.from_environment(instagram_environment(environment))
+    )
+    media = InstagramMedia(
+        media_id="reel-1",
+        username="perfil_autorizado",
+        caption=None,
+        media_type="VIDEO",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/reel/example/",
+        timestamp=datetime(2026, 9, 11, 12, tzinfo=UTC),
+        media_product_type="REELS",
+    )
+
+    await sender.send_instagram_notification(media)
+
+    assert channel.messages[0]["embed"].title == "O Vampirão adicionou novo reels"  # type: ignore[union-attr]
+    assert isinstance(channel.messages[0]["view"], InstagramNotificationView)
 
 
 @pytest.mark.asyncio
