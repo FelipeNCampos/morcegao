@@ -78,12 +78,17 @@ class Music(commands.Cog):
                 return
             except RuntimeError as error:
                 logger.warning(
-                    "Runtime de voz indisponível: guild=%s tipo=%s.", guild.id, type(error).__name__
+                    "Runtime de voz indisponível: guild=%s tipo=%s detalhe=%s.",
+                    guild.id,
+                    type(error).__name__,
+                    str(error),
                 )
-                await interaction.followup.send(
-                    "O servidor do bot não possui o PyNaCl configurado para reprodução de áudio.",
-                    ephemeral=True,
+                message = (
+                    "O servidor do bot não possui o PyNaCl configurado para reprodução de áudio."
+                    if "PyNaCl library needed" in str(error)
+                    else "Não consegui iniciar a conexão de voz. Tente novamente em instantes."
                 )
+                await interaction.followup.send(message, ephemeral=True)
                 return
             except (discord.ClientException, discord.HTTPException):
                 logger.warning(

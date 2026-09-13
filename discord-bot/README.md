@@ -224,7 +224,8 @@ Instale as dependências do projeto após atualizar o código:
 python -m pip install -e ".[dev]"
 ```
 
-O host também precisa do FFmpeg no `PATH`. Na EC2 Amazon Linux 2023, o pacote está no repositório
+O pacote Python `davey` também é necessário para a criptografia de voz atual do Discord. Ele é
+instalado junto com o projeto por `pip install -e .`. O host também precisa do FFmpeg no `PATH`. Na EC2 Amazon Linux 2023, o pacote está no repositório
 oficial Supplementary Packages for Amazon Linux (SPAL). Instale o repositório e o pacote
 `ffmpeg-free`, depois valide:
 

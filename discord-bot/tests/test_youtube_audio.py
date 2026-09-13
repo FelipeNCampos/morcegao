@@ -40,7 +40,12 @@ class FakeExtractor:
         ("https://www.youtube.com/watch?v=abc", True),
         ("https://youtu.be/abc", True),
         ("https://music.youtube.com/watch?v=abc", True),
-        ("https://www.youtube.com/watch?v=abc&list=playlist", False),
+        ("https://www.youtube.com/watch?v=abc&list=playlist", True),
+        (
+            "https://www.youtube.com/watch?v=7eLC4LnddHk&list=RD7eLC4LnddHk"
+            "&start_radio=1&rv=lbFl6ESBUGA",
+            True,
+        ),
         ("https://example.test/watch?v=abc", False),
         ("file:///tmp/audio.mp3", False),
         ("http://localhost/video", False),
@@ -48,7 +53,7 @@ class FakeExtractor:
     ],
 )
 def test_youtube_url_validation(url: str, expected: bool) -> None:
-    """Somente vídeos YouTube públicos e sem playlist são aceitos."""
+    """Somente links públicos que apontem para um vídeo YouTube são aceitos."""
     assert is_valid_youtube_url(url) is expected
 
 

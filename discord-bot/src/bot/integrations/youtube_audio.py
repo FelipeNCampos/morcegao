@@ -40,7 +40,7 @@ class YouTubeAudio:
 
 
 def is_valid_youtube_url(value: str) -> bool:
-    """Aceita somente links públicos de vídeo, sem playlists ou pesquisa por texto."""
+    """Aceita links públicos que apontem para um vídeo específico do YouTube."""
     url = value.strip()
     if not url or len(url) > MAX_YOUTUBE_URL_LENGTH:
         return False
@@ -51,8 +51,6 @@ def is_valid_youtube_url(value: str) -> bool:
     if parsed.username or parsed.password or parsed.port is not None:
         return False
     query = parse_qs(parsed.query)
-    if "list" in query:
-        return False
     if hostname in {"youtu.be", "www.youtu.be"}:
         return bool(parsed.path.strip("/"))
     return bool(query.get("v") or parsed.path.startswith("/shorts/"))

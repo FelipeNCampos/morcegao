@@ -92,6 +92,13 @@ class MissingPyNaClChannel(FakeVoiceChannel):
         raise RuntimeError("PyNaCl library needed in order to use voice")
 
 
+class FailingVoiceChannel(FakeVoiceChannel):
+    """Canal que simula uma falha genérica da conexão de voz."""
+
+    async def connect(self, *, self_deaf: bool) -> FakeVoiceClient:
+        raise RuntimeError("falha transitória do gateway")
+
+
 class FakeMember:
     """Membro compatível com a checagem de estado de voz do cog."""
 
@@ -193,6 +200,23 @@ async def test_play_reports_missing_pynacl_without_propagating_traceback(
 
     assert interaction.followup.messages == [
         ("O servidor do bot não possui o PyNaCl configurado para reprodução de áudio.", True)
+    ]
+
+
+@pytest.mark.asyncio
+async def test_play_does_not_label_other_runtime_errors_as_pynacl(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Erros não relacionados ao PyNaCl recebem uma resposta genérica correta."""
+    monkeypatch.setattr(music_module.discord, "Member", FakeMember)
+    channel = FailingVoiceChannel(36)
+    guild = FakeGuild()
+    interaction = FakeInteraction(guild, FakeMember(channel))
+
+    await Music.play_youtube.callback(music_cog(guild), interaction, "https://youtu.be/abc")  # type: ignore[arg-type]
+
+    assert interaction.followup.messages == [
+        ("Não consegui iniciar a conexão de voz. Tente novamente em instantes.", True)
     ]
 
 
