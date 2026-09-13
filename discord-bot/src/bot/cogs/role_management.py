@@ -36,6 +36,7 @@ class RoleManagement(commands.Cog):
             return
         self._configuration_validated = True
         await self._validate_configuration()
+        await self._add_configured_reactions()
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member) -> None:
@@ -301,6 +302,60 @@ class RoleManagement(commands.Cog):
             logger.info(
                 "Canal de cargos configurado; execute /configurar-cargos para criar mensagens."
             )
+
+    async def _add_configured_reactions(self) -> None:
+        """Garante que os emojis configurados estejam nas mensagens de menu existentes."""
+        menu = self._settings.role_menu
+        if not menu.has_reaction_menu or menu.channel_id is None:
+            return
+
+        channel = self._bot.get_channel(menu.channel_id)
+        try:
+            if channel is None:
+                channel = await self._bot.fetch_channel(menu.channel_id)
+            if not hasattr(channel, "fetch_message"):
+                logger.error("Canal de cargos %s não permite buscar mensagens.", menu.channel_id)
+                return
+        except discord.NotFound:
+            logger.error("Canal de cargos %s não encontrado.", menu.channel_id)
+            return
+        except discord.Forbidden:
+            logger.warning("Sem acesso ao canal de cargos %s.", menu.channel_id)
+            return
+        except discord.HTTPException as error:
+            logger.warning(
+                "Falha ao acessar canal de cargos %s: status=%s.", menu.channel_id, error.status
+            )
+            return
+
+        for category in menu.categories:
+            if category.message_id is None or not category.options:
+                continue
+            try:
+                message = await channel.fetch_message(category.message_id)
+                for option in category.options:
+                    await message.add_reaction(option.emoji)
+            except discord.NotFound:
+                logger.error(
+                    "Mensagem de cargos %s (%s) não encontrada.", category.name, category.message_id
+                )
+            except discord.Forbidden:
+                logger.warning(
+                    "Sem permissão para adicionar reações à mensagem de cargos %s.",
+                    category.message_id,
+                )
+            except discord.HTTPException as error:
+                logger.warning(
+                    "Falha ao adicionar reações à mensagem de cargos %s: status=%s.",
+                    category.message_id,
+                    error.status,
+                )
+            else:
+                logger.info(
+                    "Emojis configurados adicionados à mensagem de cargos %s (%s).",
+                    category.name,
+                    category.message_id,
+                )
 
     def _menu_text(self, category: RoleCategorySettings) -> str:
         """Monta uma mensagem com menções por ID, sem depender de nomes fixos."""

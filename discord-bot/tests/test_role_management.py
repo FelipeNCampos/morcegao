@@ -83,9 +83,13 @@ class FakeMessage:
 
     def __init__(self) -> None:
         self.removed: list[tuple[object, FakeMember]] = []
+        self.added: list[str] = []
 
     async def remove_reaction(self, emoji: object, member: FakeMember) -> None:
         self.removed.append((emoji, member))
+
+    async def add_reaction(self, emoji: str) -> None:
+        self.added.append(emoji)
 
 
 class FakeChannel:
@@ -190,6 +194,19 @@ async def test_member_join_assigns_auto_role(environment: Callable[[], dict[str,
     await cog.on_member_join(member)  # type: ignore[arg-type]
 
     assert [role.id for role in member.roles] == [10]
+
+
+@pytest.mark.asyncio
+async def test_ready_adds_configured_emojis_to_existing_messages(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O bot completa as reações dos menus configurados sem depender do cache."""
+    cog, _, channel = role_cog(environment)
+
+    await cog.on_ready()
+    await cog.on_ready()
+
+    assert channel.message.added == ["🔞", "🔓", "♀️", "♂️", "🌙", "☀️"]
 
 
 @pytest.mark.asyncio

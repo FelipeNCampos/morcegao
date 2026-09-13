@@ -164,6 +164,10 @@ configuradas e copie os IDs das mensagens para essas variáveis. Caso uma mensag
 recriada, atualize somente seu ID no `.env` e reinicie. Não há persistência de configurações além do
 ambiente, por escolha: nenhum dado pessoal é armazenado.
 
+Depois de configurados os IDs das mensagens, o próprio bot adiciona automaticamente todos os emojis
+definidos no `.env` a cada inicialização. Portanto, basta deixar as mensagens no canal: ninguém precisa
+procurar os emojis manualmente. O bot precisa de **Add Reactions** para essa etapa.
+
 O comportamento é um toggle:
 
 1. Reaja com `🔞` para receber o cargo +18.

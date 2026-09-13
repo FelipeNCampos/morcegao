@@ -55,10 +55,10 @@ def instagram_environment(environment: Callable[[], dict[str, str]]) -> dict[str
 
 
 @pytest.mark.asyncio
-async def test_sends_instagram_embed_with_post_title_and_link_button(
+async def test_sends_instagram_post_content_and_link_button(
     environment: Callable[[], dict[str, str]],
 ) -> None:
-    """Um post cria embed com título solicitado e botão para seu permalink."""
+    """Um post usa título enxuto no conteúdo e botão para seu permalink."""
     channel = FakeChannel()
     sender = DiscordNotificationSender(  # type: ignore[arg-type]
         FakeDiscordClient(channel), Settings.from_environment(instagram_environment(environment))
@@ -77,8 +77,8 @@ async def test_sends_instagram_embed_with_post_title_and_link_button(
     await sender.send_instagram_notification(media)
 
     assert len(channel.messages) == 1
-    assert "O Vampirão adicionou novo post" in str(channel.messages[0]["content"])
-    assert channel.messages[0]["embed"].title == "O Vampirão adicionou novo post"  # type: ignore[union-attr]
+    assert channel.messages[0]["content"] == "📸 **O Vampirão adicionou novo post no Instagram**"
+    assert channel.messages[0]["embed"].title is None  # type: ignore[union-attr]
     assert channel.messages[0]["embed"].url == media.permalink  # type: ignore[union-attr]
     view = channel.messages[0]["view"]
     assert isinstance(view, InstagramNotificationView)
@@ -86,10 +86,10 @@ async def test_sends_instagram_embed_with_post_title_and_link_button(
 
 
 @pytest.mark.asyncio
-async def test_sends_instagram_reel_title_and_link_button(
+async def test_sends_instagram_reel_content_and_link_button(
     environment: Callable[[], dict[str, str]],
 ) -> None:
-    """Um Reel recebe título próprio, sem ser classificado como post."""
+    """Um Reel usa título enxuto no conteúdo, sem ser classificado como post."""
     channel = FakeChannel()
     sender = DiscordNotificationSender(  # type: ignore[arg-type]
         FakeDiscordClient(channel), Settings.from_environment(instagram_environment(environment))
@@ -108,11 +108,12 @@ async def test_sends_instagram_reel_title_and_link_button(
 
     await sender.send_instagram_notification(media)
 
-    assert channel.messages[0]["embed"].title == "O Vampirão adicionou novo reels"  # type: ignore[union-attr]
+    assert channel.messages[0]["content"] == "📸 **O Vampirão adicionou novo reels no Instagram**"
+    assert channel.messages[0]["embed"].title is None  # type: ignore[union-attr]
     assert isinstance(channel.messages[0]["view"], InstagramNotificationView)
     fallback_file = channel.messages[0]["file"]
-    assert fallback_file.filename == "gato.png"  # type: ignore[union-attr]
-    assert channel.messages[0]["embed"].image.url == "attachment://gato.png"  # type: ignore[union-attr]
+    assert fallback_file.filename == "usar.png"  # type: ignore[union-attr]
+    assert channel.messages[0]["embed"].image.url == "attachment://usar.png"  # type: ignore[union-attr]
 
 
 @pytest.mark.asyncio
