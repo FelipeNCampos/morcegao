@@ -176,8 +176,6 @@ class DiscordNotificationSender:
         publication_link = media.permalink or "Link da publicação indisponível."
         content = (
             "📸 **Nova publicação no Instagram!**\n\n"
-            f"Perfil: @{username}\n"
-            f"Tipo: {media_type}\n"
             f"{caption}\n\n"
             f"Veja a publicação:\n{publication_link}"
         )
@@ -187,18 +185,6 @@ class DiscordNotificationSender:
             description=caption,
             colour=0xE4405F,
             url=media.permalink or None,
-        )
-
-        embed.add_field(
-            name="Perfil",
-            value=f"@{username}",
-            inline=True,
-        )
-
-        embed.add_field(
-            name="Tipo",
-            value=media_type,
-            inline=True,
         )
 
         if media.media_url:

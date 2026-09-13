@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from typing import cast
 
 import discord
@@ -17,13 +18,18 @@ from bot.errors import (
     MISSING_MANAGE_MESSAGES_PERMISSION_MESSAGE,
 )
 from bot.integrations.discord_sender import DiscordNotificationError, DiscordNotificationSender
+from bot.integrations.instagram import InstagramAPIError, InstagramClient
 from bot.integrations.twitch import TwitchClient
 from bot.integrations.twitch_auth import TwitchError
+from bot.models import InstagramMedia
 
 logger = logging.getLogger(__name__)
 
 NO_OPEN_TWITCH_LIVE_MESSAGE = "Não há nenhuma live aberta para reenviar no momento."
 TWITCH_RESEND_ERROR_MESSAGE = "Não foi possível reenviar a notificação da live."
+INSTAGRAM_NOT_CONFIGURED_MESSAGE = "As notificações do Instagram não estão configuradas."
+NO_INSTAGRAM_MEDIA_MESSAGE = "Não encontrei nenhuma publicação do Instagram para reenviar."
+INSTAGRAM_RESEND_ERROR_MESSAGE = "Não foi possível reenviar a notificação do Instagram."
 CLEANUP_NOT_FOUND_MESSAGE = "Não encontrei as mensagens que deveriam ser apagadas."
 CLEANUP_HTTP_ERROR_MESSAGE = "O Discord não conseguiu apagar as mensagens. Tente novamente."
 CLEANUP_DM_MESSAGE = "Este comando só pode ser usado em um servidor."
@@ -42,6 +48,16 @@ COMMAND_HELP: dict[str, tuple[str, str, str]] = {
     "reenviar_live": (
         "Reenvia a notificação da última live aberta.",
         "/reenviar_live",
+        "Gerenciar servidor.",
+    ),
+    "reenviar_reel": (
+        "Reenvia a notificação do Reel mais recente do Instagram.",
+        "/reenviar_reel",
+        "Gerenciar servidor.",
+    ),
+    "reenviar_post": (
+        "Reenvia a notificação do post mais recente do Instagram.",
+        "/reenviar_post",
         "Gerenciar servidor.",
     ),
     "comandos": (
@@ -67,12 +83,14 @@ class General(commands.Cog):
         twitch_client: TwitchClient | None = None,
         max_messages_to_delete: int = DEFAULT_MAX_MESSAGES_TO_DELETE,
         temporary_voice_creator_channel_id: int | None = None,
+        instagram_client: InstagramClient | None = None,
     ) -> None:
         self._notification_sender = notification_sender
         self._current_twitch_live = current_twitch_live or CurrentTwitchLiveStore()
         self._twitch_client = twitch_client
         self._max_messages_to_delete = max_messages_to_delete
         self._temporary_voice_creator_channel_id = temporary_voice_creator_channel_id
+        self._instagram_client = instagram_client
 
     @app_commands.command(name="ping", description="Verifica se o bot está respondendo.")
     async def ping(self, interaction: discord.Interaction) -> None:
@@ -150,6 +168,90 @@ class General(commands.Cog):
         await interaction.followup.send(
             f"A notificação da live de {broadcaster} foi reenviada com sucesso.",
             ephemeral=True,
+        )
+
+    @app_commands.command(
+        name="reenviar_reel", description="Reenvia o Reel mais recente do Instagram."
+    )
+    @app_commands.guild_only()
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def resend_instagram_reel_command(self, interaction: discord.Interaction) -> None:
+        """Reenvia o Reel Instagram mais recente sem alterar seu estado de processamento."""
+        await self._resend_instagram_media(interaction, self._is_instagram_reel, "Reel")
+
+    @app_commands.command(
+        name="reenviar_post", description="Reenvia o post mais recente do Instagram."
+    )
+    @app_commands.guild_only()
+    @app_commands.default_permissions(manage_guild=True)
+    @app_commands.checks.has_permissions(manage_guild=True)
+    async def resend_instagram_post_command(self, interaction: discord.Interaction) -> None:
+        """Reenvia o post Instagram mais recente sem alterar seu estado de processamento."""
+        await self._resend_instagram_media(interaction, self._is_instagram_post, "post")
+
+    async def _resend_instagram_media(
+        self,
+        interaction: discord.Interaction,
+        predicate: Callable[[InstagramMedia], bool],
+        media_label: str,
+    ) -> None:
+        """Busca e reenvia a última mídia Instagram que corresponde ao tipo solicitado."""
+        if not interaction.permissions.manage_guild:
+            await interaction.response.send_message(
+                MISSING_MANAGE_GUILD_PERMISSION_MESSAGE,
+                ephemeral=True,
+            )
+            return
+        if self._instagram_client is None:
+            await interaction.response.send_message(
+                INSTAGRAM_NOT_CONFIGURED_MESSAGE,
+                ephemeral=True,
+            )
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        try:
+            media_items = await self._instagram_client.list_recent_media()
+        except InstagramAPIError:
+            logger.exception("Falha ao consultar a mídia Instagram para reenvio manual.")
+            await interaction.followup.send(INSTAGRAM_RESEND_ERROR_MESSAGE, ephemeral=True)
+            return
+
+        media = max(
+            (item for item in media_items if predicate(item)),
+            key=lambda item: item.timestamp,
+            default=None,
+        )
+        if media is None:
+            await interaction.followup.send(
+                f"Não encontrei nenhum {media_label} do Instagram para reenviar.",
+                ephemeral=True,
+            )
+            return
+
+        try:
+            await self._notification_sender.send_instagram_notification(media)
+        except DiscordNotificationError:
+            logger.exception("Falha ao reenviar manualmente a notificação Instagram.")
+            await interaction.followup.send(INSTAGRAM_RESEND_ERROR_MESSAGE, ephemeral=True)
+            return
+
+        await interaction.followup.send(
+            f"A notificação do {media_label} mais recente do Instagram foi reenviada com sucesso.",
+            ephemeral=True,
+        )
+
+    @staticmethod
+    def _is_instagram_reel(media: InstagramMedia) -> bool:
+        """Identifica Reels pelo tipo de produto oficial, com fallback compatível."""
+        return (media.media_product_type or media.media_type or "").upper() == "REELS"
+
+    @classmethod
+    def _is_instagram_post(cls, media: InstagramMedia) -> bool:
+        """Identifica posts de feed e exclui Reels explicitamente."""
+        return not cls._is_instagram_reel(media) and (
+            media.media_product_type is None or media.media_product_type.upper() == "FEED"
         )
 
     @app_commands.command(name="comandos", description="Lista os comandos disponíveis do bot.")
@@ -282,5 +384,6 @@ async def setup(bot: commands.Bot) -> None:
             discord_bot.twitch_client,
             discord_bot.settings.max_messages_to_delete,
             discord_bot.settings.temporary_voice_creator_channel_id,
+            instagram_client=discord_bot.instagram_client,
         )
     )

@@ -90,6 +90,11 @@ class DiscordBot(commands.Bot):
         """Expõe o estado em memória da última live Twitch ainda aberta."""
         return self._current_twitch_live
 
+    @property
+    def instagram_client(self) -> InstagramClient | None:
+        """Expõe o cliente Instagram compartilhado para comandos administrativos."""
+        return self._instagram_client
+
     async def setup_hook(self) -> None:
         """Carrega extensões e sincroniza comandos antes de conectar ao gateway."""
         await self.load_extension("bot.cogs.general")

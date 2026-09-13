@@ -85,3 +85,4 @@ class InstagramMedia:
     thumbnail_url: str | None
     permalink: str | None
     timestamp: datetime
+    media_product_type: str | None = None

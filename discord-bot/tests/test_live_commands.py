@@ -9,6 +9,8 @@ import discord
 import pytest
 
 from bot.cogs.general import (
+    INSTAGRAM_NOT_CONFIGURED_MESSAGE,
+    INSTAGRAM_RESEND_ERROR_MESSAGE,
     MISSING_MANAGE_GUILD_PERMISSION_MESSAGE,
     NO_OPEN_TWITCH_LIVE_MESSAGE,
     TWITCH_RESEND_ERROR_MESSAGE,
@@ -16,8 +18,9 @@ from bot.cogs.general import (
 )
 from bot.current_twitch_live import CurrentTwitchLiveStore
 from bot.integrations.discord_sender import DiscordNotificationError
+from bot.integrations.instagram import InstagramAPIError
 from bot.integrations.twitch_auth import TwitchApiError
-from bot.models import TwitchOnlineEvent, TwitchStream
+from bot.models import InstagramMedia, TwitchOnlineEvent, TwitchStream
 
 
 class FakeNotificationSender:
@@ -25,6 +28,7 @@ class FakeNotificationSender:
 
     def __init__(self, *, raises_error: bool = False) -> None:
         self.calls: list[tuple[TwitchOnlineEvent, TwitchStream]] = []
+        self.instagram_calls: list[InstagramMedia] = []
         self._raises_error = raises_error
 
     async def send_twitch_notification(
@@ -33,6 +37,11 @@ class FakeNotificationSender:
         if self._raises_error:
             raise DiscordNotificationError("Falha de envio simulada.")
         self.calls.append((event, stream))
+
+    async def send_instagram_notification(self, media: InstagramMedia) -> None:
+        if self._raises_error:
+            raise DiscordNotificationError("Falha de envio simulada.")
+        self.instagram_calls.append(media)
 
 
 class FakeTwitchClient:
@@ -47,6 +56,18 @@ class FakeTwitchClient:
         if isinstance(self.stream, TwitchApiError):
             raise self.stream
         return self.stream
+
+
+class FakeInstagramClient:
+    """Retorna uma mídia controlada sem chamar a API Instagram."""
+
+    def __init__(self, media: InstagramMedia | InstagramAPIError | None) -> None:
+        self.media = media
+
+    async def list_recent_media(self) -> list[InstagramMedia]:
+        if isinstance(self.media, InstagramAPIError):
+            raise self.media
+        return [] if self.media is None else [self.media]
 
 
 class FakeInteractionResponse:
@@ -105,6 +126,36 @@ def open_live() -> tuple[TwitchOnlineEvent, TwitchStream]:
         is_live=True,
     )
     return event, stream
+
+
+def latest_instagram_media() -> InstagramMedia:
+    """Cria a publicação usada nos testes do reenvio Instagram."""
+    return InstagramMedia(
+        media_id="instagram-media-1",
+        username="nosferarityy",
+        caption="Nova publicação",
+        media_type="REELS",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/reel/teste/",
+        timestamp=datetime(2026, 9, 12, 12, tzinfo=UTC),
+        media_product_type="REELS",
+    )
+
+
+def latest_instagram_post() -> InstagramMedia:
+    """Cria o post de feed usado nos testes do reenvio Instagram."""
+    return InstagramMedia(
+        media_id="instagram-post-1",
+        username="nosferarityy",
+        caption="Novo post",
+        media_type="IMAGE",
+        media_url=None,
+        thumbnail_url=None,
+        permalink="https://www.instagram.com/p/teste/",
+        timestamp=datetime(2026, 9, 12, 11, tzinfo=UTC),
+        media_product_type="FEED",
+    )
 
 
 @pytest.mark.asyncio
@@ -217,6 +268,82 @@ async def test_resend_live_handles_twitch_validation_error() -> None:
 
 
 @pytest.mark.asyncio
+async def test_resend_instagram_reel_sends_latest_reel_without_changing_poller_state() -> None:
+    """O reenvio manual usa o remetente existente e o Reel mais recente da API."""
+    media = latest_instagram_media()
+    sender = FakeNotificationSender()
+    cog = General(
+        sender,  # type: ignore[arg-type]
+        instagram_client=FakeInstagramClient(media),  # type: ignore[arg-type]
+    )
+    interaction = FakeInteraction(manage_guild=True)
+
+    await General.resend_instagram_reel_command.callback(cog, interaction)  # type: ignore[arg-type]
+
+    assert sender.instagram_calls == [media]
+    assert interaction.followup.messages == [
+        ("A notificação do Reel mais recente do Instagram foi reenviada com sucesso.", True)
+    ]
+
+
+@pytest.mark.asyncio
+async def test_resend_instagram_post_sends_latest_feed_post() -> None:
+    """O comando de post ignora Reels e reenvia apenas uma mídia de feed."""
+    media = latest_instagram_post()
+    sender = FakeNotificationSender()
+    cog = General(
+        sender,  # type: ignore[arg-type]
+        instagram_client=FakeInstagramClient(media),  # type: ignore[arg-type]
+    )
+    interaction = FakeInteraction(manage_guild=True)
+
+    await General.resend_instagram_post_command.callback(cog, interaction)  # type: ignore[arg-type]
+
+    assert sender.instagram_calls == [media]
+    assert interaction.followup.messages == [
+        ("A notificação do post mais recente do Instagram foi reenviada com sucesso.", True)
+    ]
+
+
+@pytest.mark.asyncio
+async def test_resend_instagram_reel_requires_configuration_and_manage_guild() -> None:
+    """O comando não consulta a API sem permissão ou integração disponível."""
+    sender = FakeNotificationSender()
+    cog = General(sender)  # type: ignore[arg-type]
+
+    unauthorized = FakeInteraction(manage_guild=False)
+    await General.resend_instagram_reel_command.callback(cog, unauthorized)  # type: ignore[arg-type]
+    assert unauthorized.response.messages[0]["content"] == MISSING_MANAGE_GUILD_PERMISSION_MESSAGE
+
+    interaction = FakeInteraction(manage_guild=True)
+    await General.resend_instagram_reel_command.callback(cog, interaction)  # type: ignore[arg-type]
+    assert interaction.response.messages[0]["content"] == INSTAGRAM_NOT_CONFIGURED_MESSAGE
+
+
+@pytest.mark.asyncio
+async def test_resend_instagram_reel_handles_api_and_discord_errors() -> None:
+    """Falhas técnicas não são reveladas ao administrador."""
+    api_sender = FakeNotificationSender()
+    api_cog = General(
+        api_sender,  # type: ignore[arg-type]
+        instagram_client=FakeInstagramClient(InstagramAPIError("Falha simulada")),  # type: ignore[arg-type]
+    )
+    api_interaction = FakeInteraction(manage_guild=True)
+    await General.resend_instagram_reel_command.callback(api_cog, api_interaction)  # type: ignore[arg-type]
+
+    discord_sender = FakeNotificationSender(raises_error=True)
+    discord_cog = General(
+        discord_sender,  # type: ignore[arg-type]
+        instagram_client=FakeInstagramClient(latest_instagram_media()),  # type: ignore[arg-type]
+    )
+    discord_interaction = FakeInteraction(manage_guild=True)
+    await General.resend_instagram_reel_command.callback(discord_cog, discord_interaction)  # type: ignore[arg-type]
+
+    assert api_interaction.followup.messages == [(INSTAGRAM_RESEND_ERROR_MESSAGE, True)]
+    assert discord_interaction.followup.messages == [(INSTAGRAM_RESEND_ERROR_MESSAGE, True)]
+
+
+@pytest.mark.asyncio
 async def test_commands_list_contains_all_and_only_registered_commands() -> None:
     """O embed é derivado dos comandos registrados e não inventa comandos inexistentes."""
     cog = General(FakeNotificationSender())  # type: ignore[arg-type]
@@ -230,7 +357,15 @@ async def test_commands_list_contains_all_and_only_registered_commands() -> None
     registered_names = [command.name for command in cog.get_app_commands()]
     field_names = {field.name for field in embed.fields}
     assert {f"/{name}" for name in registered_names} <= field_names
-    assert {"/comandos", "/reenviar_live", "/boasvindas", "/ping", "/limpar"} == field_names
+    assert {
+        "/comandos",
+        "/reenviar_live",
+        "/reenviar_reel",
+        "/reenviar_post",
+        "/boasvindas",
+        "/ping",
+        "/limpar",
+    } == field_names
     assert "/inexistente" not in {field.name for field in embed.fields}
     assert "!inexistente" not in field_names
     limpar_field = next(field for field in embed.fields if field.name == "/limpar")
@@ -261,4 +396,12 @@ def test_general_cog_does_not_register_duplicate_slash_commands() -> None:
     command_names = [command.name for command in cog.get_app_commands()]
 
     assert len(command_names) == len(set(command_names))
-    assert set(command_names) == {"ping", "boasvindas", "reenviar_live", "comandos", "limpar"}
+    assert set(command_names) == {
+        "ping",
+        "boasvindas",
+        "reenviar_live",
+        "reenviar_reel",
+        "reenviar_post",
+        "comandos",
+        "limpar",
+    }

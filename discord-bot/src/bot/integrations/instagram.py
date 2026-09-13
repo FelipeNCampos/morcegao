@@ -25,7 +25,9 @@ INSTAGRAM_API_BASE_URL = "https://graph.instagram.com"
 INSTAGRAM_TOKEN_REFRESH_URL = f"{INSTAGRAM_API_BASE_URL}/refresh_access_token"
 REQUEST_TIMEOUT_SECONDS = 10.0
 MAX_TRANSIENT_RETRIES = 2
-MEDIA_FIELDS = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,username"
+MEDIA_FIELDS = (
+    "id,caption,media_type,media_product_type,media_url,thumbnail_url,permalink,timestamp,username"
+)
 
 
 class InstagramAPIError(RuntimeError):
@@ -309,6 +311,7 @@ class InstagramClient:
             thumbnail_url=InstagramClient._optional_string(payload.get("thumbnail_url")),
             permalink=InstagramClient._optional_string(payload.get("permalink")),
             timestamp=InstagramClient._parse_timestamp(payload.get("timestamp")),
+            media_product_type=InstagramClient._optional_string(payload.get("media_product_type")),
         )
 
     @staticmethod
