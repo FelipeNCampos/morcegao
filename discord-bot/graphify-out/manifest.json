@@ -42,9 +42,9 @@
     "semantic_hash": ""
   },
   "src/bot/cogs/general.py": {
-    "mtime": 1789301789.4108963,
-    "seen": 1789437614.086647,
-    "ast_hash": "458990bc0810edec724e5aecedc4108b",
+    "mtime": 1789441590.3727167,
+    "seen": 1789441607.1753452,
+    "ast_hash": "ad9aea1c80e8c073727b25aff80eb918",
     "semantic_hash": ""
   },
   "src/bot/cogs/media_reactions.py": {
@@ -72,15 +72,15 @@
     "semantic_hash": ""
   },
   "src/bot/command_access.py": {
-    "mtime": 1789437564.2665179,
-    "seen": 1789437614.086647,
-    "ast_hash": "8d51d094f218e3ea07b38a631dc6c354",
+    "mtime": 1789441589.6493196,
+    "seen": 1789441607.1753452,
+    "ast_hash": "47099692639167243d7fac768692626b",
     "semantic_hash": ""
   },
   "src/bot/config.py": {
-    "mtime": 1789440339.747516,
-    "seen": 1789440364.8190763,
-    "ast_hash": "2e543e2c55f0f410a2d5dda818bf7de8",
+    "mtime": 1789440909.3726158,
+    "seen": 1789440954.7676742,
+    "ast_hash": "1ee29f6f6569849bf986b9eb6c4aeebf",
     "semantic_hash": ""
   },
   "src/bot/current_twitch_live.py": {
@@ -234,15 +234,15 @@
     "semantic_hash": ""
   },
   "tests/test_command_access.py": {
-    "mtime": 1789437583.6894648,
-    "seen": 1789437614.086647,
-    "ast_hash": "ba94feeb09aa9701a58e988bde642460",
+    "mtime": 1789441591.0594225,
+    "seen": 1789441607.1758442,
+    "ast_hash": "1b244eb850e7a9ddfcf1c730968e1da3",
     "semantic_hash": ""
   },
   "tests/test_config.py": {
-    "mtime": 1789440354.571309,
-    "seen": 1789440364.8195763,
-    "ast_hash": "c308ac3aa99a85b29cfca7089a898407",
+    "mtime": 1789440912.6699347,
+    "seen": 1789440954.7676742,
+    "ast_hash": "dd0ea057079c68951e0d2b90bd43fbae",
     "semantic_hash": ""
   },
   "tests/test_discord_sender.py": {
@@ -342,9 +342,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789440341.3209221,
-    "seen": 1789440364.8195763,
-    "ast_hash": "2241a694b84b181e9a0e4162dfee0351",
+    "mtime": 1789440912.0171945,
+    "seen": 1789440954.7676742,
+    "ast_hash": "0a8a7b309d4bc8b091d97a1a192a3576",
     "semantic_hash": ""
   },
   "src/bot/assets/emojis/IconLiveFundoRosa.png": {
@@ -495,6 +495,12 @@
     "mtime": 1789438673.7593288,
     "seen": 1789438706.0017684,
     "ast_hash": "b74add287b3a975b3d2a9e3b74ec0c77",
+    "semantic_hash": ""
+  },
+  "tests/test_call_moderator.py": {
+    "mtime": 1789441591.7340775,
+    "seen": 1789441607.1758442,
+    "ast_hash": "5d5947e95ba0c65f308e58b8ddbbdf3b",
     "semantic_hash": ""
   }
 }

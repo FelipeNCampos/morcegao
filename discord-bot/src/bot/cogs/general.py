@@ -33,11 +33,23 @@ INSTAGRAM_RESEND_ERROR_MESSAGE = "Não foi possível reenviar a notificação do
 CLEANUP_NOT_FOUND_MESSAGE = "Não encontrei as mensagens que deveriam ser apagadas."
 CLEANUP_HTTP_ERROR_MESSAGE = "O Discord não conseguiu apagar as mensagens. Tente novamente."
 CLEANUP_DM_MESSAGE = "Este comando só pode ser usado em um servidor."
+CALL_NOT_CONFIGURED_MESSAGE = "O moderador para o comando /chamar não está configurado."
+CALL_DELIVERY_ERROR_MESSAGE = "Não foi possível avisar o moderador. Tente novamente mais tarde."
 
 COMMAND_HELP: dict[str, tuple[str, str, str]] = {
     "ping": (
         "Verifica se o bot está respondendo.",
         "/ping",
+        "todos os membros.",
+    ),
+    "chamar": (
+        "Envia um aviso privado ao moderador configurado.",
+        "/chamar",
+        "todos os membros.",
+    ),
+    "id_usuario": (
+        "Exibe o ID Discord de um usuário selecionado.",
+        "/id_usuario usuario:@membro",
         "todos os membros.",
     ),
     "boasvindas": (
@@ -103,6 +115,8 @@ class General(commands.Cog):
         max_messages_to_delete: int = DEFAULT_MAX_MESSAGES_TO_DELETE,
         temporary_voice_creator_channel_id: int | None = None,
         instagram_client: InstagramClient | None = None,
+        call_moderator_user_id: int | None = None,
+        discord_client: discord.Client | None = None,
     ) -> None:
         self._notification_sender = notification_sender
         self._current_twitch_live = current_twitch_live or CurrentTwitchLiveStore()
@@ -110,11 +124,63 @@ class General(commands.Cog):
         self._max_messages_to_delete = max_messages_to_delete
         self._temporary_voice_creator_channel_id = temporary_voice_creator_channel_id
         self._instagram_client = instagram_client
+        self._call_moderator_user_id = call_moderator_user_id
+        self._discord_client = discord_client
 
     @app_commands.command(name="ping", description="Verifica se o bot está respondendo.")
     async def ping(self, interaction: discord.Interaction) -> None:
         """Responde a um teste simples de conectividade."""
         await interaction.response.send_message("Pong!")
+
+    @app_commands.command(name="chamar", description="Envia um aviso privado ao moderador.")
+    @app_commands.guild_only()
+    async def call_moderator(self, interaction: discord.Interaction) -> None:
+        """Avisa, por DM, o moderador definido na configuração do ambiente."""
+        moderator_id = self._call_moderator_user_id
+        if moderator_id is None or self._discord_client is None:
+            await interaction.response.send_message(CALL_NOT_CONFIGURED_MESSAGE, ephemeral=True)
+            return
+
+        await interaction.response.defer(ephemeral=True)
+        moderator = self._discord_client.get_user(moderator_id)
+        try:
+            if moderator is None:
+                moderator = await self._discord_client.fetch_user(moderator_id)
+            caller_name = getattr(interaction.user, "display_name", None) or getattr(
+                interaction.user, "name", "um membro"
+            )
+            await moderator.send(
+                f"📣 {caller_name} pediu a atenção de um moderador. (ID: {interaction.user.id})",
+                allowed_mentions=discord.AllowedMentions.none(),
+            )
+        except discord.Forbidden:
+            logger.warning("Não foi possível enviar /chamar ao moderador %s.", moderator_id)
+            await interaction.followup.send(CALL_DELIVERY_ERROR_MESSAGE, ephemeral=True)
+            return
+        except discord.NotFound:
+            logger.warning("Moderador configurado para /chamar não encontrado: %s.", moderator_id)
+            await interaction.followup.send(CALL_DELIVERY_ERROR_MESSAGE, ephemeral=True)
+            return
+        except discord.HTTPException as error:
+            logger.warning(
+                "Falha HTTP ao executar /chamar para moderador %s: status=%s.",
+                moderator_id,
+                error.status,
+            )
+            await interaction.followup.send(CALL_DELIVERY_ERROR_MESSAGE, ephemeral=True)
+            return
+
+        await interaction.followup.send("O moderador foi avisado.", ephemeral=True)
+
+    @app_commands.command(name="id_usuario", description="Exibe o ID Discord de um usuário.")
+    async def user_id_command(
+        self, interaction: discord.Interaction, usuario: discord.User
+    ) -> None:
+        """Retorna de forma privada o ID do usuário informado."""
+        await interaction.response.send_message(
+            f"ID de {usuario.display_name}: `{usuario.id}`",
+            ephemeral=True,
+        )
 
     @app_commands.command(
         name="boasvindas",
@@ -407,5 +473,7 @@ async def setup(bot: commands.Bot) -> None:
             discord_bot.settings.max_messages_to_delete,
             discord_bot.settings.temporary_voice_creator_channel_id,
             instagram_client=discord_bot.instagram_client,
+            call_moderator_user_id=discord_bot.settings.call_moderator_user_id,
+            discord_client=discord_bot,
         )
     )

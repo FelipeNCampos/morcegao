@@ -115,6 +115,18 @@ O Morcegão enviará `📥 usuário entrou no servidor` e `📤 usuário saiu do
 do membro para facilitar auditorias. As menções não geram notificações. Deixe a variável vazia para
 desativar os logs. O bot precisa de **View Channel** e **Send Messages** nesse canal.
 
+### Chamar moderador
+
+O comando público `/chamar` envia uma DM para um moderador definido por ID, informando qual membro
+solicitou atenção. Ele não recebe parâmetros nem revela o ID do moderador no servidor. Configure-o:
+
+```dotenv
+DISCORD_CALL_MODERATOR_USER_ID=123456789012345678
+```
+
+Deixe a variável vazia para desativar o comando. O moderador precisa permitir DMs do servidor; caso
+contrário, quem usou o comando receberá apenas um aviso efêmero de falha.
+
 ### Reações automáticas em mídias
 
 Defina o ID de um canal de texto para o Morcegão reagir automaticamente a imagens, GIFs e vídeos:

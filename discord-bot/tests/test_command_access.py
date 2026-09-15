@@ -21,13 +21,13 @@ class FakeResponse:
         self.messages.append((message, ephemeral))
 
 
-def make_interaction(*, role_ids: list[int]) -> SimpleNamespace:
+def make_interaction(*, role_ids: list[int], command_name: str | None = None) -> SimpleNamespace:
     """Cria o mínimo de uma interação em guild para validar autorização."""
     return SimpleNamespace(
         guild=SimpleNamespace(id=1),
         guild_id=1,
         user=SimpleNamespace(id=2, roles=[SimpleNamespace(id=role_id) for role_id in role_ids]),
-        command=None,
+        command=(None if command_name is None else SimpleNamespace(qualified_name=command_name)),
         response=FakeResponse(),
     )
 
@@ -51,3 +51,23 @@ def test_required_role_rejects_a_member_without_the_configured_role() -> None:
 
     assert asyncio.run(CommandAccessTree.interaction_check(tree, interaction)) is False
     assert interaction.response.messages == [(COMMAND_REQUIRED_ROLE_MESSAGE, True)]
+
+
+def test_call_moderator_is_public_even_when_a_role_is_required() -> None:
+    """A exceção explícita permite que qualquer membro acione /chamar."""
+    interaction = make_interaction(role_ids=[], command_name="chamar")
+    tree = SimpleNamespace(
+        client=SimpleNamespace(settings=SimpleNamespace(command_required_role_id=99))
+    )
+
+    assert asyncio.run(CommandAccessTree.interaction_check(tree, interaction)) is True
+
+
+def test_user_id_is_public_even_when_a_role_is_required() -> None:
+    """Qualquer membro pode consultar o ID de um usuário selecionado."""
+    interaction = make_interaction(role_ids=[], command_name="id_usuario")
+    tree = SimpleNamespace(
+        client=SimpleNamespace(settings=SimpleNamespace(command_required_role_id=99))
+    )
+
+    assert asyncio.run(CommandAccessTree.interaction_check(tree, interaction)) is True

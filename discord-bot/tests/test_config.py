@@ -74,6 +74,21 @@ def test_member_log_channel_id_is_optional_and_numeric(
         Settings.from_environment(values)
 
 
+def test_call_moderator_user_id_is_optional_and_numeric(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O destinatário fixo de /chamar pode ser desativado ou definido por ID."""
+    values = environment()
+    assert Settings.from_environment(values).call_moderator_user_id is None
+
+    values["DISCORD_CALL_MODERATOR_USER_ID"] = "123456789012345679"
+    assert Settings.from_environment(values).call_moderator_user_id == 123456789012345679
+
+    values["DISCORD_CALL_MODERATOR_USER_ID"] = "moderador"
+    with pytest.raises(ConfigurationError, match="DISCORD_CALL_MODERATOR_USER_ID"):
+        Settings.from_environment(values)
+
+
 def test_role_menu_ids_emojis_and_exclusivity_are_read(
     environment: Callable[[], dict[str, str]],
 ) -> None:
