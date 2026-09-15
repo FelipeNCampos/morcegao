@@ -137,7 +137,8 @@ def role_settings(environment: Callable[[], dict[str, str]]) -> Settings:
             "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "15",
             "DISCORD_ROLE_PRONOUN_HE_HIM_ID": "16",
             "DISCORD_ROLE_PRONOUN_ELU_DELU_ID": "17",
-            "DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID": "18",
+            "DISCORD_ROLE_PRONOUN_ANY_ID": "18",
+            "DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID": "19",
         }
     )
     return Settings.from_environment(values)
@@ -147,7 +148,7 @@ def role_cog(
     environment: Callable[[], dict[str, str]],
 ) -> tuple[RoleManagement, FakeGuild, FakeChannel]:
     """Cria o cog em memória, sem instanciar outro cliente Discord."""
-    roles = [FakeRole(role_id, position=role_id) for role_id in range(10, 19)]
+    roles = [FakeRole(role_id, position=role_id) for role_id in range(10, 20)]
     guild = FakeGuild(roles)
     channel = FakeChannel(FakeMessage())
     bot = FakeBot(guild, channel)
@@ -205,7 +206,7 @@ async def test_ready_adds_configured_emojis_to_existing_messages(
     await cog.on_ready()
     await cog.on_ready()
 
-    assert channel.message.added == ["🔞", "🔓", "🌙", "🌞", "⭐", "❔"]
+    assert channel.message.added == ["🔞", "🔓", "🌙", "🌞", "⭐", "✨", "❔"]
 
 
 @pytest.mark.asyncio
@@ -271,10 +272,10 @@ async def test_nonexclusive_pronouns_keep_multiple_roles(
     guild._members[member.id] = member
 
     await cog.on_raw_reaction_add(raw_payload(32, "🌙"))  # type: ignore[arg-type]
-    await cog.on_raw_reaction_add(raw_payload(32, "⭐"))  # type: ignore[arg-type]
-    assert {role.id for role in member.roles} == {15, 17}
+    await cog.on_raw_reaction_add(raw_payload(32, "✨"))  # type: ignore[arg-type]
+    assert {role.id for role in member.roles} == {15, 18}
     await cog.on_raw_reaction_add(raw_payload(32, "🌙"))  # type: ignore[arg-type]
-    assert [role.id for role in member.roles] == [17]
+    assert [role.id for role in member.roles] == [18]
 
 
 @pytest.mark.asyncio

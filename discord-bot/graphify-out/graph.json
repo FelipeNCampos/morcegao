@@ -144,7 +144,7 @@
       "file_type": "code",
       "norm_label": "unicodeemoji",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L169"
+      "source_location": "L170"
     },
     {
       "id": "src_bot_config_configurationerror",
@@ -1561,7 +1561,7 @@
       "file_type": "code",
       "norm_label": "settings",
       "source_file": "src/bot/config.py",
-      "source_location": "L401"
+      "source_location": "L402"
     },
     {
       "id": "src_bot_integrations_discord_sender_twitchnotificationview",
@@ -2080,7 +2080,7 @@
       "file_type": "code",
       "norm_label": "payload()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L157"
+      "source_location": "L158"
     },
     {
       "id": "tests_test_role_management_raw_payload",
@@ -2092,7 +2092,7 @@
       "file_type": "code",
       "norm_label": "raw_payload()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L180"
+      "source_location": "L181"
     },
     {
       "id": "tests_test_role_management_role_cog",
@@ -2104,7 +2104,7 @@
       "file_type": "code",
       "norm_label": "role_cog()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L146"
+      "source_location": "L147"
     },
     {
       "id": "tests_test_role_management_role_settings",
@@ -2128,7 +2128,7 @@
       "file_type": "code",
       "norm_label": "test_age_reaction_toggles_and_removes_reaction()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L230"
+      "source_location": "L231"
     },
     {
       "id": "tests_test_role_management_test_exclusive_age_replaces_the_previous_role",
@@ -2140,7 +2140,7 @@
       "file_type": "code",
       "norm_label": "test_exclusive_age_replaces_the_previous_role()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L249"
+      "source_location": "L250"
     },
     {
       "id": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
@@ -2152,7 +2152,7 @@
       "file_type": "code",
       "norm_label": "test_member_is_fetched_and_reaction_stays_after_role_failure()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L301"
+      "source_location": "L302"
     },
     {
       "id": "tests_test_role_management_test_member_join_assigns_auto_role",
@@ -2164,7 +2164,7 @@
       "file_type": "code",
       "norm_label": "test_member_join_assigns_auto_role()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L188"
+      "source_location": "L189"
     },
     {
       "id": "tests_test_role_management_test_member_join_ignores_existing_or_unassignable_auto_role",
@@ -2176,7 +2176,7 @@
       "file_type": "code",
       "norm_label": "test_member_join_ignores_existing_or_unassignable_auto_role()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L212"
+      "source_location": "L213"
     },
     {
       "id": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
@@ -2188,7 +2188,7 @@
       "file_type": "code",
       "norm_label": "test_nonexclusive_pronouns_keep_multiple_roles()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L265"
+      "source_location": "L266"
     },
     {
       "id": "tests_test_role_management_test_ready_adds_configured_emojis_to_existing_messages",
@@ -2200,7 +2200,7 @@
       "file_type": "code",
       "norm_label": "test_ready_adds_configured_emojis_to_existing_messages()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L199"
+      "source_location": "L200"
     },
     {
       "id": "tests_test_role_management_test_unknown_events_and_bot_reactions_are_ignored",
@@ -2212,7 +2212,7 @@
       "file_type": "code",
       "norm_label": "test_unknown_events_and_bot_reactions_are_ignored()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L281"
+      "source_location": "L282"
     },
     {
       "id": "tests_test_role_management_unicodeemoji_init",
@@ -2224,7 +2224,7 @@
       "file_type": "code",
       "norm_label": ".__init__()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L172"
+      "source_location": "L173"
     },
     {
       "id": "tests_test_role_management_unicodeemoji_str",
@@ -2236,7 +2236,7 @@
       "file_type": "code",
       "norm_label": ".__str__()",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L176"
+      "source_location": "L177"
     },
     {
       "id": "src_bot_config_boolean",
@@ -2452,7 +2452,7 @@
       "file_type": "code",
       "norm_label": ".from_environment()",
       "source_file": "src/bot/config.py",
-      "source_location": "L422"
+      "source_location": "L423"
     },
     {
       "id": "src_bot_config_token_storage_backend",
@@ -2500,7 +2500,7 @@
       "file_type": "code",
       "norm_label": "test_instagram_interval_has_a_safe_minimum()",
       "source_file": "tests/test_config.py",
-      "source_location": "L401"
+      "source_location": "L403"
     },
     {
       "id": "tests_test_config_test_twitch_token_validation_interval_is_read_and_validated",
@@ -2512,7 +2512,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_token_validation_interval_is_read_and_validated()",
       "source_file": "tests/test_config.py",
-      "source_location": "L155"
+      "source_location": "L157"
     },
     {
       "id": "src_bot_client_discordbot_notification_sender",
@@ -8044,7 +8044,7 @@
       "file_type": "code",
       "norm_label": "test_aws_token_storage_requires_name_and_region()",
       "source_file": "tests/test_config.py",
-      "source_location": "L262"
+      "source_location": "L264"
     },
     {
       "id": "tests_test_config_test_boolean_values_are_converted",
@@ -8056,7 +8056,7 @@
       "file_type": "code",
       "norm_label": "test_boolean_values_are_converted()",
       "source_file": "tests/test_config.py",
-      "source_location": "L131"
+      "source_location": "L133"
     },
     {
       "id": "tests_test_config_test_command_required_role_id_is_optional_and_numeric",
@@ -8068,7 +8068,7 @@
       "file_type": "code",
       "norm_label": "test_command_required_role_id_is_optional_and_numeric()",
       "source_file": "tests/test_config.py",
-      "source_location": "L197"
+      "source_location": "L199"
     },
     {
       "id": "tests_test_config_test_discord_ids_are_read_as_integers",
@@ -8092,7 +8092,7 @@
       "file_type": "code",
       "norm_label": "test_instagram_auto_refresh_configuration_is_validated()",
       "source_file": "tests/test_config.py",
-      "source_location": "L232"
+      "source_location": "L234"
     },
     {
       "id": "tests_test_config_test_instagram_enabled_allows_oauth_before_token_is_available",
@@ -8104,7 +8104,7 @@
       "file_type": "code",
       "norm_label": "test_instagram_enabled_allows_oauth_before_token_is_available()",
       "source_file": "tests/test_config.py",
-      "source_location": "L365"
+      "source_location": "L367"
     },
     {
       "id": "tests_test_config_test_instagram_is_optional_when_disabled",
@@ -8116,7 +8116,7 @@
       "file_type": "code",
       "norm_label": "test_instagram_is_optional_when_disabled()",
       "source_file": "tests/test_config.py",
-      "source_location": "L311"
+      "source_location": "L313"
     },
     {
       "id": "tests_test_config_test_instagram_login_is_normalized_and_url_is_rejected",
@@ -8128,7 +8128,7 @@
       "file_type": "code",
       "norm_label": "test_instagram_login_is_normalized_and_url_is_rejected()",
       "source_file": "tests/test_config.py",
-      "source_location": "L380"
+      "source_location": "L382"
     },
     {
       "id": "tests_test_config_test_legacy_gender_and_they_them_variables_do_not_create_pronoun_options",
@@ -8140,7 +8140,7 @@
       "file_type": "code",
       "norm_label": "test_legacy_gender_and_they_them_variables_do_not_create_pronoun_options()",
       "source_file": "tests/test_config.py",
-      "source_location": "L106"
+      "source_location": "L108"
     },
     {
       "id": "tests_test_config_test_legacy_twitch_access_token_is_ignored",
@@ -8152,7 +8152,7 @@
       "file_type": "code",
       "norm_label": "test_legacy_twitch_access_token_is_ignored()",
       "source_file": "tests/test_config.py",
-      "source_location": "L282"
+      "source_location": "L284"
     },
     {
       "id": "tests_test_config_test_max_messages_to_delete_is_configurable_and_positive",
@@ -8164,7 +8164,7 @@
       "file_type": "code",
       "norm_label": "test_max_messages_to_delete_is_configurable_and_positive()",
       "source_file": "tests/test_config.py",
-      "source_location": "L168"
+      "source_location": "L170"
     },
     {
       "id": "tests_test_config_test_media_reaction_channel_id_is_optional_and_numeric",
@@ -8200,7 +8200,7 @@
       "file_type": "code",
       "norm_label": "test_required_configuration_error_does_not_include_secret()",
       "source_file": "tests/test_config.py",
-      "source_location": "L410"
+      "source_location": "L412"
     },
     {
       "id": "tests_test_config_test_role_menu_ids_emojis_and_exclusivity_are_read",
@@ -8248,7 +8248,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_and_instagram_can_be_enabled_independently()",
       "source_file": "tests/test_config.py",
-      "source_location": "L336"
+      "source_location": "L338"
     },
     {
       "id": "tests_test_config_test_twitch_is_optional_when_disabled",
@@ -8260,7 +8260,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_is_optional_when_disabled()",
       "source_file": "tests/test_config.py",
-      "source_location": "L320"
+      "source_location": "L322"
     },
     {
       "id": "tests_test_config_test_twitch_login_rejects_url",
@@ -8272,7 +8272,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_login_rejects_url()",
       "source_file": "tests/test_config.py",
-      "source_location": "L302"
+      "source_location": "L304"
     },
     {
       "id": "tests_test_config_test_twitch_login_removes_initial_at_sign",
@@ -8284,7 +8284,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_login_removes_initial_at_sign()",
       "source_file": "tests/test_config.py",
-      "source_location": "L294"
+      "source_location": "L296"
     },
     {
       "id": "tests_test_config_test_twitch_retry_boolean_is_converted",
@@ -8296,7 +8296,7 @@
       "file_type": "code",
       "norm_label": "test_twitch_retry_boolean_is_converted()",
       "source_file": "tests/test_config.py",
-      "source_location": "L145"
+      "source_location": "L147"
     },
     {
       "id": "tests_test_config_test_web_host_and_port_are_configured_and_validated",
@@ -8308,7 +8308,7 @@
       "file_type": "code",
       "norm_label": "test_web_host_and_port_are_configured_and_validated()",
       "source_file": "tests/test_config.py",
-      "source_location": "L212"
+      "source_location": "L214"
     },
     {
       "id": "tests_test_config_test_youtube_cookies_file_is_optional_and_not_exposed",
@@ -8320,7 +8320,7 @@
       "file_type": "code",
       "norm_label": "test_youtube_cookies_file_is_optional_and_not_exposed()",
       "source_file": "tests/test_config.py",
-      "source_location": "L183"
+      "source_location": "L185"
     },
     {
       "id": "tests_test_instagram_fakesecretstore_init",
@@ -9287,7 +9287,7 @@
       "source_location": "L127"
     },
     {
-      "id": "tests_test_role_management_rationale_149",
+      "id": "tests_test_role_management_rationale_150",
       "label": "Cria o cog em mem\u00f3ria, sem instanciar outro cliente Discord.",
       "_origin": "ast",
       "community": 1,
@@ -9295,10 +9295,10 @@
       "file_type": "rationale",
       "norm_label": "cria o cog em memoria, sem instanciar outro cliente discord.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L149"
+      "source_location": "L150"
     },
     {
-      "id": "tests_test_role_management_rationale_158",
+      "id": "tests_test_role_management_rationale_159",
       "label": "Cria um payload raw compat\u00edvel com os atributos usados pelo cog.",
       "_origin": "ast",
       "community": 1,
@@ -9306,7 +9306,7 @@
       "file_type": "rationale",
       "norm_label": "cria um payload raw compativel com os atributos usados pelo cog.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L158"
+      "source_location": "L159"
     },
     {
       "id": "tests_test_role_management_rationale_16",
@@ -9320,7 +9320,7 @@
       "source_location": "L16"
     },
     {
-      "id": "tests_test_role_management_rationale_170",
+      "id": "tests_test_role_management_rationale_171",
       "label": "Emoji Unicode que implementa a convers\u00e3o usada pelo payload real.",
       "_origin": "ast",
       "community": 1,
@@ -9328,10 +9328,10 @@
       "file_type": "rationale",
       "norm_label": "emoji unicode que implementa a conversao usada pelo payload real.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L170"
+      "source_location": "L171"
     },
     {
-      "id": "tests_test_role_management_rationale_181",
+      "id": "tests_test_role_management_rationale_182",
       "label": "Cria payload com emoji de texto confi\u00e1vel.",
       "_origin": "ast",
       "community": 1,
@@ -9339,10 +9339,10 @@
       "file_type": "rationale",
       "norm_label": "cria payload com emoji de texto confiavel.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L181"
+      "source_location": "L182"
     },
     {
-      "id": "tests_test_role_management_rationale_189",
+      "id": "tests_test_role_management_rationale_190",
       "label": "O membro novo recebe apenas o cargo inicial configurado.",
       "_origin": "ast",
       "community": 1,
@@ -9350,10 +9350,10 @@
       "file_type": "rationale",
       "norm_label": "o membro novo recebe apenas o cargo inicial configurado.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L189"
+      "source_location": "L190"
     },
     {
-      "id": "tests_test_role_management_rationale_202",
+      "id": "tests_test_role_management_rationale_203",
       "label": "O bot completa as rea\u00e7\u00f5es dos menus configurados sem depender do cache.",
       "_origin": "ast",
       "community": 1,
@@ -9361,10 +9361,10 @@
       "file_type": "rationale",
       "norm_label": "o bot completa as reacoes dos menus configurados sem depender do cache.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L202"
+      "source_location": "L203"
     },
     {
-      "id": "tests_test_role_management_rationale_215",
+      "id": "tests_test_role_management_rationale_216",
       "label": "Cargo existente e cargo acima do bot n\u00e3o s\u00e3o alterados.",
       "_origin": "ast",
       "community": 1,
@@ -9372,7 +9372,7 @@
       "file_type": "rationale",
       "norm_label": "cargo existente e cargo acima do bot nao sao alterados.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L215"
+      "source_location": "L216"
     },
     {
       "id": "tests_test_role_management_rationale_22",
@@ -9386,7 +9386,7 @@
       "source_location": "L22"
     },
     {
-      "id": "tests_test_role_management_rationale_233",
+      "id": "tests_test_role_management_rationale_234",
       "label": "Reagir adiciona; reagir novamente remove o mesmo cargo exclusivo.",
       "_origin": "ast",
       "community": 1,
@@ -9394,10 +9394,10 @@
       "file_type": "rationale",
       "norm_label": "reagir adiciona; reagir novamente remove o mesmo cargo exclusivo.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L233"
+      "source_location": "L234"
     },
     {
-      "id": "tests_test_role_management_rationale_252",
+      "id": "tests_test_role_management_rationale_253",
       "label": "A escolha -18 substitui +18 e nunca deixa ambos no membro.",
       "_origin": "ast",
       "community": 1,
@@ -9405,10 +9405,10 @@
       "file_type": "rationale",
       "norm_label": "a escolha -18 substitui +18 e nunca deixa ambos no membro.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L252"
+      "source_location": "L253"
     },
     {
-      "id": "tests_test_role_management_rationale_268",
+      "id": "tests_test_role_management_rationale_269",
       "label": "Pronomes n\u00e3o exclusivos permitem adicionar e remover op\u00e7\u00f5es independentemente.",
       "_origin": "ast",
       "community": 1,
@@ -9416,10 +9416,10 @@
       "file_type": "rationale",
       "norm_label": "pronomes nao exclusivos permitem adicionar e remover opcoes independentemente.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L268"
+      "source_location": "L269"
     },
     {
-      "id": "tests_test_role_management_rationale_284",
+      "id": "tests_test_role_management_rationale_285",
       "label": "Canal, mensagem, emoji e bot fora do mapa jamais recebem cargos.",
       "_origin": "ast",
       "community": 1,
@@ -9427,10 +9427,10 @@
       "file_type": "rationale",
       "norm_label": "canal, mensagem, emoji e bot fora do mapa jamais recebem cargos.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L284"
+      "source_location": "L285"
     },
     {
-      "id": "tests_test_role_management_rationale_304",
+      "id": "tests_test_role_management_rationale_305",
       "label": "Cache ausente usa fetch_member e falha de permiss\u00e3o preserva a rea\u00e7\u00e3o.",
       "_origin": "ast",
       "community": 1,
@@ -9438,7 +9438,7 @@
       "file_type": "rationale",
       "norm_label": "cache ausente usa fetch_member e falha de permissao preserva a reacao.",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L304"
+      "source_location": "L305"
     },
     {
       "id": "tests_test_role_management_rationale_34",
@@ -9716,7 +9716,7 @@
       "source_location": "L42"
     },
     {
-      "id": "src_bot_config_rationale_423",
+      "id": "src_bot_config_rationale_424",
       "label": "Cria as configura\u00e7\u00f5es a partir de vari\u00e1veis de ambiente.",
       "_origin": "ast",
       "community": 10,
@@ -9724,7 +9724,7 @@
       "file_type": "rationale",
       "norm_label": "cria as configuracoes a partir de variaveis de ambiente.",
       "source_file": "src/bot/config.py",
-      "source_location": "L423"
+      "source_location": "L424"
     },
     {
       "id": "src_bot_config_rationale_59",
@@ -9782,7 +9782,7 @@
       "source_location": "L98"
     },
     {
-      "id": "tests_test_config_rationale_158",
+      "id": "tests_test_config_rationale_160",
       "label": "O intervalo do validador Twitch \u00e9 inteiro positivo e tem padr\u00e3o documentado.",
       "_origin": "ast",
       "community": 10,
@@ -9790,10 +9790,10 @@
       "file_type": "rationale",
       "norm_label": "o intervalo do validador twitch e inteiro positivo e tem padrao documentado.",
       "source_file": "tests/test_config.py",
-      "source_location": "L158"
+      "source_location": "L160"
     },
     {
-      "id": "tests_test_config_rationale_402",
+      "id": "tests_test_config_rationale_404",
       "label": "Polling muito frequente \u00e9 rejeitado para proteger a API oficial.",
       "_origin": "ast",
       "community": 10,
@@ -9801,7 +9801,7 @@
       "file_type": "rationale",
       "norm_label": "polling muito frequente e rejeitado para proteger a api oficial.",
       "source_file": "tests/test_config.py",
-      "source_location": "L402"
+      "source_location": "L404"
     },
     {
       "id": "file",
@@ -13566,7 +13566,7 @@
       "node_kind": "heading",
       "norm_label": "autorizar a conta",
       "source_file": "README.md",
-      "source_location": "L364"
+      "source_location": "L365"
     },
     {
       "id": "readme_canais_de_voz_tempor\u00e1rios",
@@ -13578,7 +13578,7 @@
       "node_kind": "heading",
       "norm_label": "canais de voz temporarios",
       "source_file": "README.md",
-      "source_location": "L198"
+      "source_location": "L199"
     },
     {
       "id": "readme_cargos_autom\u00e1ticos_e_por_rea\u00e7\u00e3o",
@@ -13602,7 +13602,7 @@
       "node_kind": "heading",
       "norm_label": "comandos discord",
       "source_file": "README.md",
-      "source_location": "L476"
+      "source_location": "L477"
     },
     {
       "id": "readme_configura\u00e7\u00e3o",
@@ -13650,7 +13650,7 @@
       "node_kind": "heading",
       "norm_label": "iniciar",
       "source_file": "README.md",
-      "source_location": "L451"
+      "source_location": "L452"
     },
     {
       "id": "readme_instagram_oficial_da_meta",
@@ -13662,7 +13662,7 @@
       "node_kind": "heading",
       "norm_label": "instagram oficial da meta",
       "source_file": "README.md",
-      "source_location": "L324"
+      "source_location": "L325"
     },
     {
       "id": "readme_instala\u00e7\u00e3o",
@@ -13698,7 +13698,7 @@
       "node_kind": "heading",
       "norm_label": "musica do youtube em canais de voz",
       "source_file": "README.md",
-      "source_location": "L222"
+      "source_location": "L223"
     },
     {
       "id": "readme_polling_e_renova\u00e7\u00e3o",
@@ -13710,7 +13710,7 @@
       "node_kind": "heading",
       "norm_label": "polling e renovacao",
       "source_file": "README.md",
-      "source_location": "L403"
+      "source_location": "L404"
     },
     {
       "id": "readme_qualidade",
@@ -13722,7 +13722,7 @@
       "node_kind": "heading",
       "norm_label": "qualidade",
       "source_file": "README.md",
-      "source_location": "L500"
+      "source_location": "L501"
     },
     {
       "id": "readme_rea\u00e7\u00f5es_autom\u00e1ticas_em_m\u00eddias",
@@ -13758,7 +13758,7 @@
       "node_kind": "heading",
       "norm_label": "solucao de problemas",
       "source_file": "README.md",
-      "source_location": "L510"
+      "source_location": "L511"
     },
     {
       "id": "readme_twitch_eventsub",
@@ -13770,7 +13770,7 @@
       "node_kind": "heading",
       "norm_label": "twitch eventsub",
       "source_file": "README.md",
-      "source_location": "L276"
+      "source_location": "L277"
     },
     {
       "id": "src_bot_client",
@@ -16358,7 +16358,7 @@
       "source_location": "L277"
     },
     {
-      "id": "src_bot_config_rationale_402",
+      "id": "src_bot_config_rationale_403",
       "label": "Configura\u00e7\u00e3o tipada e segura para inicializar o bot.",
       "_origin": "ast",
       "community": 54,
@@ -16366,7 +16366,7 @@
       "file_type": "rationale",
       "norm_label": "configuracao tipada e segura para inicializar o bot.",
       "source_file": "src/bot/config.py",
-      "source_location": "L402"
+      "source_location": "L403"
     },
     {
       "id": "tests_test_media_reactions_rationale_62",
@@ -16534,7 +16534,7 @@
       "source_location": "L1"
     },
     {
-      "id": "tests_test_config_rationale_109",
+      "id": "tests_test_config_rationale_111",
       "label": "Vari\u00e1veis removidas n\u00e3o voltam a ativar op\u00e7\u00f5es de pronomes.",
       "_origin": "ast",
       "community": 6,
@@ -16542,7 +16542,7 @@
       "file_type": "rationale",
       "norm_label": "variaveis removidas nao voltam a ativar opcoes de pronomes.",
       "source_file": "tests/test_config.py",
-      "source_location": "L109"
+      "source_location": "L111"
     },
     {
       "id": "tests_test_config_rationale_13",
@@ -16556,7 +16556,7 @@
       "source_location": "L13"
     },
     {
-      "id": "tests_test_config_rationale_134",
+      "id": "tests_test_config_rationale_136",
       "label": "Os formatos booleanos aceitos devem ser interpretados corretamente.",
       "_origin": "ast",
       "community": 6,
@@ -16564,10 +16564,10 @@
       "file_type": "rationale",
       "norm_label": "os formatos booleanos aceitos devem ser interpretados corretamente.",
       "source_file": "tests/test_config.py",
-      "source_location": "L134"
+      "source_location": "L136"
     },
     {
-      "id": "tests_test_config_rationale_148",
+      "id": "tests_test_config_rationale_150",
       "label": "O controle de repeti\u00e7\u00e3o Twitch usa os mesmos formatos booleanos aceitos.",
       "_origin": "ast",
       "community": 6,
@@ -16575,10 +16575,10 @@
       "file_type": "rationale",
       "norm_label": "o controle de repeticao twitch usa os mesmos formatos booleanos aceitos.",
       "source_file": "tests/test_config.py",
-      "source_location": "L148"
+      "source_location": "L150"
     },
     {
-      "id": "tests_test_config_rationale_171",
+      "id": "tests_test_config_rationale_173",
       "label": "O limite de modera\u00e7\u00e3o tem padr\u00e3o seguro e n\u00e3o aceita valores n\u00e3o positivos.",
       "_origin": "ast",
       "community": 6,
@@ -16586,10 +16586,10 @@
       "file_type": "rationale",
       "norm_label": "o limite de moderacao tem padrao seguro e nao aceita valores nao positivos.",
       "source_file": "tests/test_config.py",
-      "source_location": "L171"
+      "source_location": "L173"
     },
     {
-      "id": "tests_test_config_rationale_186",
+      "id": "tests_test_config_rationale_188",
       "label": "O caminho de cookies \u00e9 opcional e permanece uma configura\u00e7\u00e3o local do host.",
       "_origin": "ast",
       "community": 6,
@@ -16597,10 +16597,10 @@
       "file_type": "rationale",
       "norm_label": "o caminho de cookies e opcional e permanece uma configuracao local do host.",
       "source_file": "tests/test_config.py",
-      "source_location": "L186"
+      "source_location": "L188"
     },
     {
-      "id": "tests_test_config_rationale_200",
+      "id": "tests_test_config_rationale_202",
       "label": "O cargo global de comandos pode ser desativado ou configurado por ID.",
       "_origin": "ast",
       "community": 6,
@@ -16608,10 +16608,10 @@
       "file_type": "rationale",
       "norm_label": "o cargo global de comandos pode ser desativado ou configurado por id.",
       "source_file": "tests/test_config.py",
-      "source_location": "L200"
+      "source_location": "L202"
     },
     {
-      "id": "tests_test_config_rationale_215",
+      "id": "tests_test_config_rationale_217",
       "label": "O servidor web usa host local configur\u00e1vel e portas TCP v\u00e1lidas.",
       "_origin": "ast",
       "community": 6,
@@ -16619,7 +16619,7 @@
       "file_type": "rationale",
       "norm_label": "o servidor web usa host local configuravel e portas tcp validas.",
       "source_file": "tests/test_config.py",
-      "source_location": "L215"
+      "source_location": "L217"
     },
     {
       "id": "tests_test_config_rationale_22",
@@ -16633,7 +16633,7 @@
       "source_location": "L22"
     },
     {
-      "id": "tests_test_config_rationale_235",
+      "id": "tests_test_config_rationale_237",
       "label": "A renova\u00e7\u00e3o requer expira\u00e7\u00e3o com fuso, dias e horas positivos quando ativa.",
       "_origin": "ast",
       "community": 6,
@@ -16641,10 +16641,10 @@
       "file_type": "rationale",
       "norm_label": "a renovacao requer expiracao com fuso, dias e horas positivos quando ativa.",
       "source_file": "tests/test_config.py",
-      "source_location": "L235"
+      "source_location": "L237"
     },
     {
-      "id": "tests_test_config_rationale_265",
+      "id": "tests_test_config_rationale_267",
       "label": "AWS Secrets Manager s\u00f3 \u00e9 aceito com os identificadores necess\u00e1rios.",
       "_origin": "ast",
       "community": 6,
@@ -16652,10 +16652,10 @@
       "file_type": "rationale",
       "norm_label": "aws secrets manager so e aceito com os identificadores necessarios.",
       "source_file": "tests/test_config.py",
-      "source_location": "L265"
+      "source_location": "L267"
     },
     {
-      "id": "tests_test_config_rationale_285",
+      "id": "tests_test_config_rationale_287",
       "label": "A configura\u00e7\u00e3o n\u00e3o l\u00ea nem mant\u00e9m a vari\u00e1vel legada de token Twitch.",
       "_origin": "ast",
       "community": 6,
@@ -16663,10 +16663,10 @@
       "file_type": "rationale",
       "norm_label": "a configuracao nao le nem mantem a variavel legada de token twitch.",
       "source_file": "tests/test_config.py",
-      "source_location": "L285"
+      "source_location": "L287"
     },
     {
-      "id": "tests_test_config_rationale_295",
+      "id": "tests_test_config_rationale_297",
       "label": "O login Twitch pode ser informado com @, mas \u00e9 normalizado.",
       "_origin": "ast",
       "community": 6,
@@ -16674,10 +16674,10 @@
       "file_type": "rationale",
       "norm_label": "o login twitch pode ser informado com @, mas e normalizado.",
       "source_file": "tests/test_config.py",
-      "source_location": "L295"
+      "source_location": "L297"
     },
     {
-      "id": "tests_test_config_rationale_303",
+      "id": "tests_test_config_rationale_305",
       "label": "Uma URL n\u00e3o \u00e9 um login Twitch v\u00e1lido.",
       "_origin": "ast",
       "community": 6,
@@ -16685,10 +16685,10 @@
       "file_type": "rationale",
       "norm_label": "uma url nao e um login twitch valido.",
       "source_file": "tests/test_config.py",
-      "source_location": "L303"
+      "source_location": "L305"
     },
     {
-      "id": "tests_test_config_rationale_312",
+      "id": "tests_test_config_rationale_314",
       "label": "O bot continua configur\u00e1vel sem dados Instagram com a integra\u00e7\u00e3o desativada.",
       "_origin": "ast",
       "community": 6,
@@ -16696,10 +16696,10 @@
       "file_type": "rationale",
       "norm_label": "o bot continua configuravel sem dados instagram com a integracao desativada.",
       "source_file": "tests/test_config.py",
-      "source_location": "L312"
+      "source_location": "L314"
     },
     {
-      "id": "tests_test_config_rationale_321",
+      "id": "tests_test_config_rationale_323",
       "label": "O bot inicia sem credenciais Twitch quando essa integra\u00e7\u00e3o est\u00e1 desativada.",
       "_origin": "ast",
       "community": 6,
@@ -16707,7 +16707,7 @@
       "file_type": "rationale",
       "norm_label": "o bot inicia sem credenciais twitch quando essa integracao esta desativada.",
       "source_file": "tests/test_config.py",
-      "source_location": "L321"
+      "source_location": "L323"
     },
     {
       "id": "tests_test_config_rationale_33",
@@ -16721,7 +16721,7 @@
       "source_location": "L33"
     },
     {
-      "id": "tests_test_config_rationale_339",
+      "id": "tests_test_config_rationale_341",
       "label": "Cada integra\u00e7\u00e3o tem seu pr\u00f3prio controle de ativa\u00e7\u00e3o por ambiente.",
       "_origin": "ast",
       "community": 6,
@@ -16729,10 +16729,10 @@
       "file_type": "rationale",
       "norm_label": "cada integracao tem seu proprio controle de ativacao por ambiente.",
       "source_file": "tests/test_config.py",
-      "source_location": "L339"
+      "source_location": "L341"
     },
     {
-      "id": "tests_test_config_rationale_368",
+      "id": "tests_test_config_rationale_370",
       "label": "OAuth pode ser iniciado antes de haver token, ID ou canal para o polling.",
       "_origin": "ast",
       "community": 6,
@@ -16740,10 +16740,10 @@
       "file_type": "rationale",
       "norm_label": "oauth pode ser iniciado antes de haver token, id ou canal para o polling.",
       "source_file": "tests/test_config.py",
-      "source_location": "L368"
+      "source_location": "L370"
     },
     {
-      "id": "tests_test_config_rationale_383",
+      "id": "tests_test_config_rationale_385",
       "label": "O perfil Instagram ativo aceita @ inicial, mas nunca uma URL.",
       "_origin": "ast",
       "community": 6,
@@ -16751,10 +16751,10 @@
       "file_type": "rationale",
       "norm_label": "o perfil instagram ativo aceita @ inicial, mas nunca uma url.",
       "source_file": "tests/test_config.py",
-      "source_location": "L383"
+      "source_location": "L385"
     },
     {
-      "id": "tests_test_config_rationale_413",
+      "id": "tests_test_config_rationale_415",
       "label": "Erros de valida\u00e7\u00e3o nunca devem reproduzir um valor secreto.",
       "_origin": "ast",
       "community": 6,
@@ -16762,7 +16762,7 @@
       "file_type": "rationale",
       "norm_label": "erros de validacao nunca devem reproduzir um valor secreto.",
       "source_file": "tests/test_config.py",
-      "source_location": "L413"
+      "source_location": "L415"
     },
     {
       "id": "tests_test_config_rationale_50",
@@ -19229,7 +19229,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L386",
+      "source_location": "L387",
       "weight": 1.0
     },
     {
@@ -19241,7 +19241,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L390",
+      "source_location": "L391",
       "weight": 1.0
     },
     {
@@ -19253,7 +19253,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L393",
+      "source_location": "L394",
       "weight": 1.0
     },
     {
@@ -19313,7 +19313,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L426",
+      "source_location": "L427",
       "weight": 1.0
     },
     {
@@ -19325,7 +19325,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L427",
+      "source_location": "L428",
       "weight": 1.0
     },
     {
@@ -19337,7 +19337,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L430",
+      "source_location": "L431",
       "weight": 1.0
     },
     {
@@ -19349,7 +19349,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L432",
+      "source_location": "L433",
       "weight": 1.0
     },
     {
@@ -19361,7 +19361,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L440",
+      "source_location": "L441",
       "weight": 1.0
     },
     {
@@ -19373,7 +19373,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L442",
+      "source_location": "L443",
       "weight": 1.0
     },
     {
@@ -19385,7 +19385,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L446",
+      "source_location": "L447",
       "weight": 1.0
     },
     {
@@ -19397,7 +19397,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L455",
+      "source_location": "L456",
       "weight": 1.0
     },
     {
@@ -19409,7 +19409,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L457",
+      "source_location": "L458",
       "weight": 1.0
     },
     {
@@ -19421,7 +19421,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L459",
+      "source_location": "L460",
       "weight": 1.0
     },
     {
@@ -19433,7 +19433,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L481",
+      "source_location": "L482",
       "weight": 1.0
     },
     {
@@ -19445,7 +19445,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L484",
+      "source_location": "L485",
       "weight": 1.0
     },
     {
@@ -19457,7 +19457,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L492",
+      "source_location": "L493",
       "weight": 1.0
     },
     {
@@ -19469,7 +19469,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L503",
+      "source_location": "L504",
       "weight": 1.0
     },
     {
@@ -19481,7 +19481,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L518",
+      "source_location": "L519",
       "weight": 1.0
     },
     {
@@ -19493,7 +19493,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L519",
+      "source_location": "L520",
       "weight": 1.0
     },
     {
@@ -19505,7 +19505,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L559",
+      "source_location": "L560",
       "weight": 1.0
     },
     {
@@ -19517,7 +19517,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L563",
+      "source_location": "L564",
       "weight": 1.0
     },
     {
@@ -19529,7 +19529,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L576",
+      "source_location": "L577",
       "weight": 1.0
     },
     {
@@ -19541,7 +19541,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L577",
+      "source_location": "L578",
       "weight": 1.0
     },
     {
@@ -19553,7 +19553,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/bot/config.py",
-      "source_location": "L578",
+      "source_location": "L579",
       "weight": 1.0
     },
     {
@@ -22133,7 +22133,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L279",
+      "source_location": "L281",
       "weight": 1.0
     },
     {
@@ -22145,7 +22145,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L138",
+      "source_location": "L140",
       "weight": 1.0
     },
     {
@@ -22157,7 +22157,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L202",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -22181,7 +22181,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L250",
+      "source_location": "L252",
       "weight": 1.0
     },
     {
@@ -22193,7 +22193,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L372",
+      "source_location": "L374",
       "weight": 1.0
     },
     {
@@ -22205,7 +22205,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L407",
+      "source_location": "L409",
       "weight": 1.0
     },
     {
@@ -22217,7 +22217,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L313",
+      "source_location": "L315",
       "weight": 1.0
     },
     {
@@ -22229,7 +22229,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L394",
+      "source_location": "L396",
       "weight": 1.0
     },
     {
@@ -22241,7 +22241,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L122",
+      "source_location": "L124",
       "weight": 1.0
     },
     {
@@ -22253,7 +22253,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L289",
+      "source_location": "L291",
       "weight": 1.0
     },
     {
@@ -22265,7 +22265,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L173",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
@@ -22301,7 +22301,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L420",
+      "source_location": "L422",
       "weight": 1.0
     },
     {
@@ -22313,7 +22313,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L95",
+      "source_location": "L96",
       "weight": 1.0
     },
     {
@@ -22349,7 +22349,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L340",
+      "source_location": "L342",
       "weight": 1.0
     },
     {
@@ -22361,7 +22361,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L329",
+      "source_location": "L331",
       "weight": 1.0
     },
     {
@@ -22373,7 +22373,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L308",
+      "source_location": "L310",
       "weight": 1.0
     },
     {
@@ -22385,7 +22385,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L299",
+      "source_location": "L301",
       "weight": 1.0
     },
     {
@@ -22397,7 +22397,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L152",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -22409,7 +22409,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L161",
+      "source_location": "L163",
       "weight": 1.0
     },
     {
@@ -22421,7 +22421,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L218",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
@@ -22433,7 +22433,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_config.py",
-      "source_location": "L188",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
@@ -25277,7 +25277,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L159",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -25289,7 +25289,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L182",
+      "source_location": "L183",
       "weight": 1.0
     },
     {
@@ -25301,7 +25301,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -25313,7 +25313,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L150",
+      "source_location": "L151",
       "weight": 1.0
     },
     {
@@ -25325,7 +25325,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L151",
+      "source_location": "L152",
       "weight": 1.0
     },
     {
@@ -25337,7 +25337,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L152",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -25349,7 +25349,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L152",
+      "source_location": "L153",
       "weight": 1.0
     },
     {
@@ -25361,7 +25361,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L153",
+      "source_location": "L154",
       "weight": 1.0
     },
     {
@@ -25373,7 +25373,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L154",
+      "source_location": "L155",
       "weight": 1.0
     },
     {
@@ -25385,7 +25385,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L154",
+      "source_location": "L155",
       "weight": 1.0
     },
     {
@@ -25397,24 +25397,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L143",
+      "source_location": "L144",
       "weight": 1.0
     },
     {
       "source": "tests_test_role_management_test_age_reaction_toggles_and_removes_reaction",
       "target": "tests_test_role_management_role_cog",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "tests/test_role_management.py",
-      "source_location": "L234",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_role_management_test_age_reaction_toggles_and_removes_reaction",
-      "target": "tests_test_role_management_fakemember",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25426,6 +25414,18 @@
     },
     {
       "source": "tests_test_role_management_test_age_reaction_toggles_and_removes_reaction",
+      "target": "tests_test_role_management_fakemember",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_role_management.py",
+      "source_location": "L236",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_role_management_test_age_reaction_toggles_and_removes_reaction",
       "target": "tests_test_role_management_raw_payload",
       "relation": "calls",
       "_origin": "ast",
@@ -25433,7 +25433,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L237",
+      "source_location": "L238",
       "weight": 1.0
     },
     {
@@ -25445,7 +25445,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L253",
+      "source_location": "L254",
       "weight": 1.0
     },
     {
@@ -25457,7 +25457,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L256",
+      "source_location": "L257",
       "weight": 1.0
     },
     {
@@ -25469,24 +25469,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L259",
+      "source_location": "L260",
       "weight": 1.0
     },
     {
       "source": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
       "target": "tests_test_role_management_role_cog",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "tests/test_role_management.py",
-      "source_location": "L305",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
-      "target": "tests_test_role_management_fakemember",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25498,7 +25486,7 @@
     },
     {
       "source": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
-      "target": "tests_test_role_management_discord_error",
+      "target": "tests_test_role_management_fakemember",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25510,6 +25498,18 @@
     },
     {
       "source": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
+      "target": "tests_test_role_management_discord_error",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_role_management.py",
+      "source_location": "L308",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
       "target": "tests_test_role_management_raw_payload",
       "relation": "calls",
       "_origin": "ast",
@@ -25517,24 +25517,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L310",
+      "source_location": "L311",
       "weight": 1.0
     },
     {
       "source": "tests_test_role_management_test_member_join_assigns_auto_role",
       "target": "tests_test_role_management_role_cog",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "tests/test_role_management.py",
-      "source_location": "L190",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_role_management_test_member_join_assigns_auto_role",
-      "target": "tests_test_role_management_fakemember",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25545,6 +25533,18 @@
       "weight": 1.0
     },
     {
+      "source": "tests_test_role_management_test_member_join_assigns_auto_role",
+      "target": "tests_test_role_management_fakemember",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_role_management.py",
+      "source_location": "L192",
+      "weight": 1.0
+    },
+    {
       "source": "tests_test_role_management_test_member_join_ignores_existing_or_unassignable_auto_role",
       "target": "tests_test_role_management_role_cog",
       "relation": "calls",
@@ -25553,7 +25553,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L216",
+      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -25565,24 +25565,12 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L219",
+      "source_location": "L220",
       "weight": 1.0
     },
     {
       "source": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
       "target": "tests_test_role_management_role_cog",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "tests/test_role_management.py",
-      "source_location": "L269",
-      "weight": 1.0
-    },
-    {
-      "source": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
-      "target": "tests_test_role_management_fakemember",
       "relation": "calls",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25594,6 +25582,18 @@
     },
     {
       "source": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
+      "target": "tests_test_role_management_fakemember",
+      "relation": "calls",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "call",
+      "source_file": "tests/test_role_management.py",
+      "source_location": "L271",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
       "target": "tests_test_role_management_raw_payload",
       "relation": "calls",
       "_origin": "ast",
@@ -25601,7 +25601,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L273",
+      "source_location": "L274",
       "weight": 1.0
     },
     {
@@ -25613,7 +25613,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L203",
+      "source_location": "L204",
       "weight": 1.0
     },
     {
@@ -25625,7 +25625,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L285",
+      "source_location": "L286",
       "weight": 1.0
     },
     {
@@ -25637,7 +25637,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L286",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
@@ -25649,7 +25649,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L289",
+      "source_location": "L290",
       "weight": 1.0
     },
     {
@@ -25661,7 +25661,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L289",
+      "source_location": "L290",
       "weight": 1.0
     },
     {
@@ -27653,7 +27653,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_config.py",
-      "source_location": "L127",
+      "source_location": "L129",
       "weight": 1.0
     },
     {
@@ -27665,7 +27665,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_config.py",
-      "source_location": "L141",
+      "source_location": "L143",
       "weight": 1.0
     },
     {
@@ -28289,7 +28289,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L229",
+      "source_location": "L230",
       "weight": 1.0
     },
     {
@@ -28301,7 +28301,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L248",
+      "source_location": "L249",
       "weight": 1.0
     },
     {
@@ -28313,7 +28313,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L300",
+      "source_location": "L301",
       "weight": 1.0
     },
     {
@@ -28325,7 +28325,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L187",
+      "source_location": "L188",
       "weight": 1.0
     },
     {
@@ -28337,7 +28337,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L211",
+      "source_location": "L212",
       "weight": 1.0
     },
     {
@@ -28349,7 +28349,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L264",
+      "source_location": "L265",
       "weight": 1.0
     },
     {
@@ -28361,7 +28361,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L198",
+      "source_location": "L199",
       "weight": 1.0
     },
     {
@@ -28373,7 +28373,7 @@
       "confidence_score": 1.0,
       "context": "decorator",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L280",
+      "source_location": "L281",
       "weight": 1.0
     },
     {
@@ -35585,7 +35585,7 @@
       "confidence_score": 1.0,
       "context": "return_type",
       "source_file": "tests/test_role_management.py",
-      "source_location": "L180",
+      "source_location": "L181",
       "weight": 1.0
     },
     {
@@ -35724,7 +35724,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L198",
+      "source_location": "L199",
       "weight": 1.0
     },
     {
@@ -35735,7 +35735,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L222",
+      "source_location": "L223",
       "weight": 1.0
     },
     {
@@ -35746,7 +35746,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L276",
+      "source_location": "L277",
       "weight": 1.0
     },
     {
@@ -35757,7 +35757,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L324",
+      "source_location": "L325",
       "weight": 1.0
     },
     {
@@ -35801,7 +35801,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L451",
+      "source_location": "L452",
       "weight": 1.0
     },
     {
@@ -35812,7 +35812,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L476",
+      "source_location": "L477",
       "weight": 1.0
     },
     {
@@ -35834,7 +35834,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L500",
+      "source_location": "L501",
       "weight": 1.0
     },
     {
@@ -35845,7 +35845,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L510",
+      "source_location": "L511",
       "weight": 1.0
     },
     {
@@ -35867,7 +35867,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L364",
+      "source_location": "L365",
       "weight": 1.0
     },
     {
@@ -35878,7 +35878,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L403",
+      "source_location": "L404",
       "weight": 1.0
     },
     {
@@ -36428,7 +36428,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot/config.py",
-      "source_location": "L401",
+      "source_location": "L402",
       "weight": 1.0
     },
     {
@@ -37539,7 +37539,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L106",
+      "source_location": "L108",
       "weight": 1.0
     },
     {
@@ -37561,7 +37561,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L131",
+      "source_location": "L133",
       "weight": 1.0
     },
     {
@@ -37572,7 +37572,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L145",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -37583,7 +37583,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L155",
+      "source_location": "L157",
       "weight": 1.0
     },
     {
@@ -37594,7 +37594,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L168",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -37605,7 +37605,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L183",
+      "source_location": "L185",
       "weight": 1.0
     },
     {
@@ -37616,7 +37616,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L197",
+      "source_location": "L199",
       "weight": 1.0
     },
     {
@@ -37638,7 +37638,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L212",
+      "source_location": "L214",
       "weight": 1.0
     },
     {
@@ -37649,7 +37649,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L232",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
@@ -37660,7 +37660,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L262",
+      "source_location": "L264",
       "weight": 1.0
     },
     {
@@ -37671,7 +37671,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L282",
+      "source_location": "L284",
       "weight": 1.0
     },
     {
@@ -37682,7 +37682,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L294",
+      "source_location": "L296",
       "weight": 1.0
     },
     {
@@ -37704,7 +37704,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L302",
+      "source_location": "L304",
       "weight": 1.0
     },
     {
@@ -37715,7 +37715,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L311",
+      "source_location": "L313",
       "weight": 1.0
     },
     {
@@ -37726,7 +37726,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L320",
+      "source_location": "L322",
       "weight": 1.0
     },
     {
@@ -37737,7 +37737,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L336",
+      "source_location": "L338",
       "weight": 1.0
     },
     {
@@ -37748,7 +37748,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L365",
+      "source_location": "L367",
       "weight": 1.0
     },
     {
@@ -37759,7 +37759,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L380",
+      "source_location": "L382",
       "weight": 1.0
     },
     {
@@ -37770,7 +37770,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L401",
+      "source_location": "L403",
       "weight": 1.0
     },
     {
@@ -37781,7 +37781,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L410",
+      "source_location": "L412",
       "weight": 1.0
     },
     {
@@ -39035,7 +39035,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L146",
+      "source_location": "L147",
       "weight": 1.0
     },
     {
@@ -39057,7 +39057,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "weight": 1.0
     },
     {
@@ -39068,7 +39068,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L169",
+      "source_location": "L170",
       "weight": 1.0
     },
     {
@@ -39079,7 +39079,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L180",
+      "source_location": "L181",
       "weight": 1.0
     },
     {
@@ -39090,7 +39090,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L188",
+      "source_location": "L189",
       "weight": 1.0
     },
     {
@@ -39101,7 +39101,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L199",
+      "source_location": "L200",
       "weight": 1.0
     },
     {
@@ -39123,7 +39123,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L212",
+      "source_location": "L213",
       "weight": 1.0
     },
     {
@@ -39134,7 +39134,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L230",
+      "source_location": "L231",
       "weight": 1.0
     },
     {
@@ -39145,7 +39145,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L249",
+      "source_location": "L250",
       "weight": 1.0
     },
     {
@@ -39156,7 +39156,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L265",
+      "source_location": "L266",
       "weight": 1.0
     },
     {
@@ -39167,7 +39167,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L281",
+      "source_location": "L282",
       "weight": 1.0
     },
     {
@@ -39178,7 +39178,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L301",
+      "source_location": "L302",
       "weight": 1.0
     },
     {
@@ -41191,7 +41191,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot/config.py",
-      "source_location": "L422",
+      "source_location": "L423",
       "weight": 1.0
     },
     {
@@ -43776,7 +43776,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L172",
+      "source_location": "L173",
       "weight": 1.0
     },
     {
@@ -43787,7 +43787,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L176",
+      "source_location": "L177",
       "weight": 1.0
     },
     {
@@ -45672,14 +45672,14 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot_config_rationale_402",
+      "source": "src_bot_config_rationale_403",
       "target": "src_bot_config_settings",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot/config.py",
-      "source_location": "L402",
+      "source_location": "L403",
       "weight": 1.0
     },
     {
@@ -45694,14 +45694,14 @@
       "weight": 1.0
     },
     {
-      "source": "src_bot_config_rationale_423",
+      "source": "src_bot_config_rationale_424",
       "target": "src_bot_config_settings_from_environment",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/bot/config.py",
-      "source_location": "L423",
+      "source_location": "L424",
       "weight": 1.0
     },
     {
@@ -48026,14 +48026,14 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_109",
+      "source": "tests_test_config_rationale_111",
       "target": "tests_test_config_test_legacy_gender_and_they_them_variables_do_not_create_pronoun_options",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L109",
+      "source_location": "L111",
       "weight": 1.0
     },
     {
@@ -48048,80 +48048,80 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_134",
+      "source": "tests_test_config_rationale_136",
       "target": "tests_test_config_test_boolean_values_are_converted",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L134",
+      "source_location": "L136",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_148",
+      "source": "tests_test_config_rationale_150",
       "target": "tests_test_config_test_twitch_retry_boolean_is_converted",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L148",
+      "source_location": "L150",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_158",
+      "source": "tests_test_config_rationale_160",
       "target": "tests_test_config_test_twitch_token_validation_interval_is_read_and_validated",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L158",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_171",
+      "source": "tests_test_config_rationale_173",
       "target": "tests_test_config_test_max_messages_to_delete_is_configurable_and_positive",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L171",
+      "source_location": "L173",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_186",
+      "source": "tests_test_config_rationale_188",
       "target": "tests_test_config_test_youtube_cookies_file_is_optional_and_not_exposed",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L186",
+      "source_location": "L188",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_200",
+      "source": "tests_test_config_rationale_202",
       "target": "tests_test_config_test_command_required_role_id_is_optional_and_numeric",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L200",
+      "source_location": "L202",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_215",
+      "source": "tests_test_config_rationale_217",
       "target": "tests_test_config_test_web_host_and_port_are_configured_and_validated",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L215",
+      "source_location": "L217",
       "weight": 1.0
     },
     {
@@ -48136,80 +48136,80 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_235",
+      "source": "tests_test_config_rationale_237",
       "target": "tests_test_config_test_instagram_auto_refresh_configuration_is_validated",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L235",
+      "source_location": "L237",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_265",
+      "source": "tests_test_config_rationale_267",
       "target": "tests_test_config_test_aws_token_storage_requires_name_and_region",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L265",
+      "source_location": "L267",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_285",
+      "source": "tests_test_config_rationale_287",
       "target": "tests_test_config_test_legacy_twitch_access_token_is_ignored",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L285",
+      "source_location": "L287",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_295",
+      "source": "tests_test_config_rationale_297",
       "target": "tests_test_config_test_twitch_login_removes_initial_at_sign",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L295",
+      "source_location": "L297",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_303",
+      "source": "tests_test_config_rationale_305",
       "target": "tests_test_config_test_twitch_login_rejects_url",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L303",
+      "source_location": "L305",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_312",
+      "source": "tests_test_config_rationale_314",
       "target": "tests_test_config_test_instagram_is_optional_when_disabled",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L312",
+      "source_location": "L314",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_321",
+      "source": "tests_test_config_rationale_323",
       "target": "tests_test_config_test_twitch_is_optional_when_disabled",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L321",
+      "source_location": "L323",
       "weight": 1.0
     },
     {
@@ -48224,58 +48224,58 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_339",
+      "source": "tests_test_config_rationale_341",
       "target": "tests_test_config_test_twitch_and_instagram_can_be_enabled_independently",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L339",
+      "source_location": "L341",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_368",
+      "source": "tests_test_config_rationale_370",
       "target": "tests_test_config_test_instagram_enabled_allows_oauth_before_token_is_available",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L368",
+      "source_location": "L370",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_383",
+      "source": "tests_test_config_rationale_385",
       "target": "tests_test_config_test_instagram_login_is_normalized_and_url_is_rejected",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L383",
+      "source_location": "L385",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_402",
+      "source": "tests_test_config_rationale_404",
       "target": "tests_test_config_test_instagram_interval_has_a_safe_minimum",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L402",
+      "source_location": "L404",
       "weight": 1.0
     },
     {
-      "source": "tests_test_config_rationale_413",
+      "source": "tests_test_config_rationale_415",
       "target": "tests_test_config_test_required_configuration_error_does_not_include_secret",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_config.py",
-      "source_location": "L413",
+      "source_location": "L415",
       "weight": 1.0
     },
     {
@@ -49522,25 +49522,25 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_149",
+      "source": "tests_test_role_management_rationale_150",
       "target": "tests_test_role_management_role_cog",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L149",
+      "source_location": "L150",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_158",
+      "source": "tests_test_role_management_rationale_159",
       "target": "tests_test_role_management_payload",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L158",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -49555,58 +49555,58 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_170",
+      "source": "tests_test_role_management_rationale_171",
       "target": "tests_test_role_management_unicodeemoji",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L170",
+      "source_location": "L171",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_181",
+      "source": "tests_test_role_management_rationale_182",
       "target": "tests_test_role_management_raw_payload",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L181",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_189",
+      "source": "tests_test_role_management_rationale_190",
       "target": "tests_test_role_management_test_member_join_assigns_auto_role",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L189",
+      "source_location": "L190",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_202",
+      "source": "tests_test_role_management_rationale_203",
       "target": "tests_test_role_management_test_ready_adds_configured_emojis_to_existing_messages",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L202",
+      "source_location": "L203",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_215",
+      "source": "tests_test_role_management_rationale_216",
       "target": "tests_test_role_management_test_member_join_ignores_existing_or_unassignable_auto_role",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L215",
+      "source_location": "L216",
       "weight": 1.0
     },
     {
@@ -49621,58 +49621,58 @@
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_233",
+      "source": "tests_test_role_management_rationale_234",
       "target": "tests_test_role_management_test_age_reaction_toggles_and_removes_reaction",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L233",
+      "source_location": "L234",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_252",
+      "source": "tests_test_role_management_rationale_253",
       "target": "tests_test_role_management_test_exclusive_age_replaces_the_previous_role",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L252",
+      "source_location": "L253",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_268",
+      "source": "tests_test_role_management_rationale_269",
       "target": "tests_test_role_management_test_nonexclusive_pronouns_keep_multiple_roles",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L268",
+      "source_location": "L269",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_284",
+      "source": "tests_test_role_management_rationale_285",
       "target": "tests_test_role_management_test_unknown_events_and_bot_reactions_are_ignored",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L284",
+      "source_location": "L285",
       "weight": 1.0
     },
     {
-      "source": "tests_test_role_management_rationale_304",
+      "source": "tests_test_role_management_rationale_305",
       "target": "tests_test_role_management_test_member_is_fetched_and_reaction_stays_after_role_failure",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_role_management.py",
-      "source_location": "L304",
+      "source_location": "L305",
       "weight": 1.0
     },
     {
@@ -52276,7 +52276,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L278",
+      "source_location": "L280",
       "weight": 0.8
     },
     {
@@ -52287,7 +52287,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L279",
+      "source_location": "L281",
       "weight": 0.8
     },
     {
@@ -52298,7 +52298,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L138",
+      "source_location": "L140",
       "weight": 0.8
     },
     {
@@ -52309,7 +52309,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L202",
+      "source_location": "L204",
       "weight": 0.8
     },
     {
@@ -52320,7 +52320,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L208",
+      "source_location": "L210",
       "weight": 0.8
     },
     {
@@ -52342,7 +52342,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L250",
+      "source_location": "L252",
       "weight": 0.8
     },
     {
@@ -52353,7 +52353,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L258",
+      "source_location": "L260",
       "weight": 0.8
     },
     {
@@ -52364,7 +52364,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L372",
+      "source_location": "L374",
       "weight": 0.8
     },
     {
@@ -52375,7 +52375,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L406",
+      "source_location": "L408",
       "weight": 0.8
     },
     {
@@ -52386,7 +52386,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L407",
+      "source_location": "L409",
       "weight": 0.8
     },
     {
@@ -52397,7 +52397,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L313",
+      "source_location": "L315",
       "weight": 0.8
     },
     {
@@ -52408,7 +52408,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L394",
+      "source_location": "L396",
       "weight": 0.8
     },
     {
@@ -52419,7 +52419,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L397",
+      "source_location": "L399",
       "weight": 0.8
     },
     {
@@ -52430,7 +52430,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L122",
+      "source_location": "L124",
       "weight": 0.8
     },
     {
@@ -52441,7 +52441,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L289",
+      "source_location": "L291",
       "weight": 0.8
     },
     {
@@ -52452,7 +52452,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L173",
+      "source_location": "L175",
       "weight": 0.8
     },
     {
@@ -52463,7 +52463,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L179",
+      "source_location": "L181",
       "weight": 0.8
     },
     {
@@ -52518,7 +52518,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L419",
+      "source_location": "L421",
       "weight": 0.8
     },
     {
@@ -52529,7 +52529,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L420",
+      "source_location": "L422",
       "weight": 0.8
     },
     {
@@ -52540,7 +52540,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L95",
+      "source_location": "L96",
       "weight": 0.8
     },
     {
@@ -52595,7 +52595,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L340",
+      "source_location": "L342",
       "weight": 0.8
     },
     {
@@ -52606,7 +52606,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L329",
+      "source_location": "L331",
       "weight": 0.8
     },
     {
@@ -52617,7 +52617,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L307",
+      "source_location": "L309",
       "weight": 0.8
     },
     {
@@ -52628,7 +52628,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L308",
+      "source_location": "L310",
       "weight": 0.8
     },
     {
@@ -52639,7 +52639,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L299",
+      "source_location": "L301",
       "weight": 0.8
     },
     {
@@ -52650,7 +52650,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L152",
+      "source_location": "L154",
       "weight": 0.8
     },
     {
@@ -52661,7 +52661,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L161",
+      "source_location": "L163",
       "weight": 0.8
     },
     {
@@ -52672,7 +52672,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L164",
+      "source_location": "L166",
       "weight": 0.8
     },
     {
@@ -52683,7 +52683,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L218",
+      "source_location": "L220",
       "weight": 0.8
     },
     {
@@ -52694,7 +52694,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L224",
+      "source_location": "L226",
       "weight": 0.8
     },
     {
@@ -52705,7 +52705,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.95,
       "source_file": "tests/test_config.py",
-      "source_location": "L188",
+      "source_location": "L190",
       "weight": 0.8
     },
     {
@@ -54316,5 +54316,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "6b55daac862f5f5400c80094613c629f0cc7c063"
+  "built_at_commit": "2e02595f7ac973fec52cdb6d8d73794db4a2d6a1"
 }

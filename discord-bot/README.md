@@ -150,11 +150,12 @@ DISCORD_ROLE_AGE_MINUS_18_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_SHE_HER_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_HE_HIM_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_ELU_DELU_ID=123456789012345678
+DISCORD_ROLE_PRONOUN_ANY_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID=123456789012345678
 ```
 
-Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `🌙`, `🌞`, `⭐` e `❔` para
-pronomes, respectivamente ela/dela, ele/dele, elu/delu e prefere não informar. Todos são emojis
+Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `🌙`, `🌞`, `⭐`, `✨` e `❔` para
+pronomes, respectivamente ela/dela, ele/dele, elu/delu, qualquer pronome e prefere não informar. Todos são emojis
 Unicode disponíveis no Discord padrão. Você pode alterar qualquer um por
 `DISCORD_ROLE_*_EMOJI`. Para emoji personalizado, informe a string completa, por exemplo
 `<:meuemoji:123456789012345678>`; o bot compara tanto a string quanto o ID do emoji.

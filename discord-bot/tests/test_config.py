@@ -88,6 +88,7 @@ def test_role_menu_ids_emojis_and_exclusivity_are_read(
             "DISCORD_ROLE_AGE_PLUS_18_EMOJI": "<:adult:555>",
             "DISCORD_PRONOUN_ROLE_MESSAGE_ID": "555",
             "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "666",
+            "DISCORD_ROLE_PRONOUN_ANY_ID": "777",
             "DISCORD_ROLE_PRONOUN_EXCLUSIVE": "true",
         }
     )
@@ -101,6 +102,7 @@ def test_role_menu_ids_emojis_and_exclusivity_are_read(
     assert role_menu.categories[0].exclusive is True
     assert role_menu.categories[1].message_id == 555
     assert role_menu.categories[1].exclusive is True
+    assert {option.role_id for option in role_menu.categories[1].options} == {666, 777}
 
 
 def test_legacy_gender_and_they_them_variables_do_not_create_pronoun_options(
