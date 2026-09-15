@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 CATEGORY_TITLES = {
     "age": "Faixa etária",
-    "gender": "Gênero",
     "pronouns": "Pronomes",
 }
 

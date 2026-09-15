@@ -1,0 +1,488 @@
+{
+  "pyproject.toml": {
+    "mtime": 1789312228.3202095,
+    "seen": 1789437614.086647,
+    "ast_hash": "4127caa2ba631a10abccce71653f3a27",
+    "semantic_hash": ""
+  },
+  "scripts/generate_deployment_article.py": {
+    "mtime": 1789193058.518448,
+    "seen": 1789437614.086647,
+    "ast_hash": "9a41bf9306375afa70b38db3a6b5cfd1",
+    "semantic_hash": ""
+  },
+  "scripts/generate_deployment_article_pdf.py": {
+    "mtime": 1789193481.7211318,
+    "seen": 1789437614.086647,
+    "ast_hash": "cd3dd8117cf1e7f42737fc1340b7115f",
+    "semantic_hash": ""
+  },
+  "src/bot/__init__.py": {
+    "mtime": 1789105785.735921,
+    "seen": 1789437614.086647,
+    "ast_hash": "86361c7ea93061b671572e995634d279",
+    "semantic_hash": ""
+  },
+  "src/bot/__main__.py": {
+    "mtime": 1789100845.5183363,
+    "seen": 1789437614.086647,
+    "ast_hash": "7957c464174260be0894a48080750169",
+    "semantic_hash": ""
+  },
+  "src/bot/client.py": {
+    "mtime": 1789437598.0375507,
+    "seen": 1789437614.086647,
+    "ast_hash": "1e82eea8b6f3bf7bc1a148e1ff1cedf8",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/__init__.py": {
+    "mtime": 1789105785.735921,
+    "seen": 1789437614.086647,
+    "ast_hash": "1b8f6a50ec29afafaa51dc7738652bfc",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/general.py": {
+    "mtime": 1789301789.4108963,
+    "seen": 1789437614.086647,
+    "ast_hash": "458990bc0810edec724e5aecedc4108b",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/media_reactions.py": {
+    "mtime": 1789129488.8996031,
+    "seen": 1789437614.086647,
+    "ast_hash": "25ffffa5288d9d6bf1e59b99a8bae616",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/music.py": {
+    "mtime": 1789314313.858258,
+    "seen": 1789437614.086647,
+    "ast_hash": "953a6ad7db64fad12d26fb76d95303ac",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/role_management.py": {
+    "mtime": 1789279986.8598793,
+    "seen": 1789437614.086647,
+    "ast_hash": "5079c86e563dd9a9827fdfda74025c5c",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/temporary_voice.py": {
+    "mtime": 1789301770.5413296,
+    "seen": 1789437614.086647,
+    "ast_hash": "b51b8fc8c86fcabd729d44dc6d494b37",
+    "semantic_hash": ""
+  },
+  "src/bot/command_access.py": {
+    "mtime": 1789437564.2665179,
+    "seen": 1789437614.086647,
+    "ast_hash": "8d51d094f218e3ea07b38a631dc6c354",
+    "semantic_hash": ""
+  },
+  "src/bot/config.py": {
+    "mtime": 1789437485.0926218,
+    "seen": 1789437614.086647,
+    "ast_hash": "d63930d0e703ba64e07e5ff57de69222",
+    "semantic_hash": ""
+  },
+  "src/bot/current_twitch_live.py": {
+    "mtime": 1789119149.788961,
+    "seen": 1789437614.086647,
+    "ast_hash": "9bdb486f7b32796ad92b0c73c9f17809",
+    "semantic_hash": ""
+  },
+  "src/bot/errors.py": {
+    "mtime": 1789130079.1993554,
+    "seen": 1789437614.086647,
+    "ast_hash": "087e8d189932c01561fee9a1cde3a172",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/__init__.py": {
+    "mtime": 1789105453.6768825,
+    "seen": 1789437614.086647,
+    "ast_hash": "1855a2e5d852a666de09c4a5a2bdb195",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/discord_sender.py": {
+    "mtime": 1789279062.5660727,
+    "seen": 1789437614.086647,
+    "ast_hash": "b511d6f4646af037325e1f30f04269ab",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/instagram.py": {
+    "mtime": 1789268723.8219059,
+    "seen": 1789437614.086647,
+    "ast_hash": "15a17a6769825cfe27225e1712591ec0",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/instagram_oauth.py": {
+    "mtime": 1789260371.7153203,
+    "seen": 1789437614.086647,
+    "ast_hash": "ccf6c28d95c260d5afc782a8d3f35b17",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/instagram_token_store.py": {
+    "mtime": 1789260371.7153203,
+    "seen": 1789437614.086647,
+    "ast_hash": "4967b6f1e72658868f4cbf42b3a1dd23",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/twitch.py": {
+    "mtime": 1789119150.6149774,
+    "seen": 1789437614.086647,
+    "ast_hash": "b06717f00254286465010d1e49d9c60d",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/twitch_auth.py": {
+    "mtime": 1789109294.9500222,
+    "seen": 1789437614.086647,
+    "ast_hash": "3d83df91215ce4d3cca3ef06a4f45b5c",
+    "semantic_hash": ""
+  },
+  "src/bot/integrations/youtube_audio.py": {
+    "mtime": 1789314312.989988,
+    "seen": 1789437614.086647,
+    "ast_hash": "2081eb814a25565c8cfa0235390d9ed4",
+    "semantic_hash": ""
+  },
+  "src/bot/logging_config.py": {
+    "mtime": 1789267335.5945816,
+    "seen": 1789437614.086647,
+    "ast_hash": "e7308ed58f9e80231decb43b3bfc64d5",
+    "semantic_hash": ""
+  },
+  "src/bot/main.py": {
+    "mtime": 1789260680.7016542,
+    "seen": 1789437614.086647,
+    "ast_hash": "3b9f384d3d222561fc578480d4c765a0",
+    "semantic_hash": ""
+  },
+  "src/bot/models.py": {
+    "mtime": 1789268723.0457988,
+    "seen": 1789437614.086647,
+    "ast_hash": "e3741667ef5bc1d1edcf78087f0899d3",
+    "semantic_hash": ""
+  },
+  "src/bot/storage.py": {
+    "mtime": 1789106069.5839665,
+    "seen": 1789437614.086647,
+    "ast_hash": "3ad37816d0906f5f4f5c2ae1e194ead1",
+    "semantic_hash": ""
+  },
+  "src/bot/tasks/__init__.py": {
+    "mtime": 1789105568.9648724,
+    "seen": 1789437614.086647,
+    "ast_hash": "faecc4ce7b0e5a778aee1b77af979a6a",
+    "semantic_hash": ""
+  },
+  "src/bot/tasks/instagram_poller.py": {
+    "mtime": 1789266167.092251,
+    "seen": 1789437614.086647,
+    "ast_hash": "141f5e5ad66c1f0265e9b6198027633e",
+    "semantic_hash": ""
+  },
+  "src/bot/tasks/instagram_token_refresh.py": {
+    "mtime": 1789110417.9838343,
+    "seen": 1789437614.086647,
+    "ast_hash": "00decf18a43ff7a52ca7e5851936fcc5",
+    "semantic_hash": ""
+  },
+  "src/bot/tasks/twitch_token_validator.py": {
+    "mtime": 1789109678.6515129,
+    "seen": 1789437614.086647,
+    "ast_hash": "ac1340c73338b42055f2a09b9f6eb96b",
+    "semantic_hash": ""
+  },
+  "src/bot/web/__init__.py": {
+    "mtime": 1789105615.743886,
+    "seen": 1789437614.086647,
+    "ast_hash": "0e57da898b300e649d7fd985bcfa1352",
+    "semantic_hash": ""
+  },
+  "src/bot/web/app.py": {
+    "mtime": 1789260371.7153203,
+    "seen": 1789437614.086647,
+    "ast_hash": "72c2aaf18e46ebfb53e905336476d6fb",
+    "semantic_hash": ""
+  },
+  "src/bot/web/instagram_oauth.py": {
+    "mtime": 1789260499.6365638,
+    "seen": 1789437614.086647,
+    "ast_hash": "e91b9867bad8986ee7243aca963e932a",
+    "semantic_hash": ""
+  },
+  "src/bot/web/routes.py": {
+    "mtime": 1789106224.4517367,
+    "seen": 1789437614.086647,
+    "ast_hash": "f875330f72614a17adf98c5e0f5f9f63",
+    "semantic_hash": ""
+  },
+  "tests/__init__.py": {
+    "mtime": 1789105785.735921,
+    "seen": 1789437614.086647,
+    "ast_hash": "955014e07415d93abb76c2c25356993e",
+    "semantic_hash": ""
+  },
+  "tests/conftest.py": {
+    "mtime": 1789107004.7462907,
+    "seen": 1789437614.086647,
+    "ast_hash": "1a079e05ee1318e9b02c931245bd8258",
+    "semantic_hash": ""
+  },
+  "tests/test_cleanup_command.py": {
+    "mtime": 1789130149.5043335,
+    "seen": 1789437614.086647,
+    "ast_hash": "ce4ac841f7a5a42d70cea0d304231ec7",
+    "semantic_hash": ""
+  },
+  "tests/test_command_access.py": {
+    "mtime": 1789437583.6894648,
+    "seen": 1789437614.086647,
+    "ast_hash": "ba94feeb09aa9701a58e988bde642460",
+    "semantic_hash": ""
+  },
+  "tests/test_config.py": {
+    "mtime": 1789437487.3455503,
+    "seen": 1789437614.086647,
+    "ast_hash": "3db6c33bb4c94089e9c7e11800a984b4",
+    "semantic_hash": ""
+  },
+  "tests/test_discord_sender.py": {
+    "mtime": 1789280179.6637897,
+    "seen": 1789437614.086647,
+    "ast_hash": "c04307ad4c3abd1f37417623ef43b679",
+    "semantic_hash": ""
+  },
+  "tests/test_instagram.py": {
+    "mtime": 1789266184.1771886,
+    "seen": 1789437614.086647,
+    "ast_hash": "35c8533077dd5322b0d515ef4c4b9286",
+    "semantic_hash": ""
+  },
+  "tests/test_instagram_oauth.py": {
+    "mtime": 1789260487.4761784,
+    "seen": 1789437614.086647,
+    "ast_hash": "076500e234593745a31e7e9f7dd22818",
+    "semantic_hash": ""
+  },
+  "tests/test_live_commands.py": {
+    "mtime": 1789301790.22872,
+    "seen": 1789437614.086647,
+    "ast_hash": "dc9db004bbac70229a92b0432de7db51",
+    "semantic_hash": ""
+  },
+  "tests/test_main.py": {
+    "mtime": 1789260371.7153203,
+    "seen": 1789437614.086647,
+    "ast_hash": "5f13cf716d9ece1ac8cbcee9cba6ffbf",
+    "semantic_hash": ""
+  },
+  "tests/test_media_reactions.py": {
+    "mtime": 1789129506.6105497,
+    "seen": 1789437614.086647,
+    "ast_hash": "4e235fca884e109593904ca4fb40fe47",
+    "semantic_hash": ""
+  },
+  "tests/test_music.py": {
+    "mtime": 1789312093.4384966,
+    "seen": 1789437614.086647,
+    "ast_hash": "a099829e0340bde5979a7086a96fe590",
+    "semantic_hash": ""
+  },
+  "tests/test_role_management.py": {
+    "mtime": 1789282222.2697098,
+    "seen": 1789437614.086647,
+    "ast_hash": "2c8e362cf2800d62903a35a1430bd10d",
+    "semantic_hash": ""
+  },
+  "tests/test_temporary_voice.py": {
+    "mtime": 1789124034.1453388,
+    "seen": 1789437614.086647,
+    "ast_hash": "adf887c03cfb5d66d1b93b38a0348624",
+    "semantic_hash": ""
+  },
+  "tests/test_twitch.py": {
+    "mtime": 1789119371.0187058,
+    "seen": 1789437614.086647,
+    "ast_hash": "2525b0cc79dce3a9f484023f06bfc0ef",
+    "semantic_hash": ""
+  },
+  "tests/test_twitch_auth.py": {
+    "mtime": 1789109678.6515129,
+    "seen": 1789437614.086647,
+    "ast_hash": "cb9f19949dea02e375ba2d62f55dd287",
+    "semantic_hash": ""
+  },
+  "tests/test_twitch_token_validator.py": {
+    "mtime": 1789109657.439811,
+    "seen": 1789437614.086647,
+    "ast_hash": "f54aa31df56e3063feadaae8b8102308",
+    "semantic_hash": ""
+  },
+  "tests/test_twitch_webhook.py": {
+    "mtime": 1789106167.8670964,
+    "seen": 1789437614.086647,
+    "ast_hash": "c6be6b5a5a8e283975277c8d2f4559cc",
+    "semantic_hash": ""
+  },
+  "tests/test_web_app.py": {
+    "mtime": 1789112405.1019683,
+    "seen": 1789437614.086647,
+    "ast_hash": "5e82af9139db673c468d6125d8fd4fab",
+    "semantic_hash": ""
+  },
+  "tests/test_welcome.py": {
+    "mtime": 1789260432.2229335,
+    "seen": 1789437614.086647,
+    "ast_hash": "9faae47f13f2c8b6f48acf6aa2b41b9c",
+    "semantic_hash": ""
+  },
+  "tests/test_youtube_audio.py": {
+    "mtime": 1789314317.0531814,
+    "seen": 1789437614.086647,
+    "ast_hash": "cc2f1697a3ddda3738fd77b2d5680798",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1789314333.386261,
+    "seen": 1789437614.086647,
+    "ast_hash": "d26e9812c45b13dbae9f7cefaeda8ef9",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/IconLiveFundoRosa.png": {
+    "mtime": 1789099477.2791586,
+    "seen": 1789437614.086647,
+    "ast_hash": "267f700fa8c8a96670473cd557727f67",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/abacax.png": {
+    "mtime": 1789099456.9721138,
+    "seen": 1789437614.087149,
+    "ast_hash": "f85d7f9f2a8b520104748a7fa4a028c7",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/ahn.png": {
+    "mtime": 1789099452.4935713,
+    "seen": 1789437614.087149,
+    "ast_hash": "3e420c82190e4b5f4220d510e074a841",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/assustado.png": {
+    "mtime": 1789099388.441143,
+    "seen": 1789437614.087149,
+    "ast_hash": "c8653872672e3c6e5626d5f1af8a27ff",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/bebendoSangue.png": {
+    "mtime": 1789099398.2195754,
+    "seen": 1789437614.087149,
+    "ast_hash": "18ac37e33953786bb7dd90666e7e8605",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/bebendoSangueComZoom.png": {
+    "mtime": 1789099411.750593,
+    "seen": 1789437614.087149,
+    "ast_hash": "4d6164bd656802c1be78c139b13256af",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/cafune.png": {
+    "mtime": 1789099430.4432888,
+    "seen": 1789437614.087149,
+    "ast_hash": "03f5fd13e5cacb7d0e2f88cf3f9c8676",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/cafuneComPesco\u00e7oGrosso.png": {
+    "mtime": 1789099440.360479,
+    "seen": 1789437614.087149,
+    "ast_hash": "054705b4c574fb955ef27389b2b49120",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/escondido.png": {
+    "mtime": 1789099426.2132127,
+    "seen": 1789437614.087149,
+    "ast_hash": "83e82aaa877b58dbdf78e67caa220582",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/espia.png": {
+    "mtime": 1789098903.4674354,
+    "seen": 1789437614.087149,
+    "ast_hash": "83e82aaa877b58dbdf78e67caa220582",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/gato.png": {
+    "mtime": 1789099461.293082,
+    "seen": 1789437614.087149,
+    "ast_hash": "a75cf09b587822c93180c58753c90d2d",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/hummmmm.png": {
+    "mtime": 1789099501.7546206,
+    "seen": 1789437614.087149,
+    "ast_hash": "6795ee76ed138adc7de620759069b554",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/iconLiveFundoBranco.png": {
+    "mtime": 1789099470.123117,
+    "seen": 1789437614.087149,
+    "ast_hash": "7dd755588eb92e0ef4c6975d0223464e",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/tubalao.png": {
+    "mtime": 1789099422.3666627,
+    "seen": 1789437614.087149,
+    "ast_hash": "12a4e7e15b1636aca14f57cf0a97a967",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/tutorialMaquiagem.png": {
+    "mtime": 1789099491.3501093,
+    "seen": 1789437614.087149,
+    "ast_hash": "d62343a43c8a469f3bffdd820bc7cfbe",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/vampCaixaoPng.png": {
+    "mtime": 1789099513.646753,
+    "seen": 1789437614.087149,
+    "ast_hash": "ad83c178f15ea161b7977fe9dcf0aba5",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/emojis/vevendoVInho.png": {
+    "mtime": 1789099417.2143712,
+    "seen": 1789437614.087149,
+    "ast_hash": "cfd92ccf39ba0c4f53cc886b5a14453c",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/reels-png/gato.png": {
+    "mtime": 1789099461.293082,
+    "seen": 1789437614.087149,
+    "ast_hash": "a75cf09b587822c93180c58753c90d2d",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/reels-png/usar.png": {
+    "mtime": 1789099461.293082,
+    "seen": 1789437614.087149,
+    "ast_hash": "a75cf09b587822c93180c58753c90d2d",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/twitch-banner-live/Fundo.png": {
+    "mtime": 1789119736.1805656,
+    "seen": 1789437614.087149,
+    "ast_hash": "e5457ac5adbfc29f803680077b3e11c7",
+    "semantic_hash": ""
+  },
+  "src/bot/assets/welcome-img/gato.png": {
+    "mtime": 1789099461.293082,
+    "seen": 1789437614.087149,
+    "ast_hash": "a75cf09b587822c93180c58753c90d2d",
+    "semantic_hash": ""
+  },
+  "tmp/pdfs/morcegao-page-1.png": {
+    "mtime": 1789193371.5806296,
+    "seen": 1789437614.087149,
+    "ast_hash": "b230cd698d3b48041d3905a361ce01ff",
+    "semantic_hash": ""
+  },
+  "tmp/pdfs/morcegao-page-2.png": {
+    "mtime": 1789193371.7242248,
+    "seen": 1789437614.087149,
+    "ast_hash": "2eadc9d6b67684e56d08e21d201cd7f2",
+    "semantic_hash": ""
+  }
+}

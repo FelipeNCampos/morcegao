@@ -367,19 +367,6 @@ def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
         ),
         _role_category(
             source,
-            name="gender",
-            message_variable="DISCORD_GENDER_ROLE_MESSAGE_ID",
-            exclusive_variable="DISCORD_ROLE_GENDER_EXCLUSIVE",
-            default_exclusive=False,
-            options=(
-                ("DISCORD_ROLE_GENDER_FEMININE_ID", "DISCORD_ROLE_GENDER_FEMININE_EMOJI", "♀️"),
-                ("DISCORD_ROLE_GENDER_MASCULINE_ID", "DISCORD_ROLE_GENDER_MASCULINE_EMOJI", "♂️"),
-                ("DISCORD_ROLE_GENDER_NON_BINARY_ID", "DISCORD_ROLE_GENDER_NON_BINARY_EMOJI", "⭐"),
-                ("DISCORD_ROLE_GENDER_OTHER_ID", "DISCORD_ROLE_GENDER_OTHER_EMOJI", "🌈"),
-            ),
-        ),
-        _role_category(
-            source,
             name="pronouns",
             message_variable="DISCORD_PRONOUN_ROLE_MESSAGE_ID",
             exclusive_variable="DISCORD_ROLE_PRONOUN_EXCLUSIVE",
@@ -387,6 +374,12 @@ def _role_menu_settings(source: Mapping[str, str]) -> RoleMenuSettings:
             options=(
                 ("DISCORD_ROLE_PRONOUN_SHE_HER_ID", "DISCORD_ROLE_PRONOUN_SHE_HER_EMOJI", "🌙"),
                 ("DISCORD_ROLE_PRONOUN_HE_HIM_ID", "DISCORD_ROLE_PRONOUN_HE_HIM_EMOJI", "🌞"),
+                ("DISCORD_ROLE_PRONOUN_ELU_DELU_ID", "DISCORD_ROLE_PRONOUN_ELU_DELU_EMOJI", "⭐"),
+                (
+                    "DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID",
+                    "DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_EMOJI",
+                    "❔",
+                ),
             ),
         ),
     )
@@ -422,6 +415,7 @@ class Settings:
     instagram: InstagramSettings
     web: WebSettings
     youtube_cookies_file: str | None = None
+    command_required_role_id: int | None = None
 
     @classmethod
     def from_environment(cls, environment: Mapping[str, str] | None = None) -> Settings:
@@ -583,4 +577,8 @@ class Settings:
                 port=_web_port(source.get("WEB_PORT")),
             ),
             youtube_cookies_file=_optional_value(source.get("YOUTUBE_COOKIES_FILE")),
+            command_required_role_id=_numeric_id(
+                "DISCORD_COMMAND_REQUIRED_ROLE_ID",
+                source.get("DISCORD_COMMAND_REQUIRED_ROLE_ID"),
+            ),
         )

@@ -71,7 +71,9 @@ def test_role_menu_ids_emojis_and_exclusivity_are_read(
             "DISCORD_AGE_ROLE_MESSAGE_ID": "333",
             "DISCORD_ROLE_AGE_PLUS_18_ID": "444",
             "DISCORD_ROLE_AGE_PLUS_18_EMOJI": "<:adult:555>",
-            "DISCORD_ROLE_GENDER_EXCLUSIVE": "true",
+            "DISCORD_PRONOUN_ROLE_MESSAGE_ID": "555",
+            "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "666",
+            "DISCORD_ROLE_PRONOUN_EXCLUSIVE": "true",
         }
     )
 
@@ -82,13 +84,14 @@ def test_role_menu_ids_emojis_and_exclusivity_are_read(
     assert role_menu.categories[0].message_id == 333
     assert role_menu.categories[0].role_id_for_emoji("adult", 555) == 444
     assert role_menu.categories[0].exclusive is True
+    assert role_menu.categories[1].message_id == 555
     assert role_menu.categories[1].exclusive is True
 
 
-def test_legacy_they_them_variables_do_not_create_a_pronoun_option(
+def test_legacy_gender_and_they_them_variables_do_not_create_pronoun_options(
     environment: Callable[[], dict[str, str]],
 ) -> None:
-    """They/them foi removido do menu e variáveis antigas não voltam a ativá-lo."""
+    """Variáveis removidas não voltam a ativar opções de pronomes."""
     values = environment()
     values.update(
         {
@@ -97,10 +100,11 @@ def test_legacy_they_them_variables_do_not_create_a_pronoun_option(
             "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "444",
             "DISCORD_ROLE_PRONOUN_THEY_THEM_ID": "555",
             "DISCORD_ROLE_PRONOUN_THEY_THEM_EMOJI": "⭐",
+            "DISCORD_ROLE_GENDER_FEMININE_ID": "666",
         }
     )
 
-    pronouns = Settings.from_environment(values).role_menu.categories[2]
+    pronouns = Settings.from_environment(values).role_menu.categories[1]
 
     assert [option.role_id for option in pronouns.options] == [444]
 
@@ -173,6 +177,21 @@ def test_youtube_cookies_file_is_optional_and_not_exposed(
         Settings.from_environment(values).youtube_cookies_file
         == "/etc/morcegao/youtube-cookies.txt"
     )
+
+
+def test_command_required_role_id_is_optional_and_numeric(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O cargo global de comandos pode ser desativado ou configurado por ID."""
+    values = environment()
+    assert Settings.from_environment(values).command_required_role_id is None
+
+    values["DISCORD_COMMAND_REQUIRED_ROLE_ID"] = "123456789012345679"
+    assert Settings.from_environment(values).command_required_role_id == 123456789012345679
+
+    values["DISCORD_COMMAND_REQUIRED_ROLE_ID"] = "cargo"
+    with pytest.raises(ConfigurationError, match="DISCORD_COMMAND_REQUIRED_ROLE_ID"):
+        Settings.from_environment(values)
 
 
 def test_web_host_and_port_are_configured_and_validated(

@@ -134,17 +134,15 @@ DISCORD_ROLE_MENU_CHANNEL_ID=123456789012345678
 
 DISCORD_ROLE_AGE_PLUS_18_ID=123456789012345678
 DISCORD_ROLE_AGE_MINUS_18_ID=123456789012345678
-DISCORD_ROLE_GENDER_FEMININE_ID=123456789012345678
-DISCORD_ROLE_GENDER_MASCULINE_ID=123456789012345678
-DISCORD_ROLE_GENDER_NON_BINARY_ID=
-DISCORD_ROLE_GENDER_OTHER_ID=
 DISCORD_ROLE_PRONOUN_SHE_HER_ID=123456789012345678
 DISCORD_ROLE_PRONOUN_HE_HIM_ID=123456789012345678
+DISCORD_ROLE_PRONOUN_ELU_DELU_ID=123456789012345678
+DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID=123456789012345678
 ```
 
-Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `♀️`, `♂️`, `⭐` e `🌈` para
-gênero; `🌙` e `🌞` para pronomes. Todos são emojis Unicode disponíveis no Discord padrão. Você
-pode alterar qualquer um por
+Os emojis padrão estão em `.env.example`: `🔞` e `🔓` para idade; `🌙`, `🌞`, `⭐` e `❔` para
+pronomes, respectivamente ela/dela, ele/dele, elu/delu e prefere não informar. Todos são emojis
+Unicode disponíveis no Discord padrão. Você pode alterar qualquer um por
 `DISCORD_ROLE_*_EMOJI`. Para emoji personalizado, informe a string completa, por exemplo
 `<:meuemoji:123456789012345678>`; o bot compara tanto a string quanto o ID do emoji.
 
@@ -155,7 +153,6 @@ novo, pois isso criaria outras mensagens:
 
 ```dotenv
 DISCORD_AGE_ROLE_MESSAGE_ID=123456789012345678
-DISCORD_GENDER_ROLE_MESSAGE_ID=123456789012345678
 DISCORD_PRONOUN_ROLE_MESSAGE_ID=123456789012345678
 ```
 
@@ -176,10 +173,9 @@ O comportamento é um toggle:
 4. Ao escolher a outra opção de idade, o cargo anterior será substituído.
 5. A reação do usuário é removida automaticamente após o processamento.
 
-Idade é exclusiva por padrão (`DISCORD_ROLE_AGE_EXCLUSIVE=true`). Gênero e pronomes permitem
-múltiplas opções por padrão; defina `DISCORD_ROLE_GENDER_EXCLUSIVE=true` ou
-`DISCORD_ROLE_PRONOUN_EXCLUSIVE=true` se quiser limitar cada categoria a uma opção. Reações em outro
-canal, outra mensagem ou com emoji não configurado são ignoradas. O processamento usa
+Idade é exclusiva por padrão (`DISCORD_ROLE_AGE_EXCLUSIVE=true`). Pronomes permitem múltiplas opções
+por padrão; defina `DISCORD_ROLE_PRONOUN_EXCLUSIVE=true` se quiser limitar a categoria a uma opção.
+Reações em outro canal, outra mensagem ou com emoji não configurado são ignoradas. O processamento usa
 `on_raw_reaction_add`, portanto continua funcionando mesmo que a mensagem não esteja no cache.
 
 Se aparecer nos logs que um cargo não é gerenciável, confira se o cargo existe, se não é integrado e

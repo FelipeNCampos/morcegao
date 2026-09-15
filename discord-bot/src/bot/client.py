@@ -7,9 +7,9 @@ import contextlib
 import logging
 
 import discord
-from discord import app_commands
 from discord.ext import commands
 
+from bot.command_access import CommandAccessTree
 from bot.config import Settings
 from bot.current_twitch_live import CurrentTwitchLiveStore
 from bot.errors import handle_app_command_error
@@ -52,7 +52,7 @@ class DiscordBot(commands.Bot):
             intents=intents,
             help_command=None,
             application_id=settings.discord_application_id,
-            tree_cls=app_commands.CommandTree,
+            tree_cls=CommandAccessTree,
         )
         self.settings = settings
         self.tree.on_error = handle_app_command_error

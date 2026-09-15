@@ -124,21 +124,20 @@ class FakeBot:
 
 
 def role_settings(environment: Callable[[], dict[str, str]]) -> Settings:
-    """Retorna os três menus configurados com IDs e emojis Unicode."""
+    """Retorna os menus de idade e pronomes com IDs e emojis Unicode."""
     values = environment()
     values.update(
         {
             "DISCORD_AUTO_ROLE_ID": "10",
             "DISCORD_ROLE_MENU_CHANNEL_ID": "20",
             "DISCORD_AGE_ROLE_MESSAGE_ID": "30",
-            "DISCORD_GENDER_ROLE_MESSAGE_ID": "31",
             "DISCORD_PRONOUN_ROLE_MESSAGE_ID": "32",
             "DISCORD_ROLE_AGE_PLUS_18_ID": "11",
             "DISCORD_ROLE_AGE_MINUS_18_ID": "12",
-            "DISCORD_ROLE_GENDER_FEMININE_ID": "13",
-            "DISCORD_ROLE_GENDER_MASCULINE_ID": "14",
             "DISCORD_ROLE_PRONOUN_SHE_HER_ID": "15",
             "DISCORD_ROLE_PRONOUN_HE_HIM_ID": "16",
+            "DISCORD_ROLE_PRONOUN_ELU_DELU_ID": "17",
+            "DISCORD_ROLE_PRONOUN_PREFER_NOT_TO_INFORM_ID": "18",
         }
     )
     return Settings.from_environment(values)
@@ -148,7 +147,7 @@ def role_cog(
     environment: Callable[[], dict[str, str]],
 ) -> tuple[RoleManagement, FakeGuild, FakeChannel]:
     """Cria o cog em memória, sem instanciar outro cliente Discord."""
-    roles = [FakeRole(role_id, position=role_id) for role_id in range(10, 17)]
+    roles = [FakeRole(role_id, position=role_id) for role_id in range(10, 19)]
     guild = FakeGuild(roles)
     channel = FakeChannel(FakeMessage())
     bot = FakeBot(guild, channel)
@@ -206,7 +205,7 @@ async def test_ready_adds_configured_emojis_to_existing_messages(
     await cog.on_ready()
     await cog.on_ready()
 
-    assert channel.message.added == ["🔞", "🔓", "♀️", "♂️", "🌙", "🌞"]
+    assert channel.message.added == ["🔞", "🔓", "🌙", "🌞", "⭐", "❔"]
 
 
 @pytest.mark.asyncio
@@ -263,19 +262,19 @@ async def test_exclusive_age_replaces_the_previous_role(
 
 
 @pytest.mark.asyncio
-async def test_nonexclusive_gender_keeps_multiple_roles(
+async def test_nonexclusive_pronouns_keep_multiple_roles(
     environment: Callable[[], dict[str, str]],
 ) -> None:
-    """Gênero não exclusivo permite adicionar e remover opções independentemente."""
+    """Pronomes não exclusivos permitem adicionar e remover opções independentemente."""
     cog, guild, _ = role_cog(environment)
     member = FakeMember(60, guild)
     guild._members[member.id] = member
 
-    await cog.on_raw_reaction_add(raw_payload(31, "♀️"))  # type: ignore[arg-type]
-    await cog.on_raw_reaction_add(raw_payload(31, "♂️"))  # type: ignore[arg-type]
-    assert {role.id for role in member.roles} == {13, 14}
-    await cog.on_raw_reaction_add(raw_payload(31, "♀️"))  # type: ignore[arg-type]
-    assert [role.id for role in member.roles] == [14]
+    await cog.on_raw_reaction_add(raw_payload(32, "🌙"))  # type: ignore[arg-type]
+    await cog.on_raw_reaction_add(raw_payload(32, "⭐"))  # type: ignore[arg-type]
+    assert {role.id for role in member.roles} == {15, 17}
+    await cog.on_raw_reaction_add(raw_payload(32, "🌙"))  # type: ignore[arg-type]
+    assert [role.id for role in member.roles] == [17]
 
 
 @pytest.mark.asyncio
