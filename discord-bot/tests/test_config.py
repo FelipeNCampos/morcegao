@@ -59,6 +59,21 @@ def test_media_reaction_channel_id_is_optional_and_numeric(
         Settings.from_environment(values)
 
 
+def test_member_log_channel_id_is_optional_and_numeric(
+    environment: Callable[[], dict[str, str]],
+) -> None:
+    """O canal de logs de membros pode ser desativado ou receber um ID válido."""
+    values = environment()
+    assert Settings.from_environment(values).member_log_channel_id is None
+
+    values["DISCORD_MEMBER_LOG_CHANNEL_ID"] = "123456789012345679"
+    assert Settings.from_environment(values).member_log_channel_id == 123456789012345679
+
+    values["DISCORD_MEMBER_LOG_CHANNEL_ID"] = "invalido"
+    with pytest.raises(ConfigurationError, match="DISCORD_MEMBER_LOG_CHANNEL_ID"):
+        Settings.from_environment(values)
+
+
 def test_role_menu_ids_emojis_and_exclusivity_are_read(
     environment: Callable[[], dict[str, str]],
 ) -> None:

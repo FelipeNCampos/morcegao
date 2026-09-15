@@ -102,6 +102,19 @@ autorizá-lo também.
 
 `DISCORD_GUILD_ID` registra os slash commands rapidamente no servidor de desenvolvimento. `SYNC_GLOBAL_COMMANDS=true` também sincroniza comandos globais, que podem demorar mais para aparecer.
 
+### Logs de entrada e saída
+
+Para registrar quando uma pessoa entra ou sai do servidor, crie um canal de texto privado para a
+equipe e informe seu ID:
+
+```dotenv
+DISCORD_MEMBER_LOG_CHANNEL_ID=123456789012345678
+```
+
+O Morcegão enviará `📥 usuário entrou no servidor` e `📤 usuário saiu do servidor`, incluindo o ID
+do membro para facilitar auditorias. As menções não geram notificações. Deixe a variável vazia para
+desativar os logs. O bot precisa de **View Channel** e **Send Messages** nesse canal.
+
 ### Reações automáticas em mídias
 
 Defina o ID de um canal de texto para o Morcegão reagir automaticamente a imagens, GIFs e vídeos:

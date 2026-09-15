@@ -30,9 +30,9 @@
     "semantic_hash": ""
   },
   "src/bot/client.py": {
-    "mtime": 1789437598.0375507,
-    "seen": 1789437614.086647,
-    "ast_hash": "1e82eea8b6f3bf7bc1a148e1ff1cedf8",
+    "mtime": 1789438670.5881906,
+    "seen": 1789438706.0017684,
+    "ast_hash": "f949a390ca39f6f110748dfac48a4b53",
     "semantic_hash": ""
   },
   "src/bot/cogs/__init__.py": {
@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "src/bot/config.py": {
-    "mtime": 1789438074.4819057,
-    "seen": 1789438129.7057343,
-    "ast_hash": "2125ca4d8093d94798775eb1e0dbe093",
+    "mtime": 1789438669.8249383,
+    "seen": 1789438706.0017684,
+    "ast_hash": "e75ff5cc0bfd2fa9f245d5e5753115ed",
     "semantic_hash": ""
   },
   "src/bot/current_twitch_live.py": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "tests/test_config.py": {
-    "mtime": 1789438101.5904188,
-    "seen": 1789438129.7057343,
-    "ast_hash": "4a68ab2ba34cf2adae1af24fc83700b5",
+    "mtime": 1789438672.1708775,
+    "seen": 1789438706.0017684,
+    "ast_hash": "7d2117869b6761355d600e6bb7fedc09",
     "semantic_hash": ""
   },
   "tests/test_discord_sender.py": {
@@ -342,9 +342,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789438118.3232107,
-    "seen": 1789438129.7057343,
-    "ast_hash": "12dfb2ba45ef3b837af8bab01e825fe3",
+    "mtime": 1789438692.2033472,
+    "seen": 1789438706.0017684,
+    "ast_hash": "7402a9d1c62a021cbc47aead36448ff8",
     "semantic_hash": ""
   },
   "src/bot/assets/emojis/IconLiveFundoRosa.png": {
@@ -483,6 +483,18 @@
     "mtime": 1789193371.7242248,
     "seen": 1789437614.087149,
     "ast_hash": "2eadc9d6b67684e56d08e21d201cd7f2",
+    "semantic_hash": ""
+  },
+  "src/bot/cogs/member_activity_logs.py": {
+    "mtime": 1789438691.4780972,
+    "seen": 1789438706.0017684,
+    "ast_hash": "4a913bd9a126418e68dc759f438dd6b1",
+    "semantic_hash": ""
+  },
+  "tests/test_member_activity_logs.py": {
+    "mtime": 1789438673.7593288,
+    "seen": 1789438706.0017684,
+    "ast_hash": "b74add287b3a975b3d2a9e3b74ec0c77",
     "semantic_hash": ""
   }
 }

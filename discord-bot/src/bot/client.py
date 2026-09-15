@@ -101,6 +101,7 @@ class DiscordBot(commands.Bot):
         await self.load_extension("bot.cogs.general")
         await self.load_extension("bot.cogs.media_reactions")
         await self.load_extension("bot.cogs.role_management")
+        await self.load_extension("bot.cogs.member_activity_logs")
         await self.load_extension("bot.cogs.temporary_voice")
         await self.load_extension("bot.cogs.music")
 

@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "src/bot/cogs/role_management.py": {
-    "mtime": 1789279986.8598793,
-    "seen": 1789437614.086647,
-    "ast_hash": "5079c86e563dd9a9827fdfda74025c5c",
+    "mtime": 1789438075.2393205,
+    "seen": 1789438129.7057343,
+    "ast_hash": "bbf1abb7f4c6d827bd5c7d27ac7729c7",
     "semantic_hash": ""
   },
   "src/bot/cogs/temporary_voice.py": {
@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "src/bot/config.py": {
-    "mtime": 1789437485.0926218,
-    "seen": 1789437614.086647,
-    "ast_hash": "d63930d0e703ba64e07e5ff57de69222",
+    "mtime": 1789438074.4819057,
+    "seen": 1789438129.7057343,
+    "ast_hash": "2125ca4d8093d94798775eb1e0dbe093",
     "semantic_hash": ""
   },
   "src/bot/current_twitch_live.py": {
@@ -240,9 +240,9 @@
     "semantic_hash": ""
   },
   "tests/test_config.py": {
-    "mtime": 1789437487.3455503,
-    "seen": 1789437614.086647,
-    "ast_hash": "3db6c33bb4c94089e9c7e11800a984b4",
+    "mtime": 1789438101.5904188,
+    "seen": 1789438129.7057343,
+    "ast_hash": "4a68ab2ba34cf2adae1af24fc83700b5",
     "semantic_hash": ""
   },
   "tests/test_discord_sender.py": {
@@ -288,9 +288,9 @@
     "semantic_hash": ""
   },
   "tests/test_role_management.py": {
-    "mtime": 1789282222.2697098,
-    "seen": 1789437614.086647,
-    "ast_hash": "2c8e362cf2800d62903a35a1430bd10d",
+    "mtime": 1789438102.3265715,
+    "seen": 1789438129.7057343,
+    "ast_hash": "b2169446dfc4c72fe3f02ff9ca4cddda",
     "semantic_hash": ""
   },
   "tests/test_temporary_voice.py": {
@@ -342,9 +342,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1789314333.386261,
-    "seen": 1789437614.086647,
-    "ast_hash": "d26e9812c45b13dbae9f7cefaeda8ef9",
+    "mtime": 1789438118.3232107,
+    "seen": 1789438129.7057343,
+    "ast_hash": "12dfb2ba45ef3b837af8bab01e825fe3",
     "semantic_hash": ""
   },
   "src/bot/assets/emojis/IconLiveFundoRosa.png": {

@@ -416,6 +416,7 @@ class Settings:
     web: WebSettings
     youtube_cookies_file: str | None = None
     command_required_role_id: int | None = None
+    member_log_channel_id: int | None = None
 
     @classmethod
     def from_environment(cls, environment: Mapping[str, str] | None = None) -> Settings:
@@ -580,5 +581,9 @@ class Settings:
             command_required_role_id=_numeric_id(
                 "DISCORD_COMMAND_REQUIRED_ROLE_ID",
                 source.get("DISCORD_COMMAND_REQUIRED_ROLE_ID"),
+            ),
+            member_log_channel_id=_numeric_id(
+                "DISCORD_MEMBER_LOG_CHANNEL_ID",
+                source.get("DISCORD_MEMBER_LOG_CHANNEL_ID"),
             ),
         )

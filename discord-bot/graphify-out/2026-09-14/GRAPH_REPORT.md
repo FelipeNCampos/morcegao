@@ -1,7 +1,7 @@
 # Graph Report - discord-bot  (2026-09-14)
 
 ## Corpus Check
-- 58 files · ~422,812 words
+- 58 files · ~422,800 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 3 file(s) not represented in the graph (top: (none) 2, .example 1)
 
