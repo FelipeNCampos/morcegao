@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Callable
+from datetime import UTC, datetime
 from typing import cast
 
 import discord
@@ -21,7 +22,7 @@ from bot.integrations.discord_sender import DiscordNotificationError, DiscordNot
 from bot.integrations.instagram import InstagramAPIError, InstagramClient
 from bot.integrations.twitch import TwitchClient
 from bot.integrations.twitch_auth import TwitchError
-from bot.models import InstagramMedia
+from bot.models import InstagramMedia, TwitchOnlineEvent
 
 logger = logging.getLogger(__name__)
 
@@ -450,16 +451,41 @@ class General(commands.Cog):
     async def _get_current_open_twitch_live(self) -> CurrentTwitchLive | None:
         """Obtém a live atual e confirma que ela ainda está online antes do reenvio."""
         live = await self._current_twitch_live.get_current()
-        if live is None:
-            return None
-        if not live.stream.is_live:
-            await self._current_twitch_live.clear_if_current(live)
-            return None
-        if self._twitch_client is None:
-            return live
+        if live is not None:
+            if not live.stream.is_live:
+                await self._current_twitch_live.clear_if_current(live)
+                return None
+            if self._twitch_client is None:
+                return live
 
-        latest_stream = await self._twitch_client.get_stream(live.event.broadcaster_user_id)
-        return await self._current_twitch_live.update_stream_if_current(live, latest_stream)
+            latest_stream = await self._twitch_client.get_stream(live.event.broadcaster_user_id)
+            return await self._current_twitch_live.update_stream_if_current(live, latest_stream)
+
+        if self._twitch_client is None:
+            return None
+
+        try:
+            broadcaster_user_id, broadcaster_login, broadcaster_name = (
+                await self._twitch_client.get_user_by_login()
+            )
+        except TwitchError:
+            logger.exception("Não foi possível verificar a live Twitch configurada.")
+            return None
+
+        stream = await self._twitch_client.get_stream(broadcaster_user_id)
+        if not stream.is_live:
+            return None
+
+        event = TwitchOnlineEvent(
+            message_id="manual-live-resend",
+            event_type="stream.online",
+            broadcaster_user_id=broadcaster_user_id,
+            broadcaster_login=broadcaster_login,
+            broadcaster_name=broadcaster_name,
+            started_at=None,
+            received_at=datetime.now(UTC),
+        )
+        return CurrentTwitchLive(event, stream)
 
 
 async def setup(bot: commands.Bot) -> None:

@@ -50,12 +50,16 @@ class FakeTwitchClient:
     def __init__(self, stream: TwitchStream | TwitchApiError) -> None:
         self.stream = stream
         self.requested_user_ids: list[str] = []
+        self.resolved_broadcaster_user_id: str | None = "42"
 
     async def get_stream(self, broadcaster_user_id: str) -> TwitchStream:
         self.requested_user_ids.append(broadcaster_user_id)
         if isinstance(self.stream, TwitchApiError):
             raise self.stream
         return self.stream
+
+    async def get_user_by_login(self, login: str | None = None) -> tuple[str, str, str]:
+        return ("42", "vampirao", "O Vampirão")
 
 
 class FakeInstagramClient:
@@ -173,6 +177,27 @@ async def test_resend_live_sends_the_current_open_live_with_the_existing_sender(
 
     assert twitch_client.requested_user_ids == [event.broadcaster_user_id]
     assert sender.calls == [(event, stream)]
+    assert interaction.response.deferred == [True]
+    assert interaction.followup.messages == [
+        ("A notificação da live de O Vampirão foi reenviada com sucesso.", True)
+    ]
+
+
+@pytest.mark.asyncio
+async def test_resend_live_falls_back_to_live_lookup_when_state_is_empty() -> None:
+    """Quando o estado em memória foi limpo, o comando ainda tenta consultar a live atual."""
+    sender = FakeNotificationSender()
+    stream = TwitchStream(
+        title="Live de teste",
+        url="https://www.twitch.tv/vampirao",
+        is_live=True,
+    )
+    cog = General(sender, CurrentTwitchLiveStore(), FakeTwitchClient(stream))  # type: ignore[arg-type]
+    interaction = FakeInteraction(manage_guild=True)
+
+    await General.resend_live_command.callback(cog, interaction)  # type: ignore[arg-type]
+
+    assert sender.calls
     assert interaction.response.deferred == [True]
     assert interaction.followup.messages == [
         ("A notificação da live de O Vampirão foi reenviada com sucesso.", True)
